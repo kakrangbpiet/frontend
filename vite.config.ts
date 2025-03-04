@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   plugins: [
@@ -8,10 +9,16 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true
+        enabled: false
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+          },
+        ],
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true
@@ -43,6 +50,24 @@ export default defineConfig({
           }
         ]
       }
-    })
-  ]
+    }),
+       dts(),
+  ],
+  build: {
+    lib: {
+      entry: "src/index.ts",
+      name: "MyLib",
+      fileName: (format) => `mylib.${format}.js`,
+      formats: ["es", "cjs", "umd"], 
+    },
+    rollupOptions: {
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
+      },
+    },
+  },
 })
