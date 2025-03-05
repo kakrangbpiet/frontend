@@ -9,7 +9,7 @@ const meta: Meta<typeof Header> = {
     layout: 'fullscreen',
   },
   args: {
-    title: 'Toolpad',
+    title: 'Dashboard',
     links: [
       { to: '/', label: 'Dashboard' },
       { to: '/shop', label: 'Shop' },
@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const index: Story = {
   args: {
-    title: 'Toolpad',
+    title: 'Dashboard',
     links: [],
   },
 };

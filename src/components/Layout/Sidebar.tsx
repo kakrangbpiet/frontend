@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import {SidebarProps} from '../../Datatypes/interface';
+import { SidebarProps } from '../../Datatypes/interface';
+
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
   width: ${props => props.$isOpen ? '240px' : '64px'};
   height: 100vh;
@@ -123,7 +124,6 @@ const CloseIcon = () => (
     <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
 );
-
 
 const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   const location = useLocation();

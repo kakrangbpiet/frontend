@@ -6,7 +6,6 @@ export const HEADER_LINKS = [
 ];
 
 // Sidebar Items
-
 export const navItems = [
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/orders', label: 'Orders' },

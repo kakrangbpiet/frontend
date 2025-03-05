@@ -83,4 +83,5 @@ export interface LayoutProps {
   headerLinks: Array<{ to: string; label: string }>;
   sidebarItems: SidebarItem[];
   title: string;
+  onSidebarToggle?: () => void;
 }
