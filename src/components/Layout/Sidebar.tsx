@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import {SidebarProps} from '../../Datatypes/interface';
-
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
   width: ${props => props.$isOpen ? '240px' : '64px'};
   height: 100vh;
@@ -22,8 +21,14 @@ const SidebarHeader = styled.div`
   height: 48px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 16px;
   border-bottom: 1px solid #2C2C2C;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const LogoIcon = styled.div`
@@ -35,6 +40,16 @@ const LogoIcon = styled.div`
   justify-content: center;
   border-radius: 4px;
   margin-right: 12px;
+`;
+
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const SidebarNav = styled.div`
@@ -73,24 +88,63 @@ const NavLabel = styled.span<{ $isOpen: boolean }>`
   display: ${props => props.$isOpen ? 'block' : 'none'};
 `;
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen = true }) => {
-  const location = useLocation();
+// Custom SVG Icons
+const MenuIcon = () => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="#A0A0A0" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+);
 
-  const navItems = [
-    { to: '/dashboard', label: 'Dashboard' },
-    { to: '/orders', label: 'Orders' },
-    { to: '/analytics', label: 'Analytics' },
-    { to: '/layers', label: 'Layers' }
-  ];
+const CloseIcon = () => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="#A0A0A0" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+);
+
+
+const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
+  const location = useLocation();
 
   return (
     <SidebarContainer $isOpen={isOpen}>
       <SidebarHeader>
-        <LogoIcon />
-        {isOpen && <span style={{ color: '#A0A0A0', fontWeight: 600 }}>Toolpad</span>}
+        {isOpen ? (
+          <LogoContainer>
+            <LogoIcon />
+            <span style={{ color: '#A0A0A0', fontWeight: 600 }}>Toolpad</span>
+          </LogoContainer>
+        ) : (
+          <LogoIcon />
+        )}
+        <ToggleButton onClick={onToggle}>
+          {isOpen ? <CloseIcon /> : <MenuIcon />}
+        </ToggleButton>
       </SidebarHeader>
       <SidebarNav>
-        {navItems.map((item) => (
+        {items.map((item) => (
           <NavItem 
             key={item.to}
             to={item.to} 

@@ -23,15 +23,6 @@ export interface HeaderProps {
   }>;
 }
 
-export interface SidebarProps {
-  items: Array<{
-    to: string;
-    label: string;
-    icon?: React.ReactNode;
-  }>;
-  isOpen?: boolean;
-}
-
 export interface LayoutProps {
   children: React.ReactNode;
   headerLinks: Array<{ to: string; label: string }>;
@@ -70,11 +61,26 @@ export interface Theme {
     sm: string;
   };
 }
+
 export interface SidebarProps {
-  title: string;
-  links: Array<{
+  items: Array<{
     to: string;
     label: string;
+    icon?: React.ReactNode;
   }>;
-  isOpen?: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+export interface SidebarItem {
+  to: string;
+  label: string;
+  icon?: React.ReactNode;
+}
+
+export interface LayoutProps {
+  children: React.ReactNode;
+  headerLinks: Array<{ to: string; label: string }>;
+  sidebarItems: SidebarItem[];
+  title: string;
 }

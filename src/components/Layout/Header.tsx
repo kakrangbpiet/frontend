@@ -1,115 +1,152 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import InstallPwaButton from '../common/InstallPwaButton';
 
 const HeaderContainer = styled.header`
-  background-color: #121212;
-  color: white;
-  padding: 0 20px;
-  height: 64px;
+  background-color: #1E1E1E;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+  padding: 0 16px;
+  border-bottom: 1px solid #2C2C2C;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Logo = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #4dabf7;
+  color: #A0A0A0;
+  font-weight: 600;
+  margin-left: 12px;
+`;
+
+const LogoIcon = styled.div`
+  width: 32px;
+  height: 32px;
+  background-color: #4A4A4A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
 `;
 
 const Nav = styled.nav`
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 16px;
 `;
 
-const StyledLink = styled(Link)`
-  color: white;
+const StyledLink = styled(Link)<{ $active?: boolean }>`
+  color: #A0A0A0;
   text-decoration: none;
-  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: ${props => props.$active ? '#2C2C2C' : 'transparent'};
   
   &:hover {
-    text-decoration: underline;
-    color: #4dabf7;
+    background-color: #2C2C2C;
   }
 `;
 
-const MobileMenuButton = styled.button`
-  display: none;
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const IconButton = styled.button`
   background: none;
   border: none;
-  color: white;
-  font-size: 1.5rem;
   cursor: pointer;
-  
-  @media (max-width: 768px) {
-    display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #2C2C2C;
   }
 `;
 
-const DesktopNav = styled(Nav)`
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
+// SVG Icons
+const SearchIcon = () => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="#A0A0A0" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+);
 
-const MobileNav = styled(Nav)<{ isOpen: boolean }>`
-  display: none;
-  
-  @media (max-width: 768px) {
-    display: ${(props) => (props.isOpen ? 'flex' : 'none')};
-    position: absolute;
-    flex-direction: column;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background-color: #121212;
-    padding: 20px;
-    z-index: 100;
-  }
-`;
+const NotificationIcon = () => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="20" 
+    height="20" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="#A0A0A0" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+  </svg>
+);
 
 interface HeaderProps {
-  title: string;
+  title?: string;
   links: Array<{
     to: string;
     label: string;
   }>;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, links }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
+const Header: React.FC<HeaderProps> = ({ 
+  title = 'Toolpad', 
+  links 
+}) => {
   return (
     <HeaderContainer>
-      <Logo>{title}</Logo>
-      
-      <DesktopNav>
+      <LogoContainer>
+        <LogoIcon />
+        <Logo>{title}</Logo>
+      </LogoContainer>
+
+      <Nav>
         {links.map((link, index) => (
-          <StyledLink key={index} to={link.to}>
+          <StyledLink 
+            key={index} 
+            to={link.to}
+            $active={window.location.pathname === link.to}
+          >
             {link.label}
           </StyledLink>
         ))}
-      </DesktopNav>
-      
-      <MobileMenuButton onClick={toggleMobileMenu}>
-        ☰
-      </MobileMenuButton>
-      
-      <MobileNav isOpen={mobileMenuOpen}>
-        {links.map((link, index) => (
-          <StyledLink key={index} to={link.to}>
-            {link.label}
-          </StyledLink>
-        ))}
-      </MobileNav>
-      <InstallPwaButton />
+      </Nav>
+
+      <IconContainer>
+        <IconButton>
+          <SearchIcon />
+        </IconButton>
+        <IconButton>
+          <NotificationIcon />
+        </IconButton>
+      </IconContainer>
     </HeaderContainer>
   );
 };
