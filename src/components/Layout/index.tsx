@@ -4,6 +4,8 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import {LayoutProps} from '../../Datatypes/interface';
+import { Outlet } from "react-router-dom";
+import { HEADER_LINKS, navItems } from './routes';
 
 
 const LayoutContainer = styled.div`
@@ -20,24 +22,19 @@ const MainContent = styled.main<{ $sidebarOpen: boolean }>`
   background-color: #121212;
 `;
 
-const Layout: React.FC<LayoutProps> = ({
-  children,
-  headerLinks,
-  sidebarItems,
-  title,
-}) => {
+const Layout: React.FC<LayoutProps> = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     <LayoutContainer>
-      <Header title={title} links={headerLinks} />
+      <Header title={"React"} links={HEADER_LINKS} />
       <Sidebar 
-        items={sidebarItems} 
+        items={navItems} 
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
       />
       <MainContent $sidebarOpen={sidebarOpen}>
-        {children}
+        <Outlet/>
       </MainContent>
       <Footer />
     </LayoutContainer>

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SidebarProps } from '../../Datatypes/interface';
 
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
@@ -127,7 +127,7 @@ const CloseIcon = () => (
 
 const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   const location = useLocation();
-
+  const navigate=useNavigate()
   return (
     <SidebarContainer $isOpen={isOpen}>
       <SidebarHeader>
@@ -147,7 +147,8 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
         {items.map((item) => (
           <NavItem 
             key={item.to}
-            to={item.to} 
+            to={item.to}
+            onClick={()=> navigate(item.to)}
             $isOpen={isOpen}
             $active={location.pathname === item.to}
           >

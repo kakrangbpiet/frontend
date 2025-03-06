@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Layout from '../components/Layout';
-import { HEADER_LINKS, navItems } from '../components/Layout/routes';
 
 const DashboardCard = styled.div`
   background-color: #2a2a2a;
@@ -36,12 +34,10 @@ const BottomRow = styled.div`
   gap: 1rem;
 `;
 
-const Dashboard: React.FC = () => {
+const HomePage: React.FC = () => {
   return (
-    <Layout title="Dashboard" headerLinks={HEADER_LINKS} sidebarItems={navItems}>
       <div>
         <small>Dashboard</small>
-      </div>
       
       <DashboardGrid>
         <TopRow>
@@ -58,8 +54,9 @@ const Dashboard: React.FC = () => {
           <DashboardCard />
         </BottomRow>
       </DashboardGrid>
-    </Layout>
+    </div>
+
   );
 };
 
-export default Dashboard;
+export default HomePage;

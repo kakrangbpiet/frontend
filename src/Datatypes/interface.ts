@@ -24,10 +24,7 @@ export interface HeaderProps {
 }
 
 export interface LayoutProps {
-  children: React.ReactNode;
-  headerLinks: Array<{ to: string; label: string }>;
-  sidebarItems: Array<{ to: string; label: string; icon?: React.ReactNode }>;
-  title: string;
+ 
 }
 
 export interface Theme {
@@ -76,12 +73,4 @@ export interface SidebarItem {
   to: string;
   label: string;
   icon?: React.ReactNode;
-}
-
-export interface LayoutProps {
-  children: React.ReactNode;
-  headerLinks: Array<{ to: string; label: string }>;
-  sidebarItems: SidebarItem[];
-  title: string;
-  onSidebarToggle?: () => void;
 }
