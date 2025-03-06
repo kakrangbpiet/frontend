@@ -4,6 +4,8 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import {LayoutProps} from '../../Datatypes/interface';
+import Tooltip from './Tooltip';
+export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
 
 
 const LayoutContainer = styled.div`
@@ -29,16 +31,20 @@ const Layout: React.FC<LayoutProps> = ({
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
+    
     <LayoutContainer>
+      
       <Header title={title} links={headerLinks} />
       <Sidebar 
         items={sidebarItems} 
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
       />
+     
       <MainContent $sidebarOpen={sidebarOpen}>
         {children}
       </MainContent>
+      <Tooltip content={undefined} children={undefined}/>
       <Footer />
     </LayoutContainer>
   );

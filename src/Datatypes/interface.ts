@@ -85,3 +85,14 @@ export interface LayoutProps {
   title: string;
   onSidebarToggle?: () => void;
 }
+export interface FooterProps {
+  companyName?: string;
+  showSocials?: boolean;
+  variant?: 'light' | 'dark';
+}
+export type ThemeMode = 'light' | 'dark';
+
+export interface ThemeContextType {
+  theme: ThemeMode;
+  toggleTheme: () => void;
+}
