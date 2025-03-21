@@ -1,0 +1,97 @@
+/* /components/Card/Card.module.css */
+.card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* Variants */
+  .default {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+  }
+  
+  .outlined {
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+  }
+  
+  .elevated {
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Padding */
+  .padding-none {
+    padding: 0;
+  }
+  
+  .padding-small {
+    padding: 12px;
+  }
+  
+  .padding-medium {
+    padding: 16px;
+  }
+  
+  .padding-large {
+    padding: 24px;
+  }
+  
+  /* Border radius */
+  .radius-none {
+    border-radius: 0;
+  }
+  
+  .radius-small {
+    border-radius: 4px;
+  }
+  
+  .radius-medium {
+    border-radius: 8px;
+  }
+  
+  .radius-large {
+    border-radius: 16px;
+  }
+  
+  /* Content containers */
+  .titleContainer {
+    margin-bottom: 16px;
+  }
+  
+  .title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .contentContainer {
+    flex: 1;
+  }
+  
+  .footerContainer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .padding-small {
+      padding: 8px;
+    }
+    
+    .padding-medium {
+      padding: 12px;
+    }
+    
+    .padding-large {
+      padding: 16px;
+    }
+    
+    .title {
+      font-size: 16px;
+    }
+  }

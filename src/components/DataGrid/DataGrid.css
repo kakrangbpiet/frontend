@@ -1,0 +1,108 @@
+.data-grid-container {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+  }
+  
+  .data-grid {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .data-grid thead {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .data-grid th {
+    padding: 12px 16px;
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    background-color: #f5f5f5;
+    z-index: 1;
+  }
+  
+  .data-grid tbody td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+  }
+  
+  /* Alignment classes */
+  .data-grid .align-left {
+    text-align: left;
+  }
+  
+  .data-grid .align-center {
+    text-align: center;
+  }
+  
+  .data-grid .align-right {
+    text-align: right;
+  }
+  
+  /* Sortable headers */
+  .data-grid th.sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .data-grid th.sortable:hover {
+    background-color: #eaeaea;
+  }
+  
+  .data-grid th.sorted-asc,
+  .data-grid th.sorted-desc {
+    background-color: #e5e5e5;
+  }
+  
+  /* Striped rows */
+  .data-grid.striped tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Hoverable rows */
+  .data-grid.hoverable tbody tr:hover {
+    background-color: #f0f7ff;
+  }
+  
+  /* Selected rows */
+  .data-grid tbody tr.selected {
+    background-color: #e6f2ff;
+  }
+  
+  /* Selection cells */
+  .data-grid .selection-cell {
+    width: 40px;
+    text-align: center;
+  }
+  
+  /* Loading state */
+  .data-grid.loading {
+    opacity: 0.6;
+  }
+  
+  .data-grid-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 16px;
+    border-radius: 4px;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Empty state */
+  .data-grid td.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+  }

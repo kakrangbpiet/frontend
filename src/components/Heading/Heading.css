@@ -1,0 +1,73 @@
+/* Heading.css */
+.heading {
+    margin: 0;
+    font-family: inherit;
+  }
+  
+  /* Level styles */
+  .level-1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .level-2 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.9rem;
+  }
+  
+  .level-3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+  }
+  
+  .level-4 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 0.7rem;
+  }
+  
+  .level-5 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+  }
+  
+  .level-6 {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Variation styles */
+  .variation-primary {
+    color: #2c3e50;
+  }
+  
+  .variation-secondary {
+    color: #7f8c8d;
+  }
+  
+  .variation-error {
+    color: #e74c3c;
+  }
+  
+  .variation-warning {
+    color: #f39c12;
+  }
+  
+  .variation-success {
+    color: #27ae60;
+  }
+  
+  .variation-info {
+    color: #3498db;
+  }
