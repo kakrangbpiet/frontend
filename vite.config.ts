@@ -4,6 +4,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    port: 5173
+  },
   plugins: [
     react(),
     VitePWA({
