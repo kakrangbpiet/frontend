@@ -21,8 +21,11 @@
     "@storybook/testing-library": "^0.2.1",
     "ajv": "^8.17.1",
     "ajv-draft-04": "^1.0.0",
+    "axios": "^1.8.4",
+    "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.2.0",
     "styled-components": "^6.1.15",
     "vite-plugin-dts": "^4.5.3"

@@ -176,3 +176,17 @@ export interface Person {
   status: 'active' | 'inactive' | 'pending';
   lastLogin: Date;
 }
+
+
+// api response success
+export interface ApiSuccess {
+  statusCode?: number;
+  message: string;
+  data:object
+}
+
+// api response error
+export interface ApiError {
+  statusCode?: number;
+  error: string;
+}
