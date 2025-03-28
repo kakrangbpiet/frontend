@@ -43,7 +43,7 @@ export const fetchTravelItemsApi = createAsyncThunk(
 export const fetchTravelItemsByCategoryApi = createAsyncThunk(
   'travelCollection/setTravelItemsByCategory',
   async (
-    { category, pageSize, page, setItemPage }: { category: string; pageSize?: number; page?: number; setItemPage?: (page: number) => void },
+    { category, pageSize, page }: { category: string; pageSize?: number; page?: number; setItemPage?: (page: number) => void },
     { rejectWithValue, dispatch }
   ) => {
     // Set loading to true before fetching
@@ -67,11 +67,6 @@ export const fetchTravelItemsByCategoryApi = createAsyncThunk(
         loading: false,
       }));
 
-      // Handle pagination if applicable
-      if (page && setItemPage) {
-        setItemPage(page + 1);
-      }
-
       return {
         statusCode: response.status,
         message: 'Items fetched successfully',
@@ -92,7 +87,6 @@ export const fetchTravelItemsByCategoryApi = createAsyncThunk(
     }
   }
 );
-
 
 export const fetchSingleTravelItemApi = createAsyncThunk(
   'travelCollection/setLoadedItems',
@@ -198,7 +192,6 @@ export const updateTravelItemStatus = createAsyncThunk(
 );
 
 // Async Thunks
-
 
 export const addToCartApi = createAsyncThunk(
   'cart/addToCartApi',
@@ -340,7 +333,6 @@ export const fetchCartApi = createAsyncThunk(
     }
   }
 );
-
 
 export const removeItemQuantityApi = createAsyncThunk(
   'cart/removeItemQuantityApi',

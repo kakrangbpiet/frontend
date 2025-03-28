@@ -12,7 +12,7 @@ const Footer: React.FC<FooterProps> = ({
     return {
       footer: {
         padding: '24px 40px',
-        backgroundColor: variant === 'light' ? '#f8f9fa' : '#1e2937',
+        backgroundColor: variant === 'light' ? '#f8f9fa' : '#121212',
         color: variant === 'light' ? '#495057' : '#e5e7eb',
         borderTop: `1px solid ${variant === 'light' ? '#e9ecef' : '#374151'}`,
         fontFamily: 'Inter, system-ui, sans-serif',
