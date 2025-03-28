@@ -117,7 +117,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ 
-  title = 'Toolpad', 
+  title = 'SAMSARA', 
   links ,
 }) => {
   return (

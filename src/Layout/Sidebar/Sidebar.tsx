@@ -134,7 +134,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
         {isOpen ? (
           <LogoContainer>
             <LogoIcon />
-            <span style={{ color: '#A0A0A0', fontWeight: 600 }}>Toolpad</span>
+            <span style={{ color: '#A0A0A0', fontWeight: 600 }}>SAMSARA</span>
           </LogoContainer>
         ) : (
           <LogoIcon />
