@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { ApiEndpoint } from '../Datatypes/Enums/ApiEnums';
 
 
-const Request = async ({ endpointId, slug, data, headers }: any) => {
+const Request = async ({ endpointId, slug, data }: any) => {
   const storedAccessToken = Cookies.get('access');  // Retrieve stored access token
   const endpoint = ApiEndpoint[endpointId];
 

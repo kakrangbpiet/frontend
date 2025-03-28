@@ -3,6 +3,7 @@ import { ButtonVariant, ButtonSize, CardElevation } from './types';
 import { ReactNode } from 'react';
 import { IconPosition } from '../components/common/Button';
 import { HeadingLevel, HeadingVariation } from '../components/Heading';
+import { accountStatus, UserCategory } from './Enums/UserEnums';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -189,4 +190,61 @@ export interface ApiSuccess {
 export interface ApiError {
   statusCode?: number;
   error: string;
+}
+
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: any | null;
+  access: string | null;
+  refresh: string | null;
+  userType: string | null;
+  isLoading:boolean
+  isContactVerified:boolean
+  trxId?: string;
+  phoneNumber: string | null;
+}
+
+export type AccountStatusType = accountStatus
+export type CategoryType = UserCategory
+
+export interface IloginUser {
+    email: string;
+    password?: string;
+    accountStatus?: AccountStatusType;
+}
+
+export interface IUser extends IloginUser {
+    id?: any;
+    name: string;
+    phoneNumber: string;
+    address: string | { latitude: number; longitude: number; }
+    category: CategoryType;
+    subcategory?: string;
+    permissions?: string[];
+}
+
+export interface SignUpData {
+  name?: string;
+  email?: string;
+  password?: string;
+  phoneNumber: string;
+  address?: string;
+  accountStatus?: string;
+  category?: string;
+}
+
+export interface OtpData {
+  otp: string;
+  trxId: string;
+  deviceId: string;
+  phoneNumber: string;
+}
+
+
+export interface LoginData {
+  email: string;
+  password: string;
+  OnFormSuccess:any
+  userType: UserCategory.User | UserCategory.KAKRAN_SUPER_ADMIN
 }
