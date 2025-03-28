@@ -2,9 +2,8 @@
   "name": "frontend-pwa-app",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
+    "dev": "vite ",
     "stage": "echo '🛠️ Running frontend in STAGING mode. Needs to be configure'",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -22,6 +21,7 @@
     "ajv": "^8.17.1",
     "ajv-draft-04": "^1.0.0",
     "axios": "^1.8.4",
+    "firebase": "^11.5.0",
     "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

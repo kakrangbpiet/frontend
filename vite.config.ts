@@ -64,14 +64,14 @@ export default defineConfig({
     //   fileName: (format) => `mylib.${format}.js`,
     //   formats: ["es", "cjs", "umd"], 
     // },
-    rollupOptions: {
-      external: ["react", "react-dom"],
-      output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
-      },
-    },
+    // rollupOptions: {
+    //   external: ["react", "react-dom"],
+    //   output: {
+    //     globals: {
+    //       react: "React",
+    //       "react-dom": "ReactDOM",
+    //     },
+    //   },
+    // },
   },
 })

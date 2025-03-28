@@ -11,7 +11,7 @@ const Router: React.FC = () => {
       element: <Layout/>,
       children: [
         {
-          path: "",
+          path: "/",
           element: <HomePage/>,
         },
         {
