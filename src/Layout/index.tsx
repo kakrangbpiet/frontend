@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Header from './Header/Header';
 import Sidebar from './Sidebar/Sidebar';
 import Footer from './Footer/Footer';
-import Tooltip from './Tooltip';
 import { HEADER_LINKS, sidebarItems } from './navigation';
 import { Outlet } from 'react-router-dom';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
@@ -29,8 +28,7 @@ const Layout= () => {
   return (
     
     <LayoutContainer>
-      
-      <Header title={"title"} links={HEADER_LINKS} />
+      <Header title={"SAMSARA"} links={HEADER_LINKS} isOpen={sidebarOpen}/>
       <Sidebar 
         items={sidebarItems} 
         isOpen={sidebarOpen}
@@ -40,7 +38,6 @@ const Layout= () => {
       <MainContent $sidebarOpen={sidebarOpen}>
         <Outlet/>
       </MainContent>
-      <Tooltip content={undefined} children={undefined}/>
       <Footer />
     </LayoutContainer>
   );

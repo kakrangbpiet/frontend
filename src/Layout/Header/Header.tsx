@@ -118,13 +118,17 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ 
   title = 'Toolpad', 
-  links 
+  links ,
 }) => {
   return (
     <HeaderContainer>
       <LogoContainer>
         <LogoIcon />
+        <div style={{
+          marginLeft: '12px',
+        }}>
         <Logo>{title}</Logo>
+        </div>
       </LogoContainer>
 
       <Nav>

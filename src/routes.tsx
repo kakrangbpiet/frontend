@@ -1,7 +1,8 @@
 import React from "react";
-import { useRoutes, Navigate } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import Layout from "./Layout";
 import HomePage from "./page/Homepage";
+import NotFoundPage from "./page/NotFoundPage";
 
 const Router: React.FC = () => {
 
@@ -16,10 +17,11 @@ const Router: React.FC = () => {
           path: "",
           element: <HomePage/>,
         },
-      
+        {
+          path: "*", element: <NotFoundPage/> 
+      }
       ],
     },
-    { path: "*", element: <Navigate to="/" /> },
   ]);
 
   return routes;

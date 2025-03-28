@@ -23,7 +23,7 @@ type Story = StoryObj<typeof Footer>;
 
 export const Default: Story = {
   args: {
-    companyName: 'My PWA App',
+    companyName: 'Samsara',
     showSocials: true,
     variant: 'light',
   },
@@ -31,7 +31,7 @@ export const Default: Story = {
 
 export const DarkVariant: Story = {
   args: {
-    companyName: 'My PWA App',
+    companyName: 'Samsara',
     showSocials: true,
     variant: 'dark',
   },
@@ -39,7 +39,7 @@ export const DarkVariant: Story = {
 
 export const WithoutSocials: Story = {
   args: {
-    companyName: 'My PWA App',
+    companyName: 'Samsara',
     showSocials: false,
     variant: 'light',
   },

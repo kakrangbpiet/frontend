@@ -2,9 +2,9 @@ import React from 'react';
 import {FooterProps} from '../../Datatypes/interface';
 
 const Footer: React.FC<FooterProps> = ({
-  companyName = 'My PWA App',
+  companyName = 'SAMSARA',
   showSocials = true,
-  variant = 'light',
+  variant = '',
 }) => {
   const year = new Date().getFullYear();
   
@@ -35,6 +35,7 @@ const Footer: React.FC<FooterProps> = ({
         fontSize: '20px',
         fontWeight: 'bold',
         letterSpacing: '0.5px',
+        marginLeft:"28px"
       },
       nav: {
         display: 'flex',
