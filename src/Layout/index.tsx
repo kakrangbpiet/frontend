@@ -28,7 +28,7 @@ const Layout= () => {
   return (
     
     <LayoutContainer>
-      <Header title={"SAMSARA"} links={HEADER_LINKS} isOpen={sidebarOpen}/>
+      <Header title={"SAMSARA"} links={HEADER_LINKS} />
       <Sidebar 
         items={sidebarItems} 
         isOpen={sidebarOpen}

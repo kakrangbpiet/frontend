@@ -5,10 +5,7 @@ import HomePage from "./page/Homepage";
 import NotFoundPage from "./page/NotFoundPage";
 
 const Router: React.FC = () => {
-
-
   const routes = useRoutes([
-
     {
       path: "",
       element: <Layout/>,
@@ -23,7 +20,6 @@ const Router: React.FC = () => {
       ],
     },
   ]);
-
   return routes;
 };
 

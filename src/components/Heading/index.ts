@@ -1,2 +1,2 @@
 export { Heading } from './Heading';
-export type { HeadingProps, HeadingLevel, HeadingVariation } from './Heading';
+export type {  HeadingLevel, HeadingVariation } from './Heading';

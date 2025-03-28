@@ -1,5 +1,5 @@
 import { Skeleton } from '../../Skeleton/Skeleton'; // ✅ Using your existing Skeleton component
-import './Button.css';
+// import './button.css';
 import {ButtonProps} from '../../../Datatypes/interface'
 export type IconPosition = 'left' | 'right' | 'top' | 'bottom';
 
@@ -59,7 +59,7 @@ export const Button = ({
         alignItems: 'center',
         justifyContent: 'center',
         gap: `${iconSpacing}px`,
-        ...(iconPosition === 'top' || iconPosition === 'bottom' ? { flexDirection: 'column' } : {})
+        // ...(iconPosition === 'top' || iconPosition === 'bottom' ? { flexDirection: 'column' } : {})
       }
     };
 

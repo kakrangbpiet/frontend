@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import './DataGrid.css';
+// import './DataGrid.css';
 import {Column} from '../../Datatypes/interface';
 
 export interface DataGridProps<T extends object> {
@@ -148,7 +148,7 @@ export function DataGrid<T extends object>({
       
       if (aValue === bValue) return 0;
       
-      const compareResult = aValue < bValue ? -1 : 1;
+      const compareResult = (aValue ?? '') < (bValue ?? '') ? -1 : 1;
       return sortConfig.direction === 'asc' ? compareResult : -compareResult;
     });
   }, [data, sortConfig, columns]);

@@ -58,12 +58,12 @@ export default defineConfig({
        dts(),
   ],
   build: {
-    lib: {
-      entry: "src/index.ts",
-      name: "MyLib",
-      fileName: (format) => `mylib.${format}.js`,
-      formats: ["es", "cjs", "umd"], 
-    },
+    // lib: {
+    //   entry: "src/index.ts",
+    //   name: "MyLib",
+    //   fileName: (format) => `mylib.${format}.js`,
+    //   formats: ["es", "cjs", "umd"], 
+    // },
     rollupOptions: {
       external: ["react", "react-dom"],
       output: {

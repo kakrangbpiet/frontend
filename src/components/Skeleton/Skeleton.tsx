@@ -1,6 +1,6 @@
 // /components/Skeleton/Skeleton.tsx
 import { ReactNode } from 'react';
-import styles from './Skeleton.module.css';
+// import styles from './Skeleton.module.css';
 
 export interface SkeletonProps {
   /**
@@ -33,8 +33,8 @@ export const Skeleton = ({
   width = '100%',
   height = '16px',
   borderRadius = '4px',
-  isAnimated = true,
-  className = '',
+  // isAnimated = true,
+  // className = '',
   children
 }: SkeletonProps) => {
   const style = {
@@ -45,7 +45,7 @@ export const Skeleton = ({
 
   return (
     <div 
-      className={`${styles.skeleton} ${isAnimated ? styles.animated : ''} ${className}`} 
+      // className={`${styles.skeleton} ${isAnimated ? styles.animated : ''} ${className}`} 
       style={style}
     >
       {children}

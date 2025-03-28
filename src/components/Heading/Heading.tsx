@@ -1,6 +1,6 @@
 // Heading.tsx
 import React from 'react';
-import './Heading.css'; 
+// import './Heading.css'; 
 import {HeadingProps} from '../../Datatypes/interface'
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingVariation = 'primary' | 'secondary' | 'error' | 'warning' | 'success' | 'info';
