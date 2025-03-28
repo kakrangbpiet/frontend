@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Footer from './Footer';
-import {LayoutProps} from '../../Datatypes/interface';
+import Header from './Header/Header';
+import Sidebar from './Sidebar/Sidebar';
+import Footer from './Footer/Footer';
 import Tooltip from './Tooltip';
+import { HEADER_LINKS, sidebarItems } from './navigation';
+import { Outlet } from 'react-router-dom';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
 
 
@@ -22,19 +23,14 @@ const MainContent = styled.main<{ $sidebarOpen: boolean }>`
   background-color: #121212;
 `;
 
-const Layout: React.FC<LayoutProps> = ({
-  children,
-  headerLinks,
-  sidebarItems,
-  title,
-}) => {
+const Layout= () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     
     <LayoutContainer>
       
-      <Header title={title} links={headerLinks} />
+      <Header title={"title"} links={HEADER_LINKS} />
       <Sidebar 
         items={sidebarItems} 
         isOpen={sidebarOpen}
@@ -42,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({
       />
      
       <MainContent $sidebarOpen={sidebarOpen}>
-        {children}
+        <Outlet/>
       </MainContent>
       <Tooltip content={undefined} children={undefined}/>
       <Footer />
