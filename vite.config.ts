@@ -6,7 +6,10 @@ import dts from "vite-plugin-dts";
 export default defineConfig({
   server: {
     host: '0.0.0.0',
-    port: 5173
+    port: 5173,
+    proxy: {
+      "/backendApi": "http://localhost:3000/v1",
+    },
   },
   plugins: [
     react(),

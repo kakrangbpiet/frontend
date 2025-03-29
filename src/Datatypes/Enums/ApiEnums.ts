@@ -1,12 +1,20 @@
-const base_url_backend="https://backend-everything-37ada44e5086.herokuapp.com/v1"
-
 
 export const ApiEndpoint: Record<string, any> = {
   // TRAVEL API ENDPOINTS
+USER_LOGIN: { 
+    apiId: 1, 
+    withAuth: false, 
+    url: `backendApi/passwordless/login`, 
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Logging In",
+    successMessage: "",
+    errorMessage: "Error Logging In"
+  },
 GET_TRAVEL_ITEMS: { 
     apiId: 20, 
     withAuth: false, 
-    url: `${base_url_backend}/Travel/travelType`, 
+    url: `backendApi/Travel/travelType`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading travel items",
@@ -16,7 +24,7 @@ GET_TRAVEL_ITEMS: {
   GET_TRAVEL_ITEMS_BY_CATEGORY: { 
     apiId: 21, 
     withAuth: false, 
-    url: `${base_url_backend}/Travel/travelCategory`, 
+    url: `backendApi/Travel/travelCategory`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading travel items by category",
@@ -26,7 +34,7 @@ GET_TRAVEL_ITEMS: {
   GET_SINGLE_TRAVEL_ITEM: { 
     apiId: 22, 
     withAuth: false, 
-    url: `${base_url_backend}/Travel`, 
+    url: `backendApi/Travel`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading travel item details",
@@ -36,7 +44,7 @@ GET_TRAVEL_ITEMS: {
   ADD_TRAVEL_ITEM: { 
     apiId: 23, 
     withAuth: true, 
-    url: `${base_url_backend}/Travel`, 
+    url: `backendApi/Travel`, 
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Adding new travel item",
@@ -46,7 +54,7 @@ GET_TRAVEL_ITEMS: {
   UPDATE_TRAVEL_ITEM_STATUS: { 
     apiId: 24, 
     withAuth: true, 
-    url: `${base_url_backend}/Travel/updateStatus`, 
+    url: `backendApi/Travel/updateStatus`, 
     method: 'PATCH', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Updating travel item status",
@@ -56,7 +64,7 @@ GET_TRAVEL_ITEMS: {
   EDIT_TRAVEL_ITEM: { 
     apiId: 25, 
     withAuth: true, 
-    url: `${base_url_backend}/Travel`, 
+    url: `backendApi/Travel`, 
     method: 'PATCH', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Editing travel item",
