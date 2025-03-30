@@ -21,6 +21,7 @@ const TravelPackagesList = ({ category }: { category: string }) => {
     // Fetch items when component mounts or category changes
     dispatch(fetchTravelPackagesByCategoryApi({ 
       category, 
+      status:"active",
       pageSize: 10, // Adjust as needed
       page: 1       // Start with page 1
     }));

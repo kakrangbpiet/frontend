@@ -46,7 +46,7 @@ console.log(response,"responsel");
 export const fetchTravelPackagesByCategoryApi = createAsyncThunk(
   'travelCollection/setTravelPackagesByCategory',
   async (
-    { category, pageSize, page }: { category: string; pageSize?: number; page?: number; setItemPage?: (page: number) => void },
+    { category,status, pageSize, page }: { category: string;status?:string, pageSize?: number; page?: number; setItemPage?: (page: number) => void },
     { rejectWithValue, dispatch }
   ) => {
     // Set loading to true before fetching
@@ -58,7 +58,7 @@ export const fetchTravelPackagesByCategoryApi = createAsyncThunk(
     try {
       const response = await Request({
         endpointId: "GET_TRAVEL_ITEMS_BY_CATEGORY",
-        slug: `?category=${category}&pageSize=${pageSize || 10}&page=${page || 1}`,
+        slug: `?category=${category}&status=${status}&pageSize=${pageSize || 10}&page=${page || 1}`,
       });
 
       const items: ITravelPackage[] = response.data;
