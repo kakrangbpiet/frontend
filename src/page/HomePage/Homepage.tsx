@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <DashboardGrid>
-        <TravelItemsList category="HotDeals" />
+        <TravelItemsList category="hotdeals" />
       </DashboardGrid>
     </div>
   );

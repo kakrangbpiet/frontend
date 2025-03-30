@@ -84,6 +84,8 @@ export default travelSlice.reducer;
 
 export const selectedTravelPackages = (state: { travelCollection: TravelState }) =>
   state.travelCollection;
+export const selectedTravelPackagesLoading = (state: { travelCollection: TravelState }) =>
+  state.travelCollection.loading;
 
 export const useSelectedTravelPackage = (itemId: string | undefined) => (state: { travelCollection: TravelState }) =>
   state.travelCollection.travelPackages.find((item) => item.id === itemId);

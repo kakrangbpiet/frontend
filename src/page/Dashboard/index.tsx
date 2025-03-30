@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { isAuthenticated } from '../../redux/slices/login/authSlice';
-import { Button } from '@mui/material';
+import { Button, Container } from '@mui/material';
+import PackagesVerification from '../../components/CustomDataGrid/AllPackagesGrid';
 
 const DashboardGrid = styled.div`
   display: grid;
@@ -52,19 +53,18 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <DashboardGrid>
+      <Container>
         <MiddleRow>
          Dashboard
           <Button variant="contained" color="primary" onClick={addTravelPackage}>
             Add Package
           </Button>
         </MiddleRow>
-        <TopRow>
+        <PackagesVerification  />
+
           <DashboardCard />
-          <DashboardCard />
-        </TopRow>
         
-      </DashboardGrid>
+      </Container>
     </div>
   );
 };

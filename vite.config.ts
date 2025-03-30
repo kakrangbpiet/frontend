@@ -8,7 +8,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     proxy: {
-      "/backendApi": "http://localhost:3000/v1",
+      "/v1": "http://localhost:3000/",
     },
   },
   plugins: [

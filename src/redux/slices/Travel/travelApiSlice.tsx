@@ -6,7 +6,7 @@ import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
 
 export const fetchTravelPackagesApi = createAsyncThunk(
   'travelCollection/setLoadedItems',
-  async ({ pageSize, page, setItemPage, status }: { pageSize?: number, page?: number, setItemPage?: (page: number) => void, status: string }, { rejectWithValue, dispatch }) => {
+  async ({ pageSize, page, setItemPage, status }: { pageSize?: number, page?: number, setItemPage?: (page: number) => void, status?: string }, { rejectWithValue, dispatch }) => {
     dispatch(setLoadedItems({
       loading: true,
     }));
@@ -15,8 +15,11 @@ export const fetchTravelPackagesApi = createAsyncThunk(
         endpointId: "GET_TRAVEL_ITEMS",
         slug: `?status=${status}&pagesize=${pageSize}&page=${page}`,
       });
+console.log(response,"responsel");
 
-      const items: ITravelPackage[] = response;
+      const items: any[] = response.data;
+      console.log(response.data,"reponse");
+      
       dispatch(setLoadedItems({ itemData: items, loading: false }));
 
       const apiSuccess: ApiSuccess = {
@@ -58,7 +61,7 @@ export const fetchTravelPackagesByCategoryApi = createAsyncThunk(
         slug: `?category=${category}&pageSize=${pageSize || 10}&page=${page || 1}`,
       });
 
-      const items: ITravelPackage[] = response;
+      const items: ITravelPackage[] = response.data;
 
       // Dispatch items with loading set to false
       dispatch(setTravelPackagesByCategory({

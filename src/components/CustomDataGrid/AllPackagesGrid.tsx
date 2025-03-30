@@ -1,0 +1,142 @@
+import  { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Container,Box, Paper, Typography, useTheme, Switch,  } from "@mui/material";
+import UserColumns from "./PackageColumn";
+
+
+import { fetchTravelPackagesApi, updateTravelPackageStatus } from "../../redux/slices/Travel/travelApiSlice";
+import { AppDispatch } from "../../redux/store";
+import { selectedTravelPackages, selectedTravelPackagesLoading } from "../../redux/slices/Travel/TravelSlice";
+import LoadingOverlay from "../LoadingOverlay";
+import Datagrid from "../DataGrid/NewDataGrid";
+import SearchBar from "../Searchbar";
+import OptionsMenu from "../OptionMenu";
+import InfoCard from "../Card/InfoCard";
+
+export default function PackagesVerification() {
+  const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [openMenu, setOpenMenu] = useState(null);
+  const [selectedRowId, setSelectedRowId] = useState(null);
+  const [toggleCategoryType, setToggleUerType] = useState("active")
+  const [openModal, setOpenModal] = useState(false);
+  const [dependentInfo, setDependentInfo] = useState(null); 
+
+const travelPackages = useSelector(selectedTravelPackages);
+  const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
+  console.log("travelPackages",travelPackages);
+  
+  useEffect(() => {
+ 
+    if (toggleCategoryType == "active") {
+      dispatch(fetchTravelPackagesApi({status:"active"}))
+    }
+    else{
+        dispatch(fetchTravelPackagesApi({}))
+    }
+    setOpenModal(false)
+
+  }, [dispatch, toggleCategoryType]);
+
+  // user hospital
+  // let _users = users.map(row => {
+  //   row.currentHospital = row.currentHospital.hospitalName + ", " + row.currentHospital.location
+  //   row.registeredHospital = row.registeredHospital.hospitalName + ", " + row.registeredHospital.location
+  //   return row
+  // })
+
+
+  // Apply filtering only if rows have data
+  const filteredRows = travelPackages.travelPackages.filter(
+    (row) =>
+      row.id &&
+      row.id.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+
+
+  const updateUserStatus = (itemId, status) => {
+      dispatch(updateTravelPackageStatus(itemId, status));
+    setOpenMenu(null);
+  };
+
+
+  const toggleStatus = () => {
+    setToggleUerType((prevType) => (prevType === "active" ? "paused" : "active"));
+  }
+
+  const handleViewDetails = (dependentOn) => {
+    // Set the dependent information and open the modal
+    setDependentInfo(dependentOn);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const columns = UserColumns({setOpenMenu, setSelectedRowId, handleViewDetails});
+
+  return (
+    <Container maxWidth="xl">
+      <Box>
+        {" "}
+        {/* Apply blur when updating */}
+        <Typography variant="h2" fontWeight="bold">
+          User Verification
+        </Typography>
+        <Box sx={{ width: "100%" }}>
+          <Paper
+            sx={{
+              mb: 2,
+              overflow: "hidden",
+              borderRadius: 4,
+              backgroundColor: theme.palette.background.default,
+            }}
+          >
+            <Box sx={{ width: "100%", margin: "8px", position: "relative" }}>
+              <Paper sx={{ overflow: "hidden", borderRadius: 4, padding: 2 }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
+                  <SearchBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                  />
+                  <div>
+                    Active
+                    <Switch onClick={toggleStatus} />
+                    All
+                  </div>
+                </Box>
+
+                <LoadingOverlay loading={travelPackagesLoading} />
+                <Datagrid
+                  getRowId={(row) => row.id}
+                  columns={columns}
+                  rows={filteredRows}
+                  theme={theme}
+                />
+             
+                <OptionsMenu
+                className={""}
+                  openMenu={openMenu}
+                  setOpenMenu={setOpenMenu}
+                  selectedRowId={selectedRowId}
+                  updateUserStatus={updateUserStatus}
+                />
+                {dependentInfo &&
+                 <InfoCard
+                 InfoCardFor="More Info:"
+                 open={openModal}
+                 onClose={handleCloseModal}
+                 dependentInfo={dependentInfo}
+                 />
+                }
+              </Paper>
+            </Box>
+          </Paper>
+        </Box>
+      </Box>
+    </Container>
+  );
+}

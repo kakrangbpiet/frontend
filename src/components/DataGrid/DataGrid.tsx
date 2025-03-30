@@ -59,7 +59,7 @@ export interface DataGridProps<T extends object> {
   style?: React.CSSProperties;
 }
 
-export function DataGrid<T extends object>({
+export function DataGrid({
   data,
   columns,
   keyField,
@@ -71,7 +71,7 @@ export function DataGrid<T extends object>({
   loading = false,
   className = '',
   style
-}: DataGridProps<T>) {
+}) {
   // State for sorting
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
   
@@ -79,7 +79,7 @@ export function DataGrid<T extends object>({
   const [selectedRows, setSelectedRows] = useState<Record<string, boolean>>({});
   
   // Generate a key for a row
-  const getRowKey = (row: T): string => {
+  const getRowKey = (row): string => {
     if (typeof keyField === 'function') {
       return keyField(row);
     }
@@ -101,7 +101,7 @@ export function DataGrid<T extends object>({
   };
   
   // Handle row selection
-  const handleRowSelect = (row: T) => {
+  const handleRowSelect = (row) => {
     const rowKey = getRowKey(row);
     setSelectedRows((prev) => {
       const updated = { ...prev, [rowKey]: !prev[rowKey] };
