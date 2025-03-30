@@ -1,7 +1,17 @@
 
 export const ApiEndpoint: Record<string, any> = {
   // TRAVEL API ENDPOINTS
-USER_LOGIN: { 
+MAIN_LOGIN: { 
+    apiId: 1, 
+    withAuth: false, 
+    url: `http://localhost:3000/v1/login`,
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Logging In",
+    successMessage: "",
+    errorMessage: "Error Logging In"
+  },
+USER_REGISTER: { 
     apiId: 1, 
     withAuth: false, 
     url: `http://localhost:3000/v1/passwordless/login`, 
