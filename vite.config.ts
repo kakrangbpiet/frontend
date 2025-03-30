@@ -11,6 +11,14 @@ export default defineConfig({
       "/v1": "https://backend-am9k.onrender.com/",
     },
   },
+  css: {
+    modules: {
+      localsConvention: 'camelCase', // optional, for CSS Modules
+    },
+  },
+  optimizeDeps: {
+    include: ['swiper'],
+  },
   plugins: [
     react(),
     VitePWA({

@@ -55,6 +55,7 @@ const SingleTravelPackageDetails = () => {
   const travelType = selectedTravelPackage?.travelType ?? 'group';
   const price = selectedTravelPackage?.price ?? 0;
   const originalPrice = selectedTravelPackage?.originalPrice;
+  const maxTravelers = selectedTravelPackage?.maxTravelers ?? 0;;
 
   const approveTravelPackage = () => {
     (dispatch as AppDispatch)(updateTravelPackageStatus({
@@ -97,7 +98,8 @@ const SingleTravelPackageDetails = () => {
                   category,
                   status,
                   availableSpots,
-                  travelType
+                  travelType,
+                  maxTravelers
                 }} userType={userType} />
               </div>
             ) : (

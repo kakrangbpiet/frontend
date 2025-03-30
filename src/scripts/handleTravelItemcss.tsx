@@ -1,4 +1,3 @@
-import React from "react";
 import CodeBlock from "../components/CodeBlock";
 // import "./blogdescription.css"
 export const renderCustomStyles = (node: any, index: number) => {
