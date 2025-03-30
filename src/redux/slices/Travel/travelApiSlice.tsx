@@ -102,8 +102,10 @@ export const fetchSingleTravelPackageApi = createAsyncThunk(
         endpointId: "GET_SINGLE_TRAVEL_ITEM",
         slug: `/${itemId}`,
       });
+      console.log(response,"response");
+      
 
-      const item: ITravelPackage = response[0];
+      const item: ITravelPackage = response.data;
       dispatch(setLoadedItems({ itemData: [item], loading: false }));
 
       const apiSuccess: ApiSuccess = {
@@ -167,7 +169,7 @@ export const addTravelPackageApi = createAsyncThunk(
 
 export const updateTravelPackageStatus = createAsyncThunk(
   'travelCollection/updateItem',
-  async ({ itemId, status, setIsUpdating }: { itemId?: string, status: string, setIsUpdating: any }, { rejectWithValue, dispatch }) => {
+  async ({ itemId, status, setIsUpdating }: { itemId?: string, status: string, setIsUpdating?: any }, { rejectWithValue, dispatch }) => {
     try {
       setIsUpdating(true);
       const response = await Request({

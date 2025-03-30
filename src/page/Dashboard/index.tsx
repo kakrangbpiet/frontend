@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { isAuthenticated } from '../../redux/slices/login/authSlice';
 import { Button, Container } from '@mui/material';
-import PackagesVerification from '../../components/CustomDataGrid/AllPackagesGrid';
+import PackagesVerification from '../../components/AllPackagesDataGrid/AllPackagesGrid';
 
 
 const MiddleRow = styled.div`

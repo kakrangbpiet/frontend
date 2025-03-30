@@ -20,31 +20,31 @@ const OptionsMenu = ({
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       transformOrigin={{ vertical: "top", horizontal: "right" }}
     >
-      <MenuItem onClick={() => updateUserStatus(selectedRowId, "approve")}>
+      <MenuItem onClick={() => updateUserStatus(selectedRowId, "active")}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        Approve
+        Set Active
       </MenuItem>
-      <MenuItem onClick={() => updateUserStatus(selectedRowId, "reject")}>
+      <MenuItem onClick={() => updateUserStatus(selectedRowId, "inactive")}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        Reject
+        Set Inactive
       </MenuItem>
-      <MenuItem onClick={() => updateUserStatus(selectedRowId, "suspend")}>
+      <MenuItem onClick={() => updateUserStatus(selectedRowId, "coming-soon")}>
         <ListItemIcon>
           <DeleteIcon />
         </ListItemIcon>
-        Suspend
+        Set Coming Soon
       </MenuItem>
       <MenuItem
-        onClick={() => updateUserStatus(selectedRowId, "suspend/revoke")}
+        onClick={() => updateUserStatus(selectedRowId, "sold-out")}
       >
         <ListItemIcon>
           <DeleteIcon />
         </ListItemIcon>
-        Revoke User
+        Set Sold Out
       </MenuItem>
     </Menu>
   );

@@ -11,32 +11,26 @@ import LoadingOverlay from "../LoadingOverlay";
 import Datagrid from "../DataGrid/NewDataGrid";
 import SearchBar from "../Searchbar";
 import OptionsMenu from "../OptionMenu";
-import InfoCard from "../Card/InfoCard";
+import { useNavigate } from "react-router-dom";
 
 export default function PackagesVerification() {
   const dispatch = useDispatch<AppDispatch>();
   const theme = useTheme();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [openMenu, setOpenMenu] = useState(null);
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [toggleCategoryType, setToggleUerType] = useState("active")
-  const [openModal, setOpenModal] = useState(false);
-  const [dependentInfo, setDependentInfo] = useState(null); 
 
 const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
-  console.log("travelPackages",travelPackages);
-  
   useEffect(() => {
- 
     if (toggleCategoryType == "active") {
       dispatch(fetchTravelPackagesApi({status:"active"}))
     }
     else{
         dispatch(fetchTravelPackagesApi({}))
     }
-    setOpenModal(false)
-
   }, [dispatch, toggleCategoryType]);
 
   // user hospital
@@ -57,8 +51,7 @@ const travelPackages = useSelector(selectedTravelPackages);
 
 
   const updateUserStatus = (itemId, status) => {
-      dispatch(updateTravelPackageStatus(itemId, status));
-    setOpenMenu(null);
+      dispatch(updateTravelPackageStatus({itemId, status}));
   };
 
 
@@ -66,15 +59,10 @@ const travelPackages = useSelector(selectedTravelPackages);
     setToggleUerType((prevType) => (prevType === "active" ? "paused" : "active"));
   }
 
-  const handleViewDetails = (dependentOn) => {
+  const handleViewDetails = (id) => {
     // Set the dependent information and open the modal
-    setDependentInfo(dependentOn);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+    navigate(`/package/${id}`);
+  }
 
   const columns = UserColumns({setOpenMenu, setSelectedRowId, handleViewDetails});
 
@@ -123,14 +111,7 @@ const travelPackages = useSelector(selectedTravelPackages);
                   selectedRowId={selectedRowId}
                   updateUserStatus={updateUserStatus}
                 />
-                {dependentInfo &&
-                 <InfoCard
-                 InfoCardFor="More Info:"
-                 open={openModal}
-                 onClose={handleCloseModal}
-                 dependentInfo={dependentInfo}
-                 />
-                }
+            
               </Paper>
             </Box>
           </Paper>
