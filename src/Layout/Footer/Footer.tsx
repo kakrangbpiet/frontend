@@ -20,7 +20,7 @@ const Footer: React.FC<FooterProps> = ({
   const handleClose = () => {
     setOpen(false);
   };
-
+  const isMobile = window.innerWidth <= 768; 
   const getStyles = () => {
     return {
       footer: {
@@ -36,7 +36,8 @@ const Footer: React.FC<FooterProps> = ({
         display: 'flex',
         flexDirection: 'column' as const,
         gap: '20px',
-      },
+        ...(isMobile && { marginLeft: '40px' }), // Only applies if mobile
+    },
       topSection: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -48,7 +49,6 @@ const Footer: React.FC<FooterProps> = ({
         fontSize: '20px',
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginLeft: "28px"
       },
       nav: {
         display: 'flex',

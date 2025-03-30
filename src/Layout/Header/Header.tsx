@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Sidebar from '../Sidebar/Sidebar';
 
 const HeaderContainer = styled.header`
   background-color: #1E1E1E;
@@ -37,9 +38,13 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   gap: 16px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
-const StyledLink = styled(Link)<{ $active?: boolean }>`
+const StyledLink = styled(Link) <{ $active?: boolean }>`
   color: #A0A0A0;
   text-decoration: none;
   font-size: 14px;
@@ -55,7 +60,6 @@ const StyledLink = styled(Link)<{ $active?: boolean }>`
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
 `;
 
 const IconButton = styled.button`
@@ -73,17 +77,35 @@ const IconButton = styled.button`
   }
 `;
 
+// Mobile menu button
+const MobileMenuButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+
+  &:hover {
+    background-color: #2C2C2C;
+  }
+`;
+
 // SVG Icons
 const SearchIcon = () => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="20" 
-    height="20" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="#A0A0A0" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#A0A0A0"
+    strokeWidth="2"
+    strokeLinecap="round"
     strokeLinejoin="round"
   >
     <circle cx="11" cy="11" r="8"></circle>
@@ -92,15 +114,15 @@ const SearchIcon = () => (
 );
 
 const NotificationIcon = () => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="20" 
-    height="20" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="#A0A0A0" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#A0A0A0"
+    strokeWidth="2"
+    strokeLinecap="round"
     strokeLinejoin="round"
   >
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -114,12 +136,16 @@ interface HeaderProps {
     to: string;
     label: string;
   }>;
+  auth: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ 
-  title = 'SAMSARA', 
-  links ,
+const Header: React.FC<HeaderProps> = ({
+  title = 'SAMSARA',
+  links,
+  auth
 }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <HeaderContainer>
       <LogoContainer>
@@ -127,14 +153,14 @@ const Header: React.FC<HeaderProps> = ({
         <div style={{
           marginLeft: '12px',
         }}>
-        <Logo>{title}</Logo>
+          <Logo>{title}</Logo>
         </div>
       </LogoContainer>
 
       <Nav>
         {links.map((link, index) => (
-          <StyledLink 
-            key={index} 
+          <StyledLink
+            key={index}
             to={link.to}
             $active={window.location.pathname === link.to}
           >
@@ -150,6 +176,16 @@ const Header: React.FC<HeaderProps> = ({
         <IconButton>
           <NotificationIcon />
         </IconButton>
+        <MobileMenuButton>
+          {
+            !auth && <Sidebar
+              items={links}
+              isOpen={sidebarOpen}
+              onToggle={() => setSidebarOpen(!sidebarOpen)}
+              position="right"
+            />
+          }
+        </MobileMenuButton>
       </IconContainer>
     </HeaderContainer>
   );

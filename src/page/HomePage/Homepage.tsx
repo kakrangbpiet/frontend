@@ -6,6 +6,10 @@ const DashboardGrid = styled.div`
   display: grid;
   gap: 1rem;
   grid-template-rows: auto auto auto;
+
+  @media (max-width: 768px) {
+    margin-left: 50px;
+  }
 `;
 
 const HomePage: React.FC = () => {

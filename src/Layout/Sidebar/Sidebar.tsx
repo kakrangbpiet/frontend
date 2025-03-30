@@ -73,11 +73,11 @@ const NavItem = styled(Link)<{ $isOpen: boolean, $active?: boolean }>`
 `;
 
 const NavIcon = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   background-color: #4A4A4A;
   border-radius: 4px;
-  margin-right: 12px;
+  margin-right: 0px;
 `;
 
 const NavLabel = styled.span<{ $isOpen: boolean }>`

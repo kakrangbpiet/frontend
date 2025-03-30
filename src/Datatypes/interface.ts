@@ -74,6 +74,7 @@ export interface SidebarProps {
   }>;
   isOpen: boolean;
   onToggle: () => void;
+  position?: 'left' | 'right'
 }
 
 export interface SidebarItem {
