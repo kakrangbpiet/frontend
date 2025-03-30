@@ -13,8 +13,8 @@ interface TravelPackagesProps {
 const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages, loading }) => {
   const navigate = useNavigate();
 
-  const handleNavigate = (id: string) => {
-    navigate(`/package/${id}`);
+  const handleNavigate = (id: string,title:string) => {
+    navigate(`/package/${id}/${title}`);
   };
 
   const renderStatusChip = (status: ITravelPackage['status']) => {
@@ -41,10 +41,10 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages, loadin
       
       <section className="flat-spacing-0 pt-0">
         <div className="hover-sw-nav hover-sw-2">
-          {loading ? (
+          {travelPackages.length==0 ? (
             <Grid container spacing={3}>
-              {[...Array(3)].map((_, index) => (
-                <Grid  size={{ xs: 12, md: 4 }} key={index}>
+              {[...Array(4)].map((_, index) => (
+                <Grid  size={{ xs: 12, sm:6, md: 4,lg:3 }} key={index}>
                   <Skeleton variant="rectangular" height={350} />
                   <Skeleton variant="text" width="80%" />
                   <Skeleton variant="text" width="60%" />
@@ -64,7 +64,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages, loadin
                           overflow: 'hidden',
                           borderRadius: '18px',
                         }}
-                        onClick={() => handleNavigate(pkg.id)}
+                        onClick={() => handleNavigate(pkg.id,pkg.title)}
                         >
                           <Box  sx={{ position: 'relative',zIndex:"400" }}>
                         {renderStatusChip(pkg.status)}
@@ -80,7 +80,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages, loadin
                           <Typography
                             variant="h6"
                             component={Link}
-                            to={`/package/${pkg.id}`}
+                            to={`/package/${pkg.id}/${pkg.title}`}
                             sx={{
                               display: 'block',
                               mb: 1,

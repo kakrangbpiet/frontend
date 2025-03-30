@@ -1,6 +1,6 @@
 import  { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container,Box, Paper, Typography,  Switch,  } from "@mui/material";
+import { Box, Paper, Typography,  Switch,  } from "@mui/material";
 import UserColumns from "./PackageColumn";
 
 
@@ -58,15 +58,15 @@ const travelPackages = useSelector(selectedTravelPackages);
     setToggleUerType((prevType) => (prevType === "active" ? "paused" : "active"));
   }
 
-  const handleViewDetails = (id) => {
+  const handleViewDetails = (row) => {
     // Set the dependent information and open the modal
-    navigate(`/package/${id}`);
+    navigate(`/package/${row.id}/${row.title}`);
   }
 
   const columns = UserColumns({setOpenMenu, setSelectedRowId, handleViewDetails});
 
   return (
-    <Container maxWidth="xl">
+    <>
       <Box>
         {" "}
         {/* Apply blur when updating */}
@@ -115,6 +115,6 @@ const travelPackages = useSelector(selectedTravelPackages);
           </Paper>
         </Box>
       </Box>
-    </Container>
+    </>
   );
 }

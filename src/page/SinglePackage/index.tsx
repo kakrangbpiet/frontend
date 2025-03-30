@@ -74,7 +74,7 @@ const SingleTravelPackageDetails = () => {
   }
 
   return (
-    <Container className='px-4 mt-24 ml-2 mr-2'>
+    <Container className='px-4  ml-2 mr-2'>
       {description ? (
         <>
           <div>
@@ -103,7 +103,9 @@ const SingleTravelPackageDetails = () => {
                 }} userType={userType} />
               </div>
             ) : (
-              <Box>
+              <Box sx={{
+                mt:4
+              }}>
                 <Button variant='contained' sx={{
                 }}
                 onClick={navigateToHome}
@@ -111,16 +113,16 @@ const SingleTravelPackageDetails = () => {
                   Home
                 </Button>
 
-                <Typography variant='h3' sx={{ mb: 1, mt: 6 }}>
+                <Typography variant='h3' sx={{ mb: 1, mt: 2}}>
                   {travelPackageTitle}
                 </Typography>
 
                 {originalPrice && (
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
-                    <Typography variant='h5' sx={{ textDecoration: 'line-through', color: 'text.secondary' }}>
+                    <Typography variant='body1' sx={{ textDecoration: 'line-through', color: 'text.secondary' }}>
                     ₹{originalPrice.toFixed(2)}
                     </Typography>
-                    <Typography variant='h4' color='primary'>
+                    <Typography variant='body1' color='primary'>
                     ₹{price.toFixed(2)}
                     </Typography>
                   </Box>

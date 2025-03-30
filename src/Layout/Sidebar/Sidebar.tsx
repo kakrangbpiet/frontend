@@ -35,19 +35,15 @@ const LogoContainer = styled.div`
 const LogoIcon = styled.div`
   width: 32px;
   height: 32px;
-  background-color: #4A4A4A;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  margin-right: 12px;
 `;
 
 const ToggleButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,7 +129,6 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
       <SidebarHeader>
         {isOpen ? (
           <LogoContainer>
-            <LogoIcon />
             <span style={{ color: '#A0A0A0', fontWeight: 600 }}>SAMSARA</span>
           </LogoContainer>
         ) : (

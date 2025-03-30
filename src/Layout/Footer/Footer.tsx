@@ -6,6 +6,7 @@ import LoginForm from '../../components/Login';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { useDispatch, useSelector } from 'react-redux';
 import { isAuthenticated, logout } from '../../redux/slices/login/authSlice';
+import { Container } from '@mui/material';
 
 const Footer: React.FC<FooterProps> = ({
   companyName = 'SAMSARA',
@@ -106,6 +107,8 @@ const Footer: React.FC<FooterProps> = ({
   const styles = getStyles();
 
   return (
+    <Container>
+
     <footer style={styles.footer}>
       <div style={styles.container}>
         <div style={styles.topSection}>
@@ -157,6 +160,8 @@ const Footer: React.FC<FooterProps> = ({
         <LoginForm loginTitle="" OnFormSuccess={handleClose} userType={UserCategory.KAKRAN_SUPER_ADMIN} />
       </Dialog>
     </footer>
+    </Container>
+
   );
 };
 

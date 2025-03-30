@@ -25,7 +25,7 @@ const Router: React.FC = () => {
           element: <AboutPage/>,
         },
         {
-          path: "/package/:travelPackageId",
+          path: "/package/:travelPackageId/:travelPackageTitle",
           element: <SingleTravelPackageDetails/>,
         },
         {

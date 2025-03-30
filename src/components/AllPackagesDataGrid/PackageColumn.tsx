@@ -62,7 +62,7 @@ const TravelPackageColumns = ({
               variant="contained"
               color="primary"
               size="small"
-              onClick={() => handleViewDetails(params.row.id)}
+              onClick={() => handleViewDetails(params.row)}
             >
               View
             </Button>

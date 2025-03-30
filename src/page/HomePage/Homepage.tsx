@@ -27,7 +27,6 @@ const HomePage: React.FC = () => {
 
 
   const  categoryItemsHotDeals  = useSelector(selectTravelPackagesByCategory("hotdeals"));
-  const isMobile = window.innerWidth <= 768; 
 
  
   const handleLoadCategories = async () => {
@@ -57,11 +56,9 @@ const HomePage: React.FC = () => {
     handleLoadCategories();
    }, [dispatch,auth]);
   return (
-    <div style={{
-      marginLeft:isMobile ? '60px' : '0px',
-    }}>
+    <div >
       <video
-            className=" w-[100%] h-[100%] object-cover pointer-events-none"
+            className="m-0 p-0 w-[100%] h-[100%] object-cover pointer-events-none"
             src="mountain.mp4"
             autoPlay
             loop
@@ -69,12 +66,12 @@ const HomePage: React.FC = () => {
             playsInline
           ></video>
       <DashboardGrid>
-      <div className="flat-title mb-0 wow fadeInUp" data-wow-delay="0s">
-        <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
+      <div className="px-[24px] flat-title mb-0 wow fadeInUp" data-wow-delay="0s">
+        <Typography variant="h6" sx={{ mb: 0 }}>
           Hot Deals Packages
         </Typography>
-      </div>
         <TravelPackages travelPackages={categoryItemsHotDeals} categoryType="hotdeals"  loading={loadingByCategory["hotdeals"] || false} />
+      </div>
       </DashboardGrid>
        
     </div>
