@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
-import { useNavigate, useRoutes } from "react-router-dom";
+import React from "react";
+import {  useRoutes } from "react-router-dom";
 import Layout from "./Layout";
 import HomePage from "./page/HomePage/Homepage";
 import NotFoundPage from "./page/NotFoundPage";
-import { useSelector } from "react-redux";
-import { isAuthenticated } from "./redux/slices/login/authSlice";
 import Dashboard from "./page/Dashboard";
 import AddPackagePage from "./page/Addpackage";
+import AboutPage from "./page/AboutPage";
 
 const Router: React.FC = () => {
 
@@ -19,6 +18,10 @@ const Router: React.FC = () => {
         {
           path: "/",
           element: <HomePage/>,
+        },
+        {
+          path: "/about-us",
+          element: <AboutPage/>,
         },
         {
           path: "/dashboard",

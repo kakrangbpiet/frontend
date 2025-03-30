@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import LoginForm from '../../components/Login';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
+import { useDispatch, useSelector } from 'react-redux';
+import { isAuthenticated, logout } from '../../redux/slices/login/authSlice';
 
 const Footer: React.FC<FooterProps> = ({
   companyName = 'SAMSARA',
@@ -12,6 +14,8 @@ const Footer: React.FC<FooterProps> = ({
 }) => {
   const year = new Date().getFullYear();
   const [open, setOpen] = useState(false);
+  const auth = useSelector(isAuthenticated);
+  const dispatch=useDispatch()
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,6 +23,9 @@ const Footer: React.FC<FooterProps> = ({
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleLogout = () => {
+   dispatch(logout())
   };
   const isMobile = window.innerWidth <= 768; 
   const getStyles = () => {
@@ -108,13 +115,20 @@ const Footer: React.FC<FooterProps> = ({
             <a href="/services" style={styles.link}>Services</a>
             <a href="/contact" style={styles.link}>Contact</a>
             <a href="/privacy" style={styles.link}>Privacy Policy</a>
-            <Button 
+           {!auth ?( <Button 
               style={styles.loginButton} 
               onClick={handleClickOpen}
               disableRipple
             >
               Login
             </Button>
+           ):(<Button
+              style={styles.loginButton}
+              onClick={handleLogout}
+              disableRipple
+            >
+              logout
+            </Button>)}
           </nav>
         </div>
         

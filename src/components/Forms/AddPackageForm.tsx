@@ -1,6 +1,6 @@
-import React, { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, Chip } from '@mui/material';
+import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box } from '@mui/material';
 // import 'react-quill/dist/quill.snow.css';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
@@ -340,11 +340,11 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
           {formData.images?.map((img, index) => (
             <Box key={index} position="relative">
-              <img 
-                src={img} 
-                alt={`Gallery ${index + 1}`} 
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
-              />
+             <img 
+      src={`data:image/jpeg;base64,${img}`} 
+      alt={`Gallery ${index + 1}`} 
+      style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
+    />
               <IconButton 
                 size="small" 
                 style={{ 

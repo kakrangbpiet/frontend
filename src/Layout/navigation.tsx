@@ -6,7 +6,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 // Header Links
 export const HEADER_LINKS = [
   { to: '/', label: 'Dashboard' },
-  { to: '/analytics', label: 'Analytics',icon:<AnalyticsIcon/> },
+  { to: '/about-us', label: 'About',icon:<AnalyticsIcon/> },
   { to: '/settings', label: 'Settings',icon:<SettingsIcon/> },
 ];
 

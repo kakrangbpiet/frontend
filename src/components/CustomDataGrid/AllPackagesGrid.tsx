@@ -51,7 +51,7 @@ const travelPackages = useSelector(selectedTravelPackages);
   const filteredRows = travelPackages.travelPackages.filter(
     (row) =>
       row.id &&
-      row.id.toLowerCase().includes(searchQuery.toLowerCase()),
+      row.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
 
@@ -83,8 +83,8 @@ const travelPackages = useSelector(selectedTravelPackages);
       <Box>
         {" "}
         {/* Apply blur when updating */}
-        <Typography variant="h2" fontWeight="bold">
-          User Verification
+        <Typography variant="h4" fontWeight="bold">
+          My packages
         </Typography>
         <Box sx={{ width: "100%" }}>
           <Paper
@@ -114,7 +114,6 @@ const travelPackages = useSelector(selectedTravelPackages);
                   getRowId={(row) => row.id}
                   columns={columns}
                   rows={filteredRows}
-                  theme={theme}
                 />
              
                 <OptionsMenu

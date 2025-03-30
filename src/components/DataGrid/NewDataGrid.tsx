@@ -1,6 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { CustomNoRowsOverlay } from "../LoadingOverlay/NoRowsOverlay";
-const Datagrid = ({ getRowId, columns, rows, theme }) => (
+const Datagrid = ({ getRowId, columns, rows }) => (
   <DataGrid
     autoHeight
     columns={columns}

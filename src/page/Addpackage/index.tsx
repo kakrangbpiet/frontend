@@ -20,9 +20,7 @@ function AddPackagePage() {
   }, [isUserAuthenticated, history]);
   return (
     <Container className='mt-24'>
-          <div>
             <AddTravelPackageForm  userType={userType} formEvent={"Add Package"} />
-          </div>
     </Container>
   )
 }
