@@ -4,7 +4,7 @@ export const ApiEndpoint: Record<string, any> = {
 MAIN_LOGIN: { 
     apiId: 1, 
     withAuth: false, 
-    url: `http://localhost:3000/v1/login`,
+    url: `v1/login`,
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Logging In",
@@ -14,7 +14,7 @@ MAIN_LOGIN: {
 USER_REGISTER: { 
     apiId: 1, 
     withAuth: false, 
-    url: `http://localhost:3000/v1/passwordless/login`, 
+    url: `v1/passwordless/login`, 
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Logging In",
