@@ -146,6 +146,8 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
   };
 
   return (
+    <Box>
+
     <form onSubmit={handleFormSubmit}>
     <Grid container spacing={2}>
       {/* Title - full width */}
@@ -381,6 +383,8 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       </Grid>
     </Grid>
   </form>
+  </Box>
+
   );
 };
 

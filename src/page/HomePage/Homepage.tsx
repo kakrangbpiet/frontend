@@ -27,6 +27,7 @@ const HomePage: React.FC = () => {
 
 
   const  categoryItemsHotDeals  = useSelector(selectTravelPackagesByCategory("hotdeals"));
+  const  categoryItemsNew  = useSelector(selectTravelPackagesByCategory("new"));
 
  
   const handleLoadCategories = async () => {
@@ -43,7 +44,7 @@ const HomePage: React.FC = () => {
         fetchTravelPackagesByCategoryApi({
           pageSize: 10,
           page: 1,
-          category: "hotdeals",
+          category: "new",
           status:"active"
         })
       );
@@ -59,7 +60,7 @@ const HomePage: React.FC = () => {
     <div >
       <video
             className="m-0 p-0 w-[100%] h-[100%] object-cover pointer-events-none"
-            src="mountain.mp4"
+            src="trekking.mp4"
             autoPlay
             loop
             muted
@@ -71,6 +72,7 @@ const HomePage: React.FC = () => {
           Hot Deals Packages
         </Typography>
         <TravelPackages travelPackages={categoryItemsHotDeals} categoryType="hotdeals"  loading={loadingByCategory["hotdeals"] || false} />
+        <TravelPackages travelPackages={categoryItemsNew} categoryType="new"  loading={loadingByCategory["new"] || false} />
       </div>
       </DashboardGrid>
        

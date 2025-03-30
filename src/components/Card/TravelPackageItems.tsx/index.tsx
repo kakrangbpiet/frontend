@@ -10,7 +10,7 @@ interface TravelPackagesProps {
   travelPackages?: ITravelPackage[];
 }
 
-const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages, loading }) => {
+const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (id: string,title:string) => {
