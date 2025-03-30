@@ -20,7 +20,7 @@ export const loginUser = createAsyncThunk(
       dispatch(setLoading({ isLoading: true }));
 
       const response = await Request({
-        endpointId: "MAIN_LOGIN",
+        endpointId: "USER_LOGIN",
         data: { userType,email, password,deviceId:"550e8400-e29b-41d4-a716-446655440000" },
       })
       

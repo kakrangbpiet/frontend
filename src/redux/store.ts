@@ -2,12 +2,14 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 // import logger from 'redux-logger'
 import TravelSlice from "./slices/Travel/TravelSlice"
 import AddToCartSlice from "./slices/Travel/AddToCartSlice"
+import AuthSlice from "./slices/login/authSlice"
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
         travelCollection:TravelSlice,
         cart:AddToCartSlice,
+        auth:AuthSlice
     }, 
     // middleware:getDefaultMiddlerware =>
     //   getDefaultMiddlerware().concat(logger),

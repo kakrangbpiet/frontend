@@ -16,6 +16,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.1",
+    "@mui/material": "^7.0.1",
     "@reduxjs/toolkit": "^2.6.1",
     "@storybook/testing-library": "^0.2.1",
     "ajv": "^8.17.1",
@@ -28,6 +30,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.2.0",
     "styled-components": "^6.1.15",
+    "swiper": "^11.2.6",
     "vite-plugin-dts": "^4.5.3"
   },
   "devDependencies": {

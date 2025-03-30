@@ -4,7 +4,7 @@ export const ApiEndpoint: Record<string, any> = {
 USER_LOGIN: { 
     apiId: 1, 
     withAuth: false, 
-    url: `backendApi/passwordless/login`, 
+    url: `http://localhost:3000/v1/passwordless/login`, 
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Logging In",

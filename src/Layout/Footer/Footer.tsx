@@ -1,5 +1,9 @@
-import React from 'react';
-import {FooterProps} from '../../Datatypes/interface';
+import React, { useState } from 'react';
+import { FooterProps } from '../../Datatypes/interface';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import LoginForm from '../../components/Login';
+import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 
 const Footer: React.FC<FooterProps> = ({
   companyName = 'SAMSARA',
@@ -7,7 +11,16 @@ const Footer: React.FC<FooterProps> = ({
   variant = '',
 }) => {
   const year = new Date().getFullYear();
-  
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const getStyles = () => {
     return {
       footer: {
@@ -35,17 +48,28 @@ const Footer: React.FC<FooterProps> = ({
         fontSize: '20px',
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginLeft:"28px"
+        marginLeft: "28px"
       },
       nav: {
         display: 'flex',
         gap: '24px',
+        alignItems: 'center',
       },
       link: {
         color: variant === 'light' ? '#495057' : '#e5e7eb',
         textDecoration: 'none',
         transition: 'color 0.2s ease',
         fontSize: '14px',
+      },
+      loginButton: {
+        color: variant === 'light' ? '#495057' : '#e5e7eb',
+        fontSize: '14px',
+        padding: '0',
+        minWidth: '0',
+        '&:hover': {
+          backgroundColor: 'transparent',
+          textDecoration: 'underline',
+        },
       },
       socialIcons: {
         display: 'flex',
@@ -84,6 +108,13 @@ const Footer: React.FC<FooterProps> = ({
             <a href="/services" style={styles.link}>Services</a>
             <a href="/contact" style={styles.link}>Contact</a>
             <a href="/privacy" style={styles.link}>Privacy Policy</a>
+            <Button 
+              style={styles.loginButton} 
+              onClick={handleClickOpen}
+              disableRipple
+            >
+              Login
+            </Button>
           </nav>
         </div>
         
@@ -108,6 +139,10 @@ const Footer: React.FC<FooterProps> = ({
           © {year} {companyName}. All rights reserved.
         </div>
       </div>
+
+      <Dialog open={open} onClose={handleClose}>
+        <LoginForm loginTitle="" OnFormSuccess={handleClose} userType={UserCategory.KAKRAN_SUPER_ADMIN} />
+      </Dialog>
     </footer>
   );
 };
