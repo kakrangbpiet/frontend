@@ -10,7 +10,7 @@ interface TravelPackagesProps {
   travelPackages?: ITravelPackage[];
 }
 
-const TravelPackages: React.FC<TravelPackagesProps> = ({ categoryType, travelPackages, loading }) => {
+const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages, loading }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (id: string) => {
@@ -37,11 +37,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({ categoryType, travelPac
 
   return (
     <div className="">
-      <div className="flat-title mb-0 wow fadeInUp" data-wow-delay="0s">
-        <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-          {categoryType ? `${categoryType} Packages` : 'Travel Packages'}
-        </Typography>
-      </div>
+     
       
       <section className="flat-spacing-0 pt-0">
         <div className="hover-sw-nav hover-sw-2">

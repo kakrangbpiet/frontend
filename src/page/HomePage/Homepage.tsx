@@ -7,6 +7,7 @@ import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/trav
 import { AppDispatch } from '../../redux/store';
 import { selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
+import { Typography } from '@mui/material';
 
 const DashboardGrid = styled.div`
 
@@ -26,6 +27,7 @@ const HomePage: React.FC = () => {
 
 
   const  categoryItemsHotDeals  = useSelector(selectTravelPackagesByCategory("hotdeals"));
+  const isMobile = window.innerWidth <= 768; 
 
  
   const handleLoadCategories = async () => {
@@ -55,8 +57,23 @@ const HomePage: React.FC = () => {
     handleLoadCategories();
    }, [dispatch,auth]);
   return (
-    <div>
+    <div style={{
+      marginLeft:isMobile ? '60px' : '0px',
+    }}>
+      <video
+            className=" w-[100%] h-[100%] object-cover pointer-events-none"
+            src="mountain.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+          ></video>
       <DashboardGrid>
+      <div className="flat-title mb-0 wow fadeInUp" data-wow-delay="0s">
+        <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
+          Hot Deals Packages
+        </Typography>
+      </div>
         <TravelPackages travelPackages={categoryItemsHotDeals} categoryType="hotdeals"  loading={loadingByCategory["hotdeals"] || false} />
       </DashboardGrid>
        

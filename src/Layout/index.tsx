@@ -18,8 +18,6 @@ const LayoutContainer = styled.div`
 
 const MainContent = styled.main<{ $sidebarOpen: boolean; }>`
   flex: 1;
-  margin-left: ${({ $sidebarOpen }) =>
-   $sidebarOpen ? '240px' : '64px'};
   padding: 1rem;
   transition: margin-left 0.3s ease;
 `;
