@@ -1,7 +1,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface ITravelItem {
+export interface ITravelPackage {
     id: string;
     title: string;
     description: string;
@@ -18,15 +18,15 @@ export interface ITravelItem {
   }
 
 interface TravelState {
-  travelItems: ITravelItem[];
-  travelItemsByCategory: { [category: string]: ITravelItem[] };
+  travelPackages: ITravelPackage[];
+  travelPackagesByCategory: { [category: string]: ITravelPackage[] };
   loading: boolean;
   loadingByCategory: { [category: string]: boolean };
 }
 
 const initialState: TravelState = {
-  travelItems: [] as ITravelItem[],
-  travelItemsByCategory: {} as { [category: string]: ITravelItem[] },
+  travelPackages: [] as ITravelPackage[],
+  travelPackagesByCategory: {} as { [category: string]: ITravelPackage[] },
   loading: false,
   loadingByCategory: {},
 };
@@ -35,28 +35,28 @@ const travelSlice = createSlice({
   name: 'travelCollection',
   initialState,
   reducers: {
-    setLoadedItems: (state, action: PayloadAction<{ itemData?: ITravelItem[]; loading: boolean }>) => {
+    setLoadedItems: (state, action: PayloadAction<{ itemData?: ITravelPackage[]; loading: boolean }>) => {
       const loadedItems = action.payload.itemData;
       loadedItems &&
         loadedItems.forEach((item) => {
-          if (!state.travelItems.some((existingItem) => existingItem.id === item.id)) {
-            state.travelItems.push(item);
+          if (!state.travelPackages.some((existingItem) => existingItem.id === item.id)) {
+            state.travelPackages.push(item);
           }
         });
       state.loading = action.payload.loading;
     },
-    setTravelItemsByCategory: (
+    setTravelPackagesByCategory: (
       state,
-      action: PayloadAction<{ category: string; itemData?: ITravelItem[]; loading: boolean }>
+      action: PayloadAction<{ category: string; itemData?: ITravelPackage[]; loading: boolean }>
     ) => {
       const { category, itemData, loading } = action.payload;
-      state.travelItemsByCategory[category] = itemData || [];
+      state.travelPackagesByCategory[category] = itemData || [];
       state.loadingByCategory[category] = loading;
       const loadedItems = action.payload.itemData;
       loadedItems &&
         loadedItems.forEach((item) => {
-          if (!state.travelItems.some((existingItem) => existingItem.id === item.id)) {
-            state.travelItems.push(item);
+          if (!state.travelPackages.some((existingItem) => existingItem.id === item.id)) {
+            state.travelPackages.push(item);
           }
         });
       
@@ -65,35 +65,35 @@ const travelSlice = createSlice({
       state.loadingByCategory[action.payload.category] = action.payload.loading;
     },
 
-    addItem: (state, action: PayloadAction<ITravelItem>) => {
-      state.travelItems.push(action.payload);
+    addItem: (state, action: PayloadAction<ITravelPackage>) => {
+      state.travelPackages.push(action.payload);
     },
-    updateItem: (state, action: PayloadAction<ITravelItem>) => {
+    updateItem: (state, action: PayloadAction<ITravelPackage>) => {
       const updatedItem = action.payload;
-      const itemIndex = state.travelItems.findIndex((item) => item.id === updatedItem.id);
+      const itemIndex = state.travelPackages.findIndex((item) => item.id === updatedItem.id);
       if (itemIndex !== -1) {
-        state.travelItems[itemIndex] = updatedItem;
+        state.travelPackages[itemIndex] = updatedItem;
       }
     },
   },
 });
 
-export const { setLoadedItems, setCategoryLoading, setTravelItemsByCategory, addItem, updateItem } = travelSlice.actions;
+export const { setLoadedItems, setCategoryLoading, setTravelPackagesByCategory, addItem, updateItem } = travelSlice.actions;
 
 export default travelSlice.reducer;
 
-export const selectedTravelItems = (state: { travelCollection: TravelState }) =>
+export const selectedTravelPackages = (state: { travelCollection: TravelState }) =>
   state.travelCollection;
 
-export const useSelectedTravelItem = (itemId: string | undefined) => (state: { travelCollection: TravelState }) =>
-  state.travelCollection.travelItems.find((item) => item.id === itemId);
+export const useSelectedTravelPackage = (itemId: string | undefined) => (state: { travelCollection: TravelState }) =>
+  state.travelCollection.travelPackages.find((item) => item.id === itemId);
 
-export const selectTravelItemsByCategory = (category: string) =>(state: { travelCollection: TravelState }) =>
-  state.travelCollection.travelItemsByCategory[category] || [];
+export const selectTravelPackagesByCategory = (category: string) =>(state: { travelCollection: TravelState }) =>
+  state.travelCollection.travelPackagesByCategory[category] || [];
 
 
 
-// export interface ITravelItem {
+// export interface ITravelPackage {
 //     id: string;
 //     title: string;
 //     description: string;

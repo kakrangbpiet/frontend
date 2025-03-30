@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, setTravelItemsByCategory, ITravelItem } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
 
-export const fetchTravelItemsApi = createAsyncThunk(
+export const fetchTravelPackagesApi = createAsyncThunk(
   'travelCollection/setLoadedItems',
   async ({ pageSize, page, setItemPage, status }: { pageSize?: number, page?: number, setItemPage?: (page: number) => void, status: string }, { rejectWithValue, dispatch }) => {
     dispatch(setLoadedItems({
@@ -16,7 +16,7 @@ export const fetchTravelItemsApi = createAsyncThunk(
         slug: `?status=${status}&pagesize=${pageSize}&page=${page}`,
       });
 
-      const items: ITravelItem[] = response;
+      const items: ITravelPackage[] = response;
       dispatch(setLoadedItems({ itemData: items, loading: false }));
 
       const apiSuccess: ApiSuccess = {
@@ -40,14 +40,14 @@ export const fetchTravelItemsApi = createAsyncThunk(
   }
 );
 
-export const fetchTravelItemsByCategoryApi = createAsyncThunk(
-  'travelCollection/setTravelItemsByCategory',
+export const fetchTravelPackagesByCategoryApi = createAsyncThunk(
+  'travelCollection/setTravelPackagesByCategory',
   async (
     { category, pageSize, page }: { category: string; pageSize?: number; page?: number; setItemPage?: (page: number) => void },
     { rejectWithValue, dispatch }
   ) => {
     // Set loading to true before fetching
-    dispatch(setTravelItemsByCategory({
+    dispatch(setTravelPackagesByCategory({
       category,
       loading: true,
     }));
@@ -58,10 +58,10 @@ export const fetchTravelItemsByCategoryApi = createAsyncThunk(
         slug: `?category=${category}&pageSize=${pageSize || 10}&page=${page || 1}`,
       });
 
-      const items: ITravelItem[] = response;
+      const items: ITravelPackage[] = response;
 
       // Dispatch items with loading set to false
-      dispatch(setTravelItemsByCategory({
+      dispatch(setTravelPackagesByCategory({
         category,
         itemData: items,
         loading: false,
@@ -75,7 +75,7 @@ export const fetchTravelItemsByCategoryApi = createAsyncThunk(
 
     } catch (error) {
       // Handle error and set loading to false
-      dispatch(setTravelItemsByCategory({
+      dispatch(setTravelPackagesByCategory({
         category,
         loading: false,
       }));
@@ -88,7 +88,7 @@ export const fetchTravelItemsByCategoryApi = createAsyncThunk(
   }
 );
 
-export const fetchSingleTravelItemApi = createAsyncThunk(
+export const fetchSingleTravelPackageApi = createAsyncThunk(
   'travelCollection/setLoadedItems',
   async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
     dispatch(setLoadedItems({
@@ -100,7 +100,7 @@ export const fetchSingleTravelItemApi = createAsyncThunk(
         slug: `/${itemId}`,
       });
 
-      const item: ITravelItem = response[0];
+      const item: ITravelPackage = response[0];
       dispatch(setLoadedItems({ itemData: [item], loading: false }));
 
       const apiSuccess: ApiSuccess = {
@@ -121,9 +121,9 @@ export const fetchSingleTravelItemApi = createAsyncThunk(
   }
 );
 
-export const addTravelItemApi = createAsyncThunk(
+export const addTravelPackageApi = createAsyncThunk(
   'travelCollection/addItem',
-  async ({ newTravelItemData, formEvent, clearForm, setIsSaving }: { newTravelItemData: ITravelItem, formEvent: any, clearForm: any, setIsSaving: any }, { rejectWithValue, dispatch }) => {
+  async ({ newTravelPackageData, formEvent, clearForm, setIsSaving }: { newTravelPackageData: ITravelPackage, formEvent: any, clearForm: any, setIsSaving: any }, { rejectWithValue, dispatch }) => {
     try {
       let response;
 
@@ -131,15 +131,15 @@ export const addTravelItemApi = createAsyncThunk(
         // Update item logic
         response = await Request({
           endpointId: "EDIT_TRAVEL_ITEM",
-          slug: `/${newTravelItemData.id}`,
-          data: newTravelItemData,
+          slug: `/${newTravelPackageData.id}`,
+          data: newTravelPackageData,
         });
         dispatch(updateItem(response));
       } else {
         // Add new item logic
         response = await Request({
           endpointId: "ADD_TRAVEL_ITEM",
-          data: newTravelItemData,
+          data: newTravelPackageData,
         });
         clearForm();
         dispatch(addItem(response));
@@ -162,7 +162,7 @@ export const addTravelItemApi = createAsyncThunk(
   }
 );
 
-export const updateTravelItemStatus = createAsyncThunk(
+export const updateTravelPackageStatus = createAsyncThunk(
   'travelCollection/updateItem',
   async ({ itemId, status, setIsUpdating }: { itemId?: string, status: string, setIsUpdating: any }, { rejectWithValue, dispatch }) => {
     try {

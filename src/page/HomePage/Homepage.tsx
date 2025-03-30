@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import TravelItemsList from './HomeCard';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { isAuthenticated } from '../../redux/slices/login/authSlice';
 
 const DashboardGrid = styled.div`
   display: grid;
@@ -13,6 +16,14 @@ const DashboardGrid = styled.div`
 `;
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const auth = useSelector(isAuthenticated);
+
+  useEffect(() => {
+    if (auth) {
+      navigate("/dashboard");
+    }
+  }, [auth, navigate]);
   return (
     <div>
       <DashboardGrid>

@@ -22,7 +22,6 @@ const MainContent = styled.main<{ $sidebarOpen: boolean; $auth: any }>`
     $auth ? ($sidebarOpen ? '240px' : '64px') : '0px'};
   padding: 1rem;
   transition: margin-left 0.3s ease;
-  background-color: #121212;
 `;
 
 

@@ -1,8 +1,8 @@
 import  { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { selectTravelItemsByCategory } from '../../redux/slices/Travel/TravelSlice';
-import { fetchTravelItemsByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
+import { selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
+import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
 
 const DashboardCard = styled.div`
@@ -12,14 +12,14 @@ const DashboardCard = styled.div`
   min-height: 100px;
 `;
 
-const TravelItemsList = ({ category }: { category: string }) => {
+const TravelPackagesList = ({ category }: { category: string }) => {
   const dispatch = useDispatch<AppDispatch>();
   // Get travel items for the specific category
-  const travelItems = useSelector(selectTravelItemsByCategory(category));
+  const travelPackages = useSelector(selectTravelPackagesByCategory(category));
 
   useEffect(() => {
     // Fetch items when component mounts or category changes
-    dispatch(fetchTravelItemsByCategoryApi({ 
+    dispatch(fetchTravelPackagesByCategoryApi({ 
       category, 
       pageSize: 10, // Adjust as needed
       page: 1       // Start with page 1
@@ -29,11 +29,11 @@ const TravelItemsList = ({ category }: { category: string }) => {
   return (
     <DashboardCard>
       <h2>{category} Packages</h2>
-      {travelItems.length === 0 ? (
+      {travelPackages.length === 0 ? (
         <p>No {category} packages available</p>
       ) : (
         <ul>
-          {travelItems.map((item) => (
+          {travelPackages.map((item) => (
             <li key={item.id}>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
@@ -47,4 +47,4 @@ const TravelItemsList = ({ category }: { category: string }) => {
   );
 };
 
-export default TravelItemsList;
+export default TravelPackagesList;

@@ -4,6 +4,6 @@ export enum accountStatus {
   
   export enum UserCategory {
     User = 'user',
-    KAKRAN_SUPER_ADMIN = 'KAKRAN_SUPER_ADMIN',
+    KAKRAN_SUPER_ADMIN = 'SUPER_ADMIN',
   }
   

@@ -73,11 +73,11 @@ const NavItem = styled(Link)<{ $isOpen: boolean, $active?: boolean }>`
 `;
 
 const NavIcon = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   background-color: #4A4A4A;
   border-radius: 4px;
-  margin-right: 0px;
+  margin-right: 10px;
 `;
 
 const NavLabel = styled.span<{ $isOpen: boolean }>`
@@ -151,7 +151,9 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
             $isOpen={isOpen}
             $active={location.pathname === item.to}
           >
-            <NavIcon />
+            <NavIcon >
+           { item.icon}
+            </NavIcon>
             <NavLabel $isOpen={isOpen}>{item.label}</NavLabel>
           </NavItem>
         ))}
