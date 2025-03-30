@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../../redux/slices/login/authSlice';
-import { Typography } from '@mui/material';
 import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
 import { selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
@@ -58,9 +57,6 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <DashboardGrid>
-      <Typography variant="h3" sx={{ mt: 4 }} className="text-center mt-8 mb-2">
-          Top Products
-        </Typography>
         <TravelPackages travelPackages={categoryItemsHotDeals} categoryType="hotdeals"  loading={loadingByCategory["hotdeals"] || false} />
       </DashboardGrid>
        

@@ -1,6 +1,6 @@
 import  { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container,Box, Paper, Typography, useTheme, Switch,  } from "@mui/material";
+import { Container,Box, Paper, Typography,  Switch,  } from "@mui/material";
 import UserColumns from "./PackageColumn";
 
 
@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function PackagesVerification() {
   const dispatch = useDispatch<AppDispatch>();
-  const theme = useTheme();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [openMenu, setOpenMenu] = useState(null);
@@ -80,7 +79,6 @@ const travelPackages = useSelector(selectedTravelPackages);
               mb: 2,
               overflow: "hidden",
               borderRadius: 4,
-              backgroundColor: theme.palette.background.default,
             }}
           >
             <Box sx={{ width: "100%", margin: "8px", position: "relative" }}>

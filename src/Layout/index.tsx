@@ -16,10 +16,10 @@ const LayoutContainer = styled.div`
   min-height: 100vh;
 `;
 
-const MainContent = styled.main<{ $sidebarOpen: boolean; $auth: any }>`
+const MainContent = styled.main<{ $sidebarOpen: boolean; }>`
   flex: 1;
-  margin-left: ${({ $sidebarOpen, $auth }) =>
-    $auth ? ($sidebarOpen ? '240px' : '64px') : '0px'};
+  margin-left: ${({ $sidebarOpen }) =>
+   $sidebarOpen ? '240px' : '64px'};
   padding: 1rem;
   transition: margin-left 0.3s ease;
 `;
@@ -41,7 +41,7 @@ const Layout= () => {
       />
      }
      
-      <MainContent $auth={auth} $sidebarOpen={sidebarOpen}>
+      <MainContent  $sidebarOpen={sidebarOpen}>
         <Outlet/>
       </MainContent>
       <Footer />

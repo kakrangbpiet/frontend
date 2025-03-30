@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import dts from "vite-plugin-dts";
+import tailwind from '@tailwindcss/vite' // ESM import
 
 export default defineConfig({
   server: {
@@ -15,12 +16,15 @@ export default defineConfig({
     modules: {
       localsConvention: 'camelCase', // optional, for CSS Modules
     },
+     postcss: './postcss.config.js'
+  
   },
   optimizeDeps: {
     include: ['swiper'],
   },
   plugins: [
     react(),
+    tailwind(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {

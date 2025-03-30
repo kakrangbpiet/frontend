@@ -7,7 +7,7 @@ import { Box, Button, Container, Skeleton, Typography } from '@mui/material';
 //theme
 //redux
 import { useNavigate, useParams } from 'react-router-dom';
-import CustomSwiper from '../../components/Swiper/inde';
+import CustomSwiper from '../../components/Swiper';
 import { AppDispatch } from '../../redux/store';
 import { selectUserType } from '../../redux/slices/login/authSlice';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
@@ -118,10 +118,10 @@ const SingleTravelPackageDetails = () => {
                 {originalPrice && (
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
                     <Typography variant='h5' sx={{ textDecoration: 'line-through', color: 'text.secondary' }}>
-                      ${originalPrice.toFixed(2)}
+                    ₹{originalPrice.toFixed(2)}
                     </Typography>
                     <Typography variant='h4' color='primary'>
-                      ${price.toFixed(2)}
+                    ₹{price.toFixed(2)}
                     </Typography>
                   </Box>
                 )}
