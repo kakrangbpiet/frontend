@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box, Button, Container, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Skeleton, Typography } from '@mui/material';
 
 
 //theme
@@ -15,6 +15,7 @@ import { fetchSingleTravelPackageApi, updateTravelPackageStatus } from '../../re
 import { ITravelPackage, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
+import Registration from '../../components/Registration';
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId: travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -112,7 +113,6 @@ const SingleTravelPackageDetails = () => {
                 >
                   Home
                 </Button>
-
                 <Typography variant='h3' sx={{ mb: 1, mt: 2}}>
                   {travelPackageTitle}
                 </Typography>
@@ -131,6 +131,10 @@ const SingleTravelPackageDetails = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
                   <CustomSwiper  images={images.map(img => `data:image/png;base64,${img}`)} />
                 </Box>
+                <Grid container>
+
+                <Grid size={{xs:12, md: 6, lg: 8}} >
+                  
                 
                 <Box sx={{
                   display: "flex",
@@ -166,6 +170,12 @@ const SingleTravelPackageDetails = () => {
                   <Typography variant='h6'>Package Details:</Typography>
                   <Typography variant='body1'>Category: {category}</Typography>
                 </Box>
+                </Grid>
+                <Grid size={{xs:12, md: 6, lg: 4}} >
+                  <Registration/>
+                </Grid>
+                </Grid>
+
               </Box>
             )}
           </div>

@@ -19,7 +19,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => (
         color: "#9e9e9e",
       }}
     >
-      Search by Name, email, userType
+      Search by Package
     </Typography>
   </Box>
 );

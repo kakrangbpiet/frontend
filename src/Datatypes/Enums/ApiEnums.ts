@@ -1,10 +1,12 @@
 
+// const backendUrl="https://backend-am9k.onrender.com/v1"
+const backendUrl="http://localhost:3000/v1"
 export const ApiEndpoint: Record<string, any> = {
   // TRAVEL API ENDPOINTS
 MAIN_LOGIN: { 
     apiId: 1, 
     withAuth: false, 
-    url: `https://backend-am9k.onrender.com/v1/login`,
+    url: `${backendUrl}/login`,
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Logging In",
@@ -14,7 +16,7 @@ MAIN_LOGIN: {
 USER_REGISTER: { 
     apiId: 1, 
     withAuth: false, 
-    url: `https://backend-am9k.onrender.com/v1/passwordless/login`, 
+    url: `${backendUrl}/passwordless/login`, 
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Logging In",
@@ -24,7 +26,7 @@ USER_REGISTER: {
 GET_TRAVEL_ITEMS: { 
     apiId: 20, 
     withAuth: false, 
-    url: `https://backend-am9k.onrender.com/v1/Travel/travelType`, 
+    url: `${backendUrl}/Travel/travelType`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading travel items",
@@ -34,7 +36,7 @@ GET_TRAVEL_ITEMS: {
   GET_TRAVEL_ITEMS_BY_CATEGORY: { 
     apiId: 21, 
     withAuth: false, 
-    url: `https://backend-am9k.onrender.com/v1/Travel/travelCategory`, 
+    url: `${backendUrl}/Travel/travelCategory`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading travel items by category",
@@ -44,7 +46,7 @@ GET_TRAVEL_ITEMS: {
   GET_SINGLE_TRAVEL_ITEM: { 
     apiId: 22, 
     withAuth: false, 
-    url: `https://backend-am9k.onrender.com/v1/Travel`, 
+    url: `${backendUrl}/Travel`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading travel item details",
@@ -54,7 +56,7 @@ GET_TRAVEL_ITEMS: {
   ADD_TRAVEL_ITEM: { 
     apiId: 23, 
     withAuth: true, 
-    url: `https://backend-am9k.onrender.com/v1/Travel`, 
+    url: `${backendUrl}/Travel`, 
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Adding new travel item",
@@ -64,7 +66,7 @@ GET_TRAVEL_ITEMS: {
   UPDATE_TRAVEL_ITEM_STATUS: { 
     apiId: 24, 
     withAuth: true, 
-    url: `https://backend-am9k.onrender.com/v1/Travel/updateStatus`, 
+    url: `${backendUrl}/Travel/updateStatus`, 
     method: 'PATCH', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Updating travel item status",
@@ -74,7 +76,7 @@ GET_TRAVEL_ITEMS: {
   EDIT_TRAVEL_ITEM: { 
     apiId: 25, 
     withAuth: true, 
-    url: `https://backend-am9k.onrender.com/v1/Travel`, 
+    url: `${backendUrl}/Travel`, 
     method: 'PATCH', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Editing travel item",

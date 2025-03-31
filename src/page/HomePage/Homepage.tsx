@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
         fetchTravelPackagesByCategoryApi({
           pageSize: 10,
           page: 1,
-          category: "new",
+          category: "hotdeals",
           status:"active"
         })
       );
@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
   return (
     <div >
       <video
-            className="m-0 p-0 w-[100%] h-[100%] object-cover pointer-events-none"
+            className="m-0 p-0 w-[100%] h-[80vh] object-cover pointer-events-none"
             src="trekking.mp4"
             autoPlay
             loop

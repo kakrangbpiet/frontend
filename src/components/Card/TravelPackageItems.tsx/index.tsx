@@ -55,8 +55,6 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages }) => {
             <Grid container spacing={3}>
               {travelPackages?.map((pkg: ITravelPackage) => (
                 <Grid  size={{ xs: 12, sm:6, md: 4,lg:3 }} key={pkg.id}>
-                  <div className=" ">
-                    <Box sx={{ position: 'relative',zIndex:"" }}>
                       <Box
                         sx={{
                           cursor: 'pointer',
@@ -110,8 +108,6 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages }) => {
                           )}
                         </Box>
                       </Box>
-                    </Box>
-                  </div>
                 </Grid>
               ))}
             </Grid>

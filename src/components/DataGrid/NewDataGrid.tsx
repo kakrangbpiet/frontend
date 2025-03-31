@@ -11,7 +11,7 @@ const Datagrid = ({ getRowId, columns, rows }) => (
       mr: "20px",
     }}
     getRowId={getRowId}
-    hideFooter={true}
+    // hideFooter={true}
   />
 );
 

@@ -18,8 +18,7 @@ const CustomSwiper: React.FC<CustomSwiperProps> = ({ images, autoplayDelay = 250
   const progressCircle = useRef<SVGSVGElement | null>(null);
   const progressContent = useRef<HTMLSpanElement | null>(null);
 
-  const onAutoplayTimeLeft = (s: any, time: number, progress: number) => {
-    console.debug(s)
+  const onAutoplayTimeLeft = (_s: any, time: number, progress: number) => {
     if (progressCircle.current && progressContent.current) {
       progressCircle.current.style.setProperty('--progress', `${1 - progress}`);
       progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
@@ -50,8 +49,8 @@ const CustomSwiper: React.FC<CustomSwiperProps> = ({ images, autoplayDelay = 250
                             src={src}
                             alt={`Slide ${index + 1}`}
                             style={{
-                              width: '100%',
-                              height: '250px',
+                              width: '60%',
+                              height: '100%',
                               objectFit: 'cover',
                               transition: 'transform 0.3s ease'
                             }}
