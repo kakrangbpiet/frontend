@@ -49,8 +49,8 @@ const CustomSwiper: React.FC<CustomSwiperProps> = ({ images, autoplayDelay = 250
                             src={src}
                             alt={`Slide ${index + 1}`}
                             style={{
-                              width: '60%',
-                              height: '100%',
+                              width: '100%',
+                              height: '450px',
                               objectFit: 'cover',
                               transition: 'transform 0.3s ease'
                             }}

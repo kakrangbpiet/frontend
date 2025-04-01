@@ -172,7 +172,7 @@ const SingleTravelPackageDetails = () => {
                 </Box>
                 </Grid>
                 <Grid size={{xs:12, md: 6, lg: 4}} >
-                  <Registration/>
+                  <Registration packageId={travelPackageId} packageTitle={title} />
                 </Grid>
                 </Grid>
 

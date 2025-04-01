@@ -32,42 +32,25 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        runtimeCaching: [
-          {
-            urlPattern: ({ request }) => request.mode === 'navigate',
-            handler: 'NetworkFirst',
-          },
-        ],
+        // runtimeCaching: [
+        //   {
+        //     urlPattern: ({ request }) => request.mode === 'navigate',
+        //     handler: 'NetworkFirst',
+        //   },
+        // ],
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: "Your App Name",
-        short_name: "YourApp",
+        name: "Samsara Adventures",
+        short_name: "Samsara",
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#4285f4",
-        icons: [
-          {
-            src: "icon-192x192.png",
-            sizes: "192x192",
-            type: "image/png"
-          },
-          {
-            src: "icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png"
-          },
-          {
-            src: "icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable"
-          }
-        ]
+    
       }
     }),
        dts(),

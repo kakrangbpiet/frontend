@@ -54,7 +54,10 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    handleLoadCategories();
+    if(categoryItemsHotDeals.length === 0 || categoryItemsNew.length === 0){
+
+      handleLoadCategories();
+    }
    }, [dispatch,auth]);
   return (
     <div >

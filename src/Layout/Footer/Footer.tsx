@@ -114,7 +114,7 @@ const Footer: React.FC<FooterProps> = ({
         <div style={styles.topSection}>
           <div style={styles.logo}>{companyName}</div>
           <nav style={styles.nav}>
-            <a href="/about" style={styles.link}>About</a>
+            <a href="/about-us" style={styles.link}>About</a>
             <a href="/contact" style={styles.link}>Contact</a>
             <a href="/privacy" style={styles.link}>Privacy Policy</a>
            {!auth ?( <Button 

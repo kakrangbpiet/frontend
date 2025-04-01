@@ -102,9 +102,82 @@ export const verifyOtp = createAsyncThunk(
 );
 
 
+export const registerNumberDispatcher = createAsyncThunk(
+  'RegisterNumberPasswordLess',
+  async (phoneNumber: string, { rejectWithValue, dispatch }) => {
+    try {
+      // Dispatch loading state
+      dispatch(setLoading({ isLoading: true }));
 
+      // Perform the API call to register the user
+      const response = await Request({
+        endpointId: "REGISTER_NUMBER_PASSWORDLESS",
+        data: {phoneNumber:phoneNumber},
+      });
 
+      // Check if the response contains tokens
+        dispatch(setPhoneNumber({ phoneNumber: phoneNumber }));
 
+      dispatch(setLoading({ isLoading: false }));
+
+      // Return the API response as a success object
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Otp Sent Successfully',
+        data: response,
+      };
+      return apiSuccess;
+    } catch (error) {
+      // Handle errors during registration
+      dispatch(setLoading({ isLoading: false }));
+      const castedError = error as ApiError;
+      const errorMessage =
+        typeof castedError?.error === 'string' ? castedError?.error : 'Unknown Error';
+
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+export const registerNumberOtpDispatcher = createAsyncThunk(
+  'RegisterNumberOtpPasswordLess',
+  async ({otp,trxId,deviceId,phoneNumber}: any, { rejectWithValue, dispatch }) => {
+    try {
+      // Dispatch loading state
+      dispatch(setLoading({ isLoading: true }));
+
+      // Perform the API call to register the user
+      const response = await Request({
+        endpointId: "REGISTER_NUMBER_OTP_PASSWORDLESS",
+        data: {otp,trxId,deviceId,phoneNumber},
+      });
+
+      // Check if the response contains tokens
+      if (response?.data?.token) {
+   
+        dispatch(setContactVerified({ isContactVerified: true }));
+        dispatch(setPhoneNumber({ phoneNumber: phoneNumber }));
+      }
+
+      dispatch(setLoading({ isLoading: false }));
+
+      // Return the API response as a success object
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Phone Verified Successfully',
+        data: response,
+      };
+      return apiSuccess;
+    } catch (error) {
+      // Handle errors during registration
+      dispatch(setLoading({ isLoading: false }));
+      const castedError = error as ApiError;
+      const errorMessage =
+        typeof castedError?.error === 'string' ? castedError?.error : 'Unknown Error';
+
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
 export const registerUserDispatcher = createAsyncThunk(
   'RegisterUserPasswordLess',
   async (userData: IUser, { rejectWithValue, dispatch }) => {

@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SidebarProps } from '../../Datatypes/interface';
+import { Box } from '@mui/material';
 
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
   width: ${props => props.$isOpen ? '240px' : '64px'};
@@ -30,6 +31,7 @@ const SidebarHeader = styled.div`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const LogoIcon = styled.div`
@@ -55,7 +57,7 @@ const SidebarNav = styled.div`
   padding-top: 16px;
 `;
 
-const NavItem = styled(Link)<{ $isOpen: boolean, $active?: boolean }>`
+const NavItem = styled(Box)<{ $isOpen: boolean, $active?: boolean }>`
   display: flex;
   align-items: center;
   padding: 10px 16px;
@@ -123,12 +125,13 @@ const CloseIcon = () => (
 
 const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   const location = useLocation();
+  const navigate=useNavigate()
 
   return (
     <SidebarContainer $isOpen={isOpen}>
       <SidebarHeader>
         {isOpen ? (
-          <LogoContainer>
+          <LogoContainer onClick={()=>navigate('/')}>
             <span style={{ color: '#A0A0A0', fontWeight: 600 }}>SAMSARA</span>
           </LogoContainer>
         ) : (
@@ -142,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
         {items.map((item) => (
           <NavItem 
             key={item.to}
-            to={item.to} 
+            onClick={()=>navigate(item.to)}
             $isOpen={isOpen}
             $active={location.pathname === item.to}
           >

@@ -3,7 +3,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import TravelSlice from "./slices/Travel/TravelSlice"
 import AddToCartSlice from "./slices/Travel/AddToCartSlice"
 import AuthSlice from "./slices/login/authSlice"
-import registerSlice from "./slices/register/RegisterSlice"
+import bookTravel from "./slices/Travel/Booking/BoookTravelSlice"
 
 export const makeStore = () => {
   return configureStore({
@@ -11,7 +11,7 @@ export const makeStore = () => {
         travelCollection:TravelSlice,
         cart:AddToCartSlice,
         auth:AuthSlice,
-        user:registerSlice
+        bookTravel:bookTravel,
     }, 
     // middleware:getDefaultMiddlerware =>
     //   getDefaultMiddlerware().concat(logger),

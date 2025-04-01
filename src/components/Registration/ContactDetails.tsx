@@ -1,32 +1,45 @@
-import { Box } from '@mui/material';
-import "./style.css"
-import CustomTextField from '../CustomTextField';
+import { Box, TextField } from '@mui/material';
+import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
+interface ContactDetailsProps {
+  inquiryData: any;
+  setInquiryData: any
+}
 
-
-function ContactDetails({ stepData, setStepData }) {
-  const { phoneNumber } = stepData;
-
-  const handleChange = (field, value) => {
-    setStepData({
-      ...stepData,
-      [field]: value,
-    });
+/**
+ * Component for collecting contact information
+ */
+function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
+  const handleChange = (field: keyof TravelInquiry, value: string) => {
+    setInquiryData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   return (
     <Box sx={{ padding: 2, mt: 2 }}>
-      <CustomTextField
-        id="phoneNumber"
-        type="text"
-        label="Phone Number"
-        value={phoneNumber}
-        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'phoneNumber')}
-        placeholder="Enter Phone"
-        // error={errors.title}
-        // isError={!!errors.title}
+      {/* Email input */}
+      <TextField
         fullWidth
-
+        label="Email Address"
+        type="email"
+        value={inquiryData.userEmail}
+        onChange={(e) => handleChange('userEmail', e.target.value)}
+        margin="normal"
+        required
       />
+      
+      {/* Phone number input */}
+      <TextField
+        fullWidth
+        label="Phone Number"
+        type="tel"
+        value={inquiryData.userPhone}
+        onChange={(e) => handleChange('userPhone', e.target.value)}
+        margin="normal"
+        required
+      />
+    
     </Box>
   );
 }

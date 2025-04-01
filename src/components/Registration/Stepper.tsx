@@ -1,125 +1,206 @@
 import { useState } from 'react';
-import { Container, Stepper, Step, StepLabel, Button, Paper, useTheme } from '@mui/material';
-
-import AddressInfo from './AddressInfo';
-import UserDetails from './UserDetails';
-// import ContactDetails from './ContactDetails';
-import PaymentInfo from './PaymentInfo';
+import { Container, Stepper, Step, StepLabel, Button, Paper, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUserDispatcher } from '../../redux/slices/register/RegisterApiSlice';
-import { selectRegistrationStatus } from '../../redux/slices/register/RegisterSlice';
-import { AppDispatch } from '../../redux/store';
-import { IUser } from '../../Datatypes';
-import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 
-const steps = [' Location Details', 'User Details', 'Payment Details', ];
+// Components for each step of the inquiry process
+import LocationDetails from './LocationDetails.tsx';
+import PersonalDetails from './PersonalDetails';
+import ContactDetails from './ContactDetails';
+import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice.tsx';
 
-function getStepContent(step, stepData, setStepData, _handleProceedToNext) {
+/**
+ * Steps for the travel inquiry process:
+ * 1. Location Details - Where they want to travel
+ * 2. Personal Details - Basic information about the traveler
+ * 3. Contact Details - How to reach the traveler
+ */
+const inquirySteps = [
+  'Travel Destination', 
+  'Personal Information', 
+  'Contact Details'
+];
+
+/**
+ * Renders the appropriate component based on the current step
+ * @param step Current step index
+ * @param inquiryData Current inquiry data
+ * @param setInquiryData Function to update inquiry data
+ * @returns JSX component for the current step
+ */
+function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>) {
   switch (step) {
     case 0:
-      return <AddressInfo stepData={stepData} setStepData={setStepData}/>;
+      return <LocationDetails inquiryData={inquiryData} setInquiryData={setInquiryData} />;
     case 1:
-      return <UserDetails stepData={stepData} setStepData={setStepData} />;
-    //  case 2:
-    //  return <ContactDetails stepData={stepData} setStepData={setStepData}/>;
-     case 2:
-     return <PaymentInfo stepData={stepData} setStepData={setStepData}/>;
+      return <PersonalDetails inquiryData={inquiryData} setInquiryData={setInquiryData} />;
+    case 2:
+      return <ContactDetails inquiryData={inquiryData} setInquiryData={setInquiryData} />;
     default:
       return 'Unknown step';
   }
 }
 
-function SellerSignup() {
-  const theme = useTheme()
-  const navigate=useNavigate()
-  const dispatch = useDispatch<AppDispatch>();
-  const [activeStep, setActiveStep] = useState(0);
-  const [stepData, setStepData] = useState<IUser>({
-    name: '',
-    phoneNumber: '',
-    address: '',
-    category: UserCategory.User,
-    email:"",
-  });
-  const registrationStatus = useSelector(selectRegistrationStatus);
+// Type definition for travel inquiry data
 
+function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packageTitle: string}) {
+  const navigate = useNavigate();
+  const [activeStep, setActiveStep] = useState(0);
+  
+  // Initialize inquiry data with default values
+  const [inquiryData, setInquiryData] = useState<TravelInquiry>({
+    packageId:packageId,
+    packageTitle:packageTitle,
+    destination: packageTitle,
+    travelDates: '',
+    passengerCount: 1,
+    userName: '',
+    userEmail: '',
+    userPhone: '',
+    specialRequests: ''
+  });
+
+  /**
+   * Handles moving to the next step in the inquiry process
+   */
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    // Validate current step data before proceeding
+    if (validateCurrentStep()) {
+      setActiveStep(activeStep + 1);
+    }
   };
 
+  /**
+   * Handles returning to the previous step
+   */
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
 
+  /**
+   * Resets the form and navigates to the home page
+   */
   const handleReset = () => {
-    setStepData({
-      name: '',
-      phoneNumber: '',
-      address: '',
-      category: UserCategory.User,
-      email:''
-      
+    setInquiryData({
+      packageId:packageId,
+      packageTitle:packageTitle,
+      destination: '',
+      travelDates: '',
+      passengerCount: 1,
+      userName: '',
+      userEmail: '',
+      userPhone: '',
+      specialRequests: ''
     });
-    navigate("/seller-dashboard")
-  }
-
-  const handleProceedToNext = () => {
-    handleNext(); // Increment the activeStep
+    navigate("/");
   };
 
-
-  const handleRegisterSeller = async () => {
-    try {
-      console.log('SignUp Data:', stepData);
-      dispatch(registerUserDispatcher(stepData));
-      // Additional logic for submitting the form data if needed
-    } catch (error) {
-      console.error('Error In signUp:', error);
+  /**
+   * Validates the data for the current step
+   * @returns boolean indicating if the data is valid
+   */
+  const validateCurrentStep = (): boolean => {
+    switch (activeStep) {
+      case 0: // Location Details
+        if (!inquiryData.destination  || !inquiryData.travelDates) {
+          alert('Please fill in all required fields');
+          return false;
+        }
+        return true;
+      case 1: // Personal Details
+        if (!inquiryData.userName || inquiryData.passengerCount < 1) {
+          alert('Please provide your name and at least 1 passenger');
+          return false;
+        }
+        return true;
+      case 2: // Contact Details
+        if (!inquiryData.userEmail || !inquiryData.userPhone) {
+          alert('Please provide your email and phone number');
+          return false;
+        }
+        return true;
+      default:
+        return true;
     }
   };
 
+  /**
+   * Submits the travel inquiry to the server
+   */
+  const submitTravelInquiry = async () => {
+    try {
+      // Here you would typically dispatch an action to send the inquiry to your backend
+      console.log('Submitting travel inquiry:', inquiryData);
+      
+      // For now, we'll simulate a successful submission
+      // dispatch(submitInquiryDispatcher(inquiryData));
+      
+      alert('Your inquiry has been submitted successfully! We will contact you shortly.');
+      handleReset();
+    } catch (error) {
+      console.error('Error submitting inquiry:', error);
+      alert('There was an error submitting your inquiry. Please try again.');
+    }
+  };
 
   return (
-    <Container >
-      <Paper elevation={3} sx={{
-        mt: 4,
-        p: 2,
-        backgroundColor: theme.palette.background.default
-      }}>
-      <Stepper activeStep={activeStep}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-        {activeStep === steps.length && registrationStatus === 'success' ? (
+    <Container maxWidth="md">
+      <Paper elevation={3} sx={{ mt: 4, mb: 4, p: 2 }}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Travel Inquiry Form
+        </Typography>
+        
+        {/* Stepper showing progress through the form */}
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {inquirySteps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+
+        {/* Show success message or form content */}
+        {activeStep === inquirySteps.length ? (
           <div>
-            <h3>Signed Up successfully!</h3>
-            <Button onClick={handleReset}>Call Now For Confirmation</Button>
+            <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+              Thank you for your inquiry!
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Button 
+                variant="contained" 
+                onClick={handleReset}
+                sx={{ mr: 1 }}
+              >
+                Home
+              </Button>
+            </Box>
           </div>
         ) : (
           <div>
-
-           {getStepContent(activeStep, stepData, setStepData, handleProceedToNext)}
-        <div>
-              <Button disabled={activeStep === 0} onClick={handleBack}>
+            {/* Render the current step's form */}
+            {getStepContent(activeStep, inquiryData, setInquiryData)}
+            
+            {/* Navigation buttons */}
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
                 Back
               </Button>
+              
               <Button
                 variant="contained"
-                color="primary"
-                onClick={activeStep === steps.length - 1 ? handleRegisterSeller : handleNext}
+                onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
               >
-                {activeStep === steps.length - 1 ? 'Verify By OTP' : 'Next'}
+                {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Next'}
               </Button>
-            </div>
+            </Box>
           </div>
         )}
       </Paper>
-      </Container>
+    </Container>
   );
 }
 
-export default SellerSignup;
+export default TravelInquiryForm;

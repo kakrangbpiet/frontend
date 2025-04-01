@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
+import { Box } from '@mui/material';
 
 const HeaderContainer = styled.header`
   background-color: #1E1E1E;
@@ -16,6 +17,8 @@ const HeaderContainer = styled.header`
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
+    cursor: pointer;
+
 `;
 
 const Logo = styled.div`
@@ -44,7 +47,7 @@ const Nav = styled.nav`
   }
 `;
 
-const StyledLink = styled(Link) <{ $active?: boolean }>`
+const StyledBox = styled(Box) <{ $active?: boolean }>`
   color: #A0A0A0;
   text-decoration: none;
   font-size: 14px;
@@ -78,7 +81,7 @@ const IconButton = styled.button`
 `;
 
 // Mobile menu button
-const MobileMenuButton = styled.button`
+const MobileMenuDiv = styled.div`
   background: none;
   border: none;
   cursor: pointer;
@@ -138,10 +141,11 @@ const Header: React.FC<HeaderProps> = ({
   auth
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate=useNavigate()
 
   return (
     <HeaderContainer>
-      <LogoContainer>
+      <LogoContainer onClick={()=>navigate('/')}>
         <LogoIcon />
         <div style={{
           marginLeft: '12px',
@@ -152,13 +156,13 @@ const Header: React.FC<HeaderProps> = ({
 
       <Nav>
         {links.map((link, index) => (
-          <StyledLink
+          <StyledBox
             key={index}
-            to={link.to}
+            onClick={()=>navigate(link.to)}
             $active={window.location.pathname === link.to}
           >
             {link.label}
-          </StyledLink>
+          </StyledBox>
         ))}
       </Nav>
 
@@ -169,7 +173,7 @@ const Header: React.FC<HeaderProps> = ({
         <IconButton>
           <NotificationIcon />
         </IconButton>
-        <MobileMenuButton>
+        <MobileMenuDiv>
           {
             !auth && <Sidebar
               items={links}
@@ -178,7 +182,7 @@ const Header: React.FC<HeaderProps> = ({
               position="right"
             />
           }
-        </MobileMenuButton>
+        </MobileMenuDiv>
       </IconContainer>
     </HeaderContainer>
   );
