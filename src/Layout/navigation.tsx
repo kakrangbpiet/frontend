@@ -21,6 +21,6 @@ export const adminSidebarItems = [
 
 export const userSidebarItems = [
     { to: '/', label: 'Home',icon: <DashboardIcon sx={{color:"white"}}/>},
-    { to: '/orders', label: 'Inquiries',icon:<LocalMallIcon sx={{color:"white"}}/> },
-    { to: '/analytics', label: 'Bookings',icon :<AnalyticsIcon sx={{color:"white"}}/>},
+    { to: '/inquiries', label: 'Inquiries',icon:<LocalMallIcon sx={{color:"white"}}/> },
+    { to: '/bookings', label: 'Bookings',icon :<AnalyticsIcon sx={{color:"white"}}/>},
   ];

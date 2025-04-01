@@ -43,6 +43,16 @@ export const ApiEndpoint: Record<string, any> = {
     successMessage: "",
     errorMessage: "Error Logging In"
   },
+  GET_ALL_USERS: { 
+    apiId: 20, 
+    withAuth: true, 
+    url: `${backendUrl}/getAllUsers`, 
+    method: 'GET', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Loading user",
+    successMessage: "",
+    errorMessage: "Error loading users"
+  },
   // TRAVEL PACKAGE ENDPOINTS
   GET_TRAVEL_ITEMS: { 
     apiId: 20, 
@@ -108,7 +118,7 @@ export const ApiEndpoint: Record<string, any> = {
   // TRAVEL INQUIRY ENDPOINTS
   CREATE_TRAVEL_INQUIRY: {
     apiId: 30,
-    withAuth: false,
+    withAuth: true,
     url: `${backendUrl}/TravelInquiry`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

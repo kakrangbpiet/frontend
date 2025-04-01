@@ -4,6 +4,7 @@ import TravelSlice from "./slices/Travel/TravelSlice"
 import AddToCartSlice from "./slices/Travel/AddToCartSlice"
 import AuthSlice from "./slices/login/authSlice"
 import bookTravel from "./slices/Travel/Booking/BoookTravelSlice"
+import usersSlice from "./slices/Admin/UsersSlice"
 
 export const makeStore = () => {
   return configureStore({
@@ -12,6 +13,7 @@ export const makeStore = () => {
         cart:AddToCartSlice,
         auth:AuthSlice,
         bookTravel:bookTravel,
+        users:usersSlice,
     }, 
     // middleware:getDefaultMiddlerware =>
     //   getDefaultMiddlerware().concat(logger),
