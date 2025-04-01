@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { Container, Stepper, Step, StepLabel, Button, Paper, Typography, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
 // Components for each step of the inquiry process
 import LocationDetails from './LocationDetails.tsx';
 import PersonalDetails from './PersonalDetails';
 import ContactDetails from './ContactDetails';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice.tsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUserDispatcher } from '../../redux/slices/login/authApiSlice.tsx';
+import { AppDispatch } from '../../redux/store.ts';
+import { createTravelInquiry } from '../../redux/slices/Travel/Booking/BookTravelApiSlice.tsx';
+import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
+import { isAuthenticated } from '../../redux/slices/login/authSlice.tsx';
 
 /**
  * Steps for the travel inquiry process:
@@ -43,8 +48,9 @@ function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData
 // Type definition for travel inquiry data
 
 function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packageTitle: string}) {
-  const navigate = useNavigate();
+  const dispatch=useDispatch<AppDispatch>()
   const [activeStep, setActiveStep] = useState(0);
+  const auth = useSelector(isAuthenticated);
   
   // Initialize inquiry data with default values
   const [inquiryData, setInquiryData] = useState<TravelInquiry>({
@@ -53,9 +59,9 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
     destination: packageTitle,
     travelDates: '',
     passengerCount: 1,
-    userName: '',
-    userEmail: '',
-    userPhone: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
     specialRequests: ''
   });
 
@@ -86,12 +92,12 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
       destination: '',
       travelDates: '',
       passengerCount: 1,
-      userName: '',
-      userEmail: '',
-      userPhone: '',
+      name: '',
+      email: '',
+      phoneNumber: '',
       specialRequests: ''
     });
-    navigate("/");
+    // navigate("/");
   };
 
   /**
@@ -107,14 +113,8 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         }
         return true;
       case 1: // Personal Details
-        if (!inquiryData.userName || inquiryData.passengerCount < 1) {
+        if (!inquiryData.name || inquiryData.passengerCount < 1) {
           alert('Please provide your name and at least 1 passenger');
-          return false;
-        }
-        return true;
-      case 2: // Contact Details
-        if (!inquiryData.userEmail || !inquiryData.userPhone) {
-          alert('Please provide your email and phone number');
           return false;
         }
         return true;
@@ -129,13 +129,30 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   const submitTravelInquiry = async () => {
     try {
       // Here you would typically dispatch an action to send the inquiry to your backend
-      console.log('Submitting travel inquiry:', inquiryData);
-      
+      if (!inquiryData.phoneNumber) {
+        alert('Please provide your phone number');
+        return false;
+      }
+      if (!inquiryData.email && !auth) {
+        alert('Please provide your email');
+        return false;
+      }
       // For now, we'll simulate a successful submission
       // dispatch(submitInquiryDispatcher(inquiryData));
+      const modifiedInquiryData = {
+        ...inquiryData,
+        category: UserCategory.User,
+        address: "address",
+        accountStatus: accountStatus.pending,
+      };
+      if(!auth){
+        dispatch(registerUserDispatcher(modifiedInquiryData));
+      } 
       
-      alert('Your inquiry has been submitted successfully! We will contact you shortly.');
-      handleReset();
+      dispatch(createTravelInquiry(inquiryData));
+      
+      // handleReset();
+      // handleNext()
     } catch (error) {
       console.error('Error submitting inquiry:', error);
       alert('There was an error submitting your inquiry. Please try again.');

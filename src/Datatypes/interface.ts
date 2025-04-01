@@ -199,7 +199,7 @@ export interface AuthState {
   user: any | null;
   access: string | null;
   refresh: string | null;
-  userType: string | null;
+  userType: string | UserCategory | null;
   isLoading:boolean
   isContactVerified:boolean
   trxId?: string;
@@ -219,8 +219,8 @@ export interface IUser extends IloginUser {
     id?: any;
     name: string;
     phoneNumber: string;
-    address: string | { latitude: number; longitude: number; }
-    category: CategoryType;
+    address?: string | { latitude: number; longitude: number; }
+    category?: CategoryType;
     subcategory?: string;
     permissions?: string[];
 }

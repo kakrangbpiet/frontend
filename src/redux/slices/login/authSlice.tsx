@@ -2,11 +2,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { AuthState } from '../../../Datatypes';
+import { UserCategory } from '../../../Datatypes/Enums/UserEnums';
 
 const storedUser = Cookies.get('user');
 const storedAccessToken = Cookies.get('access');
 const storedRefreshToken = Cookies.get('refresh');
 const storedUserType = Cookies.get('userType');
+const storedPhoneNumber = Cookies.get('phoneNumber');
 
 const initialState: AuthState = {
   isAuthenticated:storedAccessToken ? true : false,
@@ -15,9 +17,9 @@ const initialState: AuthState = {
   refresh: storedRefreshToken ? storedRefreshToken : null,
   userType: storedUserType ? storedUserType : null,
   isLoading:false,
-  isContactVerified: false,
+  isContactVerified: storedPhoneNumber ? true : false,
   trxId: "",
-  phoneNumber: null,
+  phoneNumber: storedPhoneNumber ? storedPhoneNumber : null,
 };
 const authSlice = createSlice({
   name: 'auth',
@@ -32,10 +34,11 @@ const authSlice = createSlice({
       state.userType = action.payload.userType;
       state.phoneNumber = action.payload.phoneNumber;
       state.isLoading = action.payload.isLoading;
-      Cookies.set('user', JSON.stringify(action.payload.user));
+      Cookies.set('user', action.payload.user);
       Cookies.set('access', action.payload.token.accessToken.token);
       Cookies.set('refresh', action.payload.token.refreshToken.token);
       Cookies.set('userType', action.payload.userType);
+      Cookies.set('phoneNumber', action.payload.phoneNumber);
     },
     setLoading: (state, action: PayloadAction<{ isLoading: boolean }>) => {
       state.isLoading = action.payload.isLoading;
@@ -62,6 +65,7 @@ const authSlice = createSlice({
       Cookies.remove('access');
       Cookies.remove('refresh');
       Cookies.remove('userType');
+      Cookies.remove('phoneNumber');
     },
     refreshAccessToken: (state, action: PayloadAction<string>) => {
       state.access = action.payload;
@@ -78,7 +82,7 @@ export default authSlice.reducer;
 export const selectUser = (state: { auth: { user: string } }) => state.auth.user;
 export const selectToken = (state: { auth: { access: string } }) => state.auth.access;
 export const isAuthenticated = (state: { auth: { isAuthenticated: boolean } }) => state.auth.isAuthenticated;
-export const selectUserType = (state: { auth: { userType: string } }) => state.auth.userType;
+export const selectUserType = (state: { auth: { userType: UserCategory } }) => state.auth.userType;
 export const authLoading = (state: { auth: { isLoading: boolean } }) => state.auth.isLoading;
 export const selectTrxId = (state: { auth: AuthState }) => state.auth.trxId;
 export const SelectConactVerified = (state: { auth: { isContactVerified: boolean }}) => state.auth.isContactVerified;

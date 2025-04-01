@@ -1,15 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { completeBooking, createTravelInquiry, fetchUserInquiries } from './BookTravelApiSlice.tsx';
+import { IUser } from '../../../../Datatypes/interface.ts';
 
 // Types
-export interface TravelInquiry {
+export interface TravelInquiry extends IUser {
   inquiryId?: string;
   packageId: string;
   packageTitle: string;
   destination: string;
-  userName: string;
-  userEmail: string;
-  userPhone: string;
   passengerCount: number;
   travelDates: string;
   specialRequests?: string;

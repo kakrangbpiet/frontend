@@ -36,7 +36,7 @@ export const loginUser = createAsyncThunk(
       // };
       
       
-      dispatch(setCredentials({ user:response?.data?.email,phoneNumber:response?.data?.email, token:{accessToken,refreshToken}, userType:response?.data?.category,isLoading:false })); // todo use phoneNumber instead of email in PhoneNumber
+      dispatch(setCredentials({ user:response?.data?.email,phoneNumber:response?.data?.phoneNumber, token:{accessToken,refreshToken}, userType:response?.data?.category,isLoading:false })); // todo use phoneNumber instead of email in PhoneNumber
       OnFormSuccess()
       return response.data;
 
@@ -101,7 +101,6 @@ export const verifyOtp = createAsyncThunk(
   }
 );
 
-
 export const registerNumberDispatcher = createAsyncThunk(
   'RegisterNumberPasswordLess',
   async (phoneNumber: string, { rejectWithValue, dispatch }) => {
@@ -152,12 +151,16 @@ export const registerNumberOtpDispatcher = createAsyncThunk(
       });
 
       // Check if the response contains tokens
-      if (response?.data?.token) {
+      if (response) {
    
         dispatch(setContactVerified({ isContactVerified: true }));
         dispatch(setPhoneNumber({ phoneNumber: phoneNumber }));
       }
-
+      // Check if the response contains tokens
+      if (response?.data?.token) {
+        const {  accessToken,refreshToken } = response.data.token;
+        dispatch(setCredentials({ user:response?.data?.email,phoneNumber:response?.data?.phoneNumber, token:{accessToken,refreshToken}, userType:response?.data?.category,isLoading:false })); // todo use phoneNumber instead of email in PhoneNumber
+      }
       dispatch(setLoading({ isLoading: false }));
 
       // Return the API response as a success object
@@ -191,20 +194,14 @@ export const registerUserDispatcher = createAsyncThunk(
         data: userData,
       });
 
+      
       // Check if the response contains tokens
       if (response?.data?.token) {
-        const { accessToken, refreshToken } = response.data.token;
-
-        // Dispatch the setCredentials action with token and user data
-        dispatch(
-          setCredentials({
-            user: response?.data?.email,
-            phoneNumber: userData.phoneNumber,
-            token: { accessToken, refreshToken },
-            userType: response?.data?.category,
-            isLoading: false,
-          })
-        );
+        
+        const {  accessToken,refreshToken } = response.data.token;
+  
+        dispatch(setCredentials({ user:response?.data?.email,phoneNumber:userData.phoneNumber, token:{accessToken,refreshToken}, userType:response?.data?.category,isLoading:false })); // todo use phoneNumber instead of email in PhoneNumber
+      
 
         dispatch(setContactVerified({ isContactVerified: true }));
         dispatch(setPhoneNumber({ phoneNumber: userData.phoneNumber }));

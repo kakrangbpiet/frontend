@@ -25,6 +25,7 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
       <TextField
         fullWidth
         label="Destination"
+        disabled={true}
         value={inquiryData.destination}
         onChange={(e) => handleChange('destination', e.target.value)}
         InputProps={{

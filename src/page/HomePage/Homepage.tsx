@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '../../redux/slices/login/authSlice';
+import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
 import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
 import { selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import { Typography } from '@mui/material';
+import { UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
 
 const DashboardGrid = styled.div`
 
@@ -16,9 +17,11 @@ const DashboardGrid = styled.div`
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const auth = useSelector(isAuthenticated);
+    const selectedUserType = useSelector(selectUserType);
+  
   const dispatch=useDispatch()
   useEffect(() => {
-    if (auth) {
+    if (auth && selectedUserType==UserCategory.KAKRAN_SUPER_ADMIN) {
       navigate("/dashboard");
     }
   }, [auth, navigate]);

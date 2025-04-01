@@ -1,5 +1,6 @@
 export enum accountStatus {
     Approved = 'approved',
+    pending = 'pending',
   }
 export 
 enum TravelPackageStatus {

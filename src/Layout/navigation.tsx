@@ -13,9 +13,14 @@ export const HEADER_LINKS = [
 ];
 
 // Sidebar Items
-export const sidebarItems = [
+export const adminSidebarItems = [
     { to: '/dashboard', label: 'Dashboard',icon: <DashboardIcon sx={{color:"white"}}/>},
     { to: '/orders', label: 'Orders',icon:<LocalMallIcon sx={{color:"white"}}/> },
     { to: '/analytics', label: 'Analytics',icon :<AnalyticsIcon sx={{color:"white"}}/>},
-    { to: '/layers', label: 'Layers' }
+  ];
+
+export const userSidebarItems = [
+    { to: '/', label: 'Home',icon: <DashboardIcon sx={{color:"white"}}/>},
+    { to: '/orders', label: 'Inquiries',icon:<LocalMallIcon sx={{color:"white"}}/> },
+    { to: '/analytics', label: 'Bookings',icon :<AnalyticsIcon sx={{color:"white"}}/>},
   ];

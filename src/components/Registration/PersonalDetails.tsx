@@ -24,7 +24,7 @@ function PersonalDetails({ inquiryData, setInquiryData }: PersonalDetailsProps) 
         fullWidth
         label="Your Name"
         value={inquiryData.userName}
-        onChange={(e) => handleChange('userName', e.target.value)}
+        onChange={(e) => handleChange('name', e.target.value)}
         margin="normal"
         required
       />

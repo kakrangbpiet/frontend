@@ -26,7 +26,7 @@ export const ApiEndpoint: Record<string, any> = {
   REGISTER_NUMBER_OTP_PASSWORDLESS: { 
     apiId: 3, 
     withAuth: false, 
-    url: `${backendUrl}/passwordless/login`, 
+    url: `${backendUrl}/passwordless/verifyOtp`, 
     method: 'POST', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Logging In",
