@@ -5,7 +5,7 @@ import { SidebarProps } from '../../Datatypes/interface';
 import { Box } from '@mui/material';
 
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
-  width: ${props => props.$isOpen ? '240px' : '64px'};
+  width: ${props => props.$isOpen ? '200px' : '64px'};
   height: 100vh;
   background-color: #1E1E1E;
   position: fixed;

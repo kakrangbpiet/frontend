@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
 
 
   const  categoryItemsHotDeals  = useSelector(selectTravelPackagesByCategory("hotdeals"));
-  const  categoryItemsNew  = useSelector(selectTravelPackagesByCategory("new"));
+  const  categoryItemsNew  = useSelector(selectTravelPackagesByCategory("pre-planned-trips"));
 
  
   const handleLoadCategories = async () => {
@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
         fetchTravelPackagesByCategoryApi({
           pageSize: 10,
           page: 1,
-          category: "hotdeals",
+          category: "pre-planned-trips",
           status:"active"
         })
       );
@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
           Hot Deals Packages
         </Typography>
         <TravelPackages travelPackages={categoryItemsHotDeals} categoryType="hotdeals"  loading={loadingByCategory["hotdeals"] || false} />
-        <TravelPackages travelPackages={categoryItemsNew} categoryType="new"  loading={loadingByCategory["new"] || false} />
+        <TravelPackages travelPackages={categoryItemsNew} categoryType="new"  loading={loadingByCategory["pre-planned-trips"] || false} />
       </div>
       </DashboardGrid>
        

@@ -24,10 +24,10 @@ const MainContent = styled.main<{
 }>`
   flex: 1;
   margin-left: ${({ $sidebarOpen, $auth }) => 
-    $auth ? ($sidebarOpen ? '240px' : '60px') : '0'};
+    $auth ? ($sidebarOpen ? '200px' : '60px') : '0'};
   transition: margin-left 0.3s ease;
 @media (max-width: 768px) {
-  margin-left: ${({ $sidebarOpen }) => $sidebarOpen ? '240px' : '60px'};
+  margin-left: ${({ $sidebarOpen }) => $sidebarOpen ? '200px' : '60px'};
 }
 `;
 

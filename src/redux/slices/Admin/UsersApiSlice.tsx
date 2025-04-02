@@ -23,11 +23,10 @@ export const getAllUsers = createAsyncThunk(
 );
 
 // Types
-export interface User {
+export interface User extends UnverifiedUser{
     id: string;
     email: string;
     name: string;
-    phoneNumber: string;
     address?: string;
     category: string;
     accountStatus: string;

@@ -16,7 +16,7 @@ export const HEADER_LINKS = [
 export const adminSidebarItems = [
     { to: '/dashboard', label: 'Dashboard',icon: <DashboardIcon sx={{color:"white"}}/>},
     { to: '/orders', label: 'Orders',icon:<LocalMallIcon sx={{color:"white"}}/> },
-    { to: '/analytics', label: 'Analytics',icon :<AnalyticsIcon sx={{color:"white"}}/>},
+    { to: '/users', label: 'Users',icon :<AnalyticsIcon sx={{color:"white"}}/>},
   ];
 
 export const userSidebarItems = [
