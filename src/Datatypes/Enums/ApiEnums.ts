@@ -129,7 +129,7 @@ export const ApiEndpoint: Record<string, any> = {
   GET_USER_INQUIRIES: {
     apiId: 31,
     withAuth: true,
-    url: `${backendUrl}/TravelInquiry/user`,
+    url: `${backendUrl}/TravelInquiry`,
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Loading your inquiries",

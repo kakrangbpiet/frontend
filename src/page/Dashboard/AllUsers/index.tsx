@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Paper, Typography, Switch, Tabs, Tab } from "@mui/material";
+import { Box, Paper, Typography, Tabs, Tab } from "@mui/material";
 import UserColumns from "./UserColumn";
 import { useNavigate } from "react-router-dom";
 import { getAllUsers } from "../../../redux/slices/Admin/UsersApiSlice";
@@ -13,6 +13,8 @@ import {
   selectVerifiedUsers, 
   selectUnverifiedUsers 
 } from "../../../redux/slices/Admin/UsersSlice";
+import { UserCategory } from "../../../Datatypes/Enums/UserEnums";
+import { isAuthenticated, selectUserType } from "../../../redux/slices/login/authSlice";
 
 export default function AllUsers() {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,11 +26,21 @@ export default function AllUsers() {
   const unverifiedUsers = useSelector(selectUnverifiedUsers);
   const loading = useSelector(selectUsersLoading);
   
+  const isUserAuthenticated = useSelector(isAuthenticated);
+  const selectedUserType = useSelector(selectUserType);
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    if (!isUserAuthenticated && selectedUserType!==UserCategory.KAKRAN_SUPER_ADMIN) {
+      navigation("/"); 
+    }
+  }, [isUserAuthenticated, history]);
+
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -45,7 +57,7 @@ export default function AllUsers() {
   const unverifiedRows = filterUsers(unverifiedUsers, searchQuery);
   
     const handleViewDetails = (row: any) => {
-      navigate(`/admin/users/${row.id}`);
+      navigate(`/inquiries/${row.id}`);
     };
 
   const columns = UserColumns({ handleViewDetails });

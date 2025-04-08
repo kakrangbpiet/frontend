@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { isAuthenticated } from '../../redux/slices/login/authSlice';
+import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
 import { Button, Container } from '@mui/material';
 import PackagesVerification from '../../components/AllPackagesDataGrid/AllPackagesGrid';
+import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 
 
 const MiddleRow = styled.div`
@@ -17,13 +18,15 @@ const MiddleRow = styled.div`
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const auth = useSelector(isAuthenticated);
+  const isUserAuthenticated = useSelector(isAuthenticated);
+  const selectedUserType = useSelector(selectUserType);
+  const navigation = useNavigate();
 
   useEffect(() => {
-    if (!auth) {
-      navigate("/");
+    if (!isUserAuthenticated && selectedUserType!==UserCategory.KAKRAN_SUPER_ADMIN) {
+      navigation("/"); 
     }
-  }, [auth, navigate]);
+  }, [isUserAuthenticated, history]);
 
   const addTravelPackage=()=>{
     navigate("/addTravelPackage");

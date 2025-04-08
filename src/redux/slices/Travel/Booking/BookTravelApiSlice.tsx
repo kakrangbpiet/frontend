@@ -23,10 +23,11 @@ export const createTravelInquiry = createAsyncThunk(
   
   export const fetchUserInquiries = createAsyncThunk(
     'bookTravel/fetchUserInquiries',
-    async (_, { rejectWithValue }) => {
+    async (userid:any, { rejectWithValue }) => {
       try {
         const response = await Request({
           endpointId: 'GET_USER_INQUIRIES',
+          slug: `/${userid}`,
         });
         
         return response.data as TravelInquiry[];

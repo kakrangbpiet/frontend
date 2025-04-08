@@ -8,6 +8,8 @@ import AddPackagePage from "./page/Addpackage";
 import AboutPage from "./page/AboutPage";
 import SingleTravelPackageDetails from "./page/SinglePackage";
 import AllUsers from "./page/Dashboard/AllUsers";
+import ProfilePage from "./page/ProfilePage";
+import UserInquiries from "./page/ProfilePage/UserInquiries";
 
 const Router: React.FC = () => {
 
@@ -40,6 +42,14 @@ const Router: React.FC = () => {
         {
           path: "/users",
           element: <AllUsers />,
+        },
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+        },
+        {
+          path: "/inquiries/:userId",
+          element: <UserInquiries />,
         },
         {
           path: "*", element: <NotFoundPage/> 
