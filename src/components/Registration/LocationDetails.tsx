@@ -24,6 +24,22 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
       {/* Destination input */}
       <TextField
         fullWidth
+        label="Origin or Departure point"
+        disabled={true}
+        value={inquiryData.departure}
+        onChange={(e) => handleChange('departure', e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PlaceIcon />
+            </InputAdornment>
+          ),
+        }}
+        margin="normal"
+        required
+      />
+      <TextField
+        fullWidth
         label="Destination"
         disabled={true}
         value={inquiryData.destination}

@@ -57,6 +57,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
     packageId:packageId,
     packageTitle:packageTitle,
     destination: packageTitle,
+    departure: "",
     travelDates: '',
     passengerCount: 1,
     name: '',
@@ -89,7 +90,8 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
     setInquiryData({
       packageId:packageId,
       packageTitle:packageTitle,
-      destination: '',
+      destination: packageTitle,
+      departure: '',
       travelDates: '',
       passengerCount: 1,
       name: '',
