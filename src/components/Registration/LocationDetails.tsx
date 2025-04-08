@@ -2,16 +2,21 @@ import { Box, TextField, InputAdornment } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
 import CustomTextField from '../CustomTextField';
+import { useState } from 'react';
+import ChooseLocation from '../Location/ChooseLocation';
 
 interface LocationDetailsProps {
   inquiryData: any;
-  setInquiryData:any
+  setInquiryData: any;
 }
 
 /**
  * Component for collecting travel destination and dates
  */
 function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) {
+  const [openDepartureDialog, setOpenDepartureDialog] = useState(false);
+  const [openDestinationDialog, setOpenDestinationDialog] = useState(false);
+
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
       ...prev,
@@ -19,26 +24,43 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
     }));
   };
 
+  const handleDepartureClose = () => {
+    setOpenDepartureDialog(false);
+  };
+
+  const handleDestinationClose = () => {
+    setOpenDestinationDialog(false);
+  };
+
+  const setDeparture = (address: string) => {
+    handleChange('departure', address);
+  };
+
+  const setDestination = (address: string) => {
+    handleChange('destination', address);
+  };
+
   return (
     <Box sx={{ padding: 2, mt: 2 }}>
-      {/* Destination input */}
+      {/* Departure input */}
       <TextField
         fullWidth
         label="Origin or Departure point"
-        disabled={true}
         value={inquiryData.departure}
-        onChange={(e) => handleChange('departure', e.target.value)}
+        onClick={() => setOpenDepartureDialog(true)}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
               <PlaceIcon />
             </InputAdornment>
           ),
+          readOnly: true,
         }}
         margin="normal"
         required
       />
-      <TextField
+
+<TextField
         fullWidth
         label="Destination"
         disabled={true}
@@ -66,7 +88,15 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
         fullWidth
 
       />
-      
+
+      {/* Departure Location Dialog */}
+      <ChooseLocation
+        open={openDepartureDialog}
+        handleClose={handleDepartureClose}
+        setAddress={setDeparture}
+      />
+
+
     </Box>
   );
 }
