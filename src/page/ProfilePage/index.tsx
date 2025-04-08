@@ -1,7 +1,10 @@
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Button from '../../components/common/Button';
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../redux/slices/login/authSlice';
+import { jwtDecode } from 'jwt-decode'; // Make sure to install this package
 
 const ProfileContainer = styled.div`
   text-align: center;
@@ -33,22 +36,43 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfilePage = () => {
+  const token = useSelector(selectToken);
+  const navigate = useNavigate();
 
-  const { userId } = useParams<{ userId: string }>();
-  const naviagte = useNavigate()
-  const naviagteToInquiries = () => {
-    naviagte(`/inquiries/${userId}`)
+  // Function to decode the token and get user ID
+const getUserIdFromToken = () => {
+  if (!token) return null;
+  try {
+    const decoded = jwtDecode(token);
+    
+    // Type guard to check if the decoded object has an 'id' property
+    if (decoded && typeof decoded === 'object' && 'id' in decoded) {
+      return (decoded as { id: string }).id;
+    }
+    return decoded.sub;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
   }
+};
+
+  const navigateToInquiries = () => {
+    const userId = getUserIdFromToken();
+    if (userId) {
+      navigate(`/inquiries/${userId}`);
+    } else {
+      console.error('No user ID found in token');
+      // You might want to handle this case, e.g., redirect to login
+    }
+  };
+
   return (
     <ProfileContainer>
-      {userId && (
-        <Box >
-          <Button onClick={naviagteToInquiries}>
-
-            Go to My Inquiries
-          </Button>
-        </Box>
-      )}
+      <Box>
+        <Button onClick={navigateToInquiries}>
+          Go to My Inquiries
+        </Button>
+      </Box>
     </ProfileContainer>
   );
 };

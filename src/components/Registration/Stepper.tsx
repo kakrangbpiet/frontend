@@ -145,11 +145,20 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         address: "address",
         accountStatus: accountStatus.pending,
       };
-      if(!auth){
-        dispatch(registerUserDispatcher(modifiedInquiryData));
-      } 
-      
-      dispatch(createTravelInquiry(inquiryData));
+      if (!auth) {
+        // If not authenticated, register first, then create inquiry
+        const registrationResult = await dispatch(registerUserDispatcher(modifiedInquiryData)).unwrap();
+        
+        // Only proceed if registration was successful
+        if (registrationResult) {
+          await dispatch(createTravelInquiry(inquiryData));
+          handleNext(); // Move to success step
+        }
+      } else {
+        // If already authenticated, just create the inquiry
+        await dispatch(createTravelInquiry(inquiryData));
+        handleNext(); // Move to success step
+      }
       
       // handleReset();
       // handleNext()
