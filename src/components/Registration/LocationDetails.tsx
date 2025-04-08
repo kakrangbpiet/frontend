@@ -15,7 +15,6 @@ interface LocationDetailsProps {
  */
 function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) {
   const [openDepartureDialog, setOpenDepartureDialog] = useState(false);
-  const [openDestinationDialog, setOpenDestinationDialog] = useState(false);
 
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
@@ -28,16 +27,10 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
     setOpenDepartureDialog(false);
   };
 
-  const handleDestinationClose = () => {
-    setOpenDestinationDialog(false);
-  };
+
 
   const setDeparture = (address: string) => {
     handleChange('departure', address);
-  };
-
-  const setDestination = (address: string) => {
-    handleChange('destination', address);
   };
 
   return (
