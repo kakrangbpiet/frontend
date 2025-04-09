@@ -43,6 +43,16 @@ export const ApiEndpoint: Record<string, any> = {
     successMessage: "",
     errorMessage: "Error Logging In"
   },
+  AI_PROMPT: { 
+    apiId: 5, 
+    withAuth: false, 
+    url: `${backendUrl}/ai/prompt`, 
+    method: 'POST', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "",
+    successMessage: "",
+    errorMessage: ""
+  },
   GET_ALL_USERS: { 
     apiId: 20, 
     withAuth: true, 
