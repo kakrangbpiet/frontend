@@ -16,6 +16,7 @@ import { ITravelPackage, useSelectedTravelPackage } from '../../redux/slices/Tra
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
 import Registration from '../../components/Registration';
+import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId: travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -132,10 +133,7 @@ const SingleTravelPackageDetails = () => {
                   <CustomSwiper  images={images.map(img => `data:image/png;base64,${img}`)} />
                 </Box>
                 <Grid container>
-
                 <Grid size={{xs:12, md: 6, lg: 8}} >
-                  
-                
                 <Box sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -172,6 +170,8 @@ const SingleTravelPackageDetails = () => {
                 </Box>
                 </Grid>
                 <Grid size={{xs:12, md: 6, lg: 4}} >
+                <AiPromptGenerator />
+
                   <Registration packageId={travelPackageId} packageTitle={title} />
                 </Grid>
                 </Grid>

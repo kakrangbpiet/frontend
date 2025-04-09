@@ -38,7 +38,7 @@ const initialState: ChatState = {
 };
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: 'aichat',
   initialState,
   reducers: {
     addMessage: (state, action: PayloadAction<{ historyId: string; message: ChatMessage }>) => {

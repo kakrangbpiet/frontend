@@ -5,6 +5,7 @@ import AddToCartSlice from "./slices/Travel/AddToCartSlice"
 import AuthSlice from "./slices/login/authSlice"
 import bookTravel from "./slices/Travel/Booking/BoookTravelSlice"
 import usersSlice from "./slices/Admin/UsersSlice"
+import AiSlice from "./slices/AI/AiSlice"
 
 export const makeStore = () => {
   return configureStore({
@@ -14,6 +15,7 @@ export const makeStore = () => {
         auth:AuthSlice,
         bookTravel:bookTravel,
         users:usersSlice,
+        aiChat:AiSlice,
     }, 
     // middleware:getDefaultMiddlerware =>
     //   getDefaultMiddlerware().concat(logger),

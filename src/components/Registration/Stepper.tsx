@@ -171,7 +171,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   };
 
   return (
-    <Container maxWidth="md">
+    <Container >
       <Paper elevation={3} sx={{ mt: 4, mb: 4, p: 2 }}>
         <Typography variant="h5" align="center" gutterBottom>
           Travel Inquiry Form

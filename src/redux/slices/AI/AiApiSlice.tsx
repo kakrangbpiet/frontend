@@ -33,7 +33,7 @@ export const fetchChatResponse = createAsyncThunk(
 
     try {
       const response = await Request({
-        endpointId: "AiPrompt",
+        endpointId: "AI_PROMPT",
         data: { userMessage, aiType, historyId: currentHistoryId, history, promptType },
         isStream: true, // Enable streaming response
       });
