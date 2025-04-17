@@ -11,8 +11,35 @@ import { useMediaQuery } from '@mui/material';
 import { UserCategory } from '../Datatypes/Enums/UserEnums';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
 import { Twitter, Instagram, Facebook } from 'lucide-react';
+import VideoHero from '../page/HomePage/VideoHero';
 
+const heroContent = [
+  {
+    video: '/HomeVideos/v1.mp4',
+    title: "Discover the world's hidden gems with Samsara Adventures—where every journey tells a unique story and every destination leaves you breathless."
+  },
+  {
+    video: '/HomeVideos/v2.mp4',
+    title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
+  },
+  {
+    video: '/HomeVideos/v3.mp4',
+    title: "Embark on extraordinary adventures with Samsara—crafting experiences that go beyond the ordinary and into the extraordinary."
+  },
+  {
+    video: '/HomeVideos/v4.mp4',
+    title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
+  }
+];
 
+const VideoHeroContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1; // Ensure it stays behind other content
+`;
 
 const MainContent = styled.main<{
   $sidebarOpen: boolean;
@@ -20,7 +47,14 @@ const MainContent = styled.main<{
   $auth: boolean
 }>`
   flex: 1;
+    position: relative;
+  bottom: 100vh;
+
+  margin-top: 100vh; // Push content below the video
+  position: relative;
+  z-index: 1; // Ensure content appears above the video
 `;
+
 
 const Layout = () => {
   const [sidebarItem, setSidebarItem] = useState(HEADER_LINKS);
@@ -28,6 +62,12 @@ const Layout = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const selectedUserType = useSelector(selectUserType);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [randomHero, setRandomHero] = useState<{video: string, title: string} | null>(null);
+  useEffect(() => {
+    // Select a random hero content when component mounts
+    const randomIndex = Math.floor(Math.random() * heroContent.length);
+    setRandomHero(heroContent[randomIndex]);
+  }, []);
 
   const slectSidebarItemms = () => {
     if (selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
@@ -40,8 +80,7 @@ const Layout = () => {
 
   useEffect(() => {
     slectSidebarItemms();
-  }
-    , [selectedUserType]);
+  }, [selectedUserType]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -49,24 +88,24 @@ const Layout = () => {
 
   return (
     <div className="relative w-full overflow-hidden">
-
       <Header title={"SAMSARA"} links={HEADER_LINKS} auth={auth} toggleMobileMenu={toggleMobileMenu}
         mobileMenuOpen={mobileMenuOpen} isMobile={isMobile} />
-       {isMobile && <Sidebar
+      
+      {isMobile && <Sidebar
           items={sidebarItem}
           isOpen={mobileMenuOpen}
           onToggle={toggleMobileMenu}
         />
-       }
+      }
 
-      <MainContent
-        $sidebarOpen={mobileMenuOpen}
-        $isMobile={isMobile}
-        $auth={auth}
-      >
-        <Outlet />
-      </MainContent>
-      <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
+      {/* VideoHero at the top of the layout */}
+        {randomHero && (
+        <VideoHeroContainer>
+          <VideoHero
+            videoSrc={randomHero.video}
+            title={randomHero.title}
+          />
+              <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
           <a href="http://instagram.com/" className="text-white hover:text-gray-300">
             <Twitter size={24} />
           </a>
@@ -91,6 +130,17 @@ const Layout = () => {
             </a>
           </div>
         )}
+        </VideoHeroContainer>
+      )}
+
+      <MainContent
+        $sidebarOpen={mobileMenuOpen}
+        $isMobile={isMobile}
+        $auth={auth}
+      >
+          <Outlet context={{ title: randomHero?.title }} />
+      </MainContent>
+  
       <Footer />
     </div>
   );
