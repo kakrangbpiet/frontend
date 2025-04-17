@@ -1,64 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../Sidebar/Sidebar';
-import { Box } from '@mui/material';
+import {  Menu, X } from 'lucide-react';
 
-const HeaderContainer = styled.header`
-  background-color: #1E1E1E;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  border-bottom: 1px solid #2C2C2C;
-`;
 
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-    cursor: pointer;
-
-`;
-
-const Logo = styled.div`
-  color: #A0A0A0;
-  font-weight: 600;
-  margin-left: 12px;
-`;
-
-const LogoIcon = styled.div`
-  width: 32px;
-  height: 32px;
-  background-color: #4A4A4A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const StyledBox = styled(Box) <{ $active?: boolean }>`
-  color: #A0A0A0;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  background-color: ${props => props.$active ? '#2C2C2C' : 'transparent'};
-  
-  &:hover {
-    background-color: #2C2C2C;
-  }
-`;
 
 const IconContainer = styled.div`
   display: flex;
@@ -117,13 +62,13 @@ const SearchIcon = () => (
 );
 
 const NotificationIcon = () => (
-<svg width="20px" height="20px" viewBox="0 -28.5 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg"  preserveAspectRatio="xMidYMid">
+  <svg width="20px" height="20px" viewBox="0 -28.5 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid">
     <g>
-        <path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" fill="#5865F2" fillRule="nonzero">
+      <path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" fill="#5865F2" fillRule="nonzero">
 
-</path>
+      </path>
     </g>
-</svg>
+  </svg>
 );
 
 interface HeaderProps {
@@ -133,58 +78,54 @@ interface HeaderProps {
     label: string;
   }>;
   auth: any;
+  mobileMenuOpen:any
+  toggleMobileMenu:any
+  isMobile:any
 }
 
 const Header: React.FC<HeaderProps> = ({
-  title = 'SAMSARA',
   links,
-  auth
+  mobileMenuOpen,
+  toggleMobileMenu,
+  isMobile
 }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const navigate=useNavigate()
-
+  const navigate = useNavigate()
   return (
-    <HeaderContainer>
-      <LogoContainer onClick={()=>navigate('/')}>
-        <LogoIcon />
-        <div style={{
-          marginLeft: '12px',
-        }}>
-          <Logo>{title}</Logo>
-        </div>
-      </LogoContainer>
-
-      <Nav>
-        {links.map((link, index) => (
-          <StyledBox
-            key={index}
-            onClick={()=>navigate(link.to)}
-            $active={window.location.pathname === link.to}
+    <header className="absolute z-100 pt-4 px-4 md:px-6 lg:px-12 flex justify-between items-center w-full">
+      <div className="flex items-center justify-center"  onClick={()=>navigate('/')}>
+        <img src={"Smasara-Logo.png"} alt="Logo" className="h-20 w-20 sm:h-32 sm:w-32 md:h-48 md:w-48 object-contain" />
+      </div>
+  
+      <div className="flex items-center">
+        <nav className="hidden md:flex space-x-8 lg:space-x-12 text-white font-calluna tracking-calluna-wide">
+          {links.map((link, index) => (
+            <div
+              className={`hover:text-gray-400 text-[#A0A0A0] text-sm px-3 py-2 rounded 
+                ${window.location.pathname === link.to ? 'bg-[#2C2C2C]' : 'bg-transparent'}`}
+              key={index}
+              onClick={() => navigate(link.to)}
+            >
+              {link.label}
+            </div>
+          ))}
+        </nav>
+        <div className="hidden md:flex space-x-4 ml-8">
+          <button className="text-white hover:text-gray-300">Switch to App</button>
+          <button 
+            onClick={() => navigate('/profile')}
+            className="bg-gray-800 text-white py-2 px-6 rounded-md hover:bg-gray-700"
           >
-            {link.label}
-          </StyledBox>
-        ))}
-      </Nav>
-
-      <IconContainer>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-        <IconButton>
-          <NotificationIcon />
-        </IconButton>
-        <MobileMenuDiv>
-          {
-            !auth && <Sidebar
-              items={links}
-              isOpen={sidebarOpen}
-              onToggle={() => setSidebarOpen(!sidebarOpen)}
-              position="right"
-            />
-          }
-        </MobileMenuDiv>
-      </IconContainer>
-    </HeaderContainer>
+            Profile
+          </button>
+        </div>
+  
+        {isMobile && (
+          <button className="text-white p-2 ml-auto" onClick={toggleMobileMenu}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} style={{color:'black'}} />}
+          </button>
+        )}
+      </div>
+    </header>
   );
 };
 

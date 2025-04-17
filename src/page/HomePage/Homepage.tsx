@@ -84,7 +84,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <VideoHero 
-        videoSrc="trekking.mp4"
+        videoSrc="/HomeVideos/v2.mp4"
         title="Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
         onDestinationChange={handleDestinationChange}
         onCustomizedTripClick={handleCustomizedTripClick}
