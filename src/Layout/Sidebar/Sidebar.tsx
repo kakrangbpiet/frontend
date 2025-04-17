@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SidebarProps } from '../../Datatypes/interface';
 import { Box } from '@mui/material';
-import { X, Twitter, Instagram, Facebook } from 'lucide-react';
+import {  Twitter, Instagram, Facebook } from 'lucide-react';
 
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
   width: ${props => props.$isOpen ? '100%' : '0'};
