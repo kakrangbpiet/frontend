@@ -180,7 +180,6 @@ interface VideoHeroProps {
 const VideoHero: React.FC<VideoHeroProps> = ({
   videoSrc,
   title,
-  subtitle,
   onDestinationChange,
   onCustomizedTripClick,
   onPrePlannedTripsClick
