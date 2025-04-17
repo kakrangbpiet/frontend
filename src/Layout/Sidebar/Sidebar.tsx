@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SidebarProps } from '../../Datatypes/interface';
 import { Box } from '@mui/material';
+import {  Twitter, Instagram, Facebook } from 'lucide-react';
 
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
-  width: ${props => props.$isOpen ? '200px' : '64px'};
+  width: ${props => props.$isOpen ? '100%' : '0'};
   height: 100vh;
   background-color: #1E1E1E;
   position: fixed;
@@ -19,43 +20,6 @@ const SidebarContainer = styled.div<{ $isOpen: boolean }>`
   border-right: 1px solid #2C2C2C;
 `;
 
-const SidebarHeader = styled.div`
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  border-bottom: 1px solid #2C2C2C;
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const LogoIcon = styled.div`
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ToggleButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const SidebarNav = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-top: 16px;
-`;
 
 const NavItem = styled(Box)<{ $isOpen: boolean, $active?: boolean }>`
   display: flex;
@@ -63,11 +27,7 @@ const NavItem = styled(Box)<{ $isOpen: boolean, $active?: boolean }>`
   padding: 10px 16px;
   cursor: pointer;
   text-decoration: none;
-  background-color: ${props => props.$active ? '#2C2C2C' : 'transparent'};
-  
-  &:hover {
-    background-color: #2C2C2C;
-  }
+
 `;
 
 const NavIcon = styled.div`
@@ -84,68 +44,22 @@ const NavLabel = styled.span<{ $isOpen: boolean }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: ${props => props.$isOpen ? 'block' : 'none'};
 `;
 
-// Custom SVG Icons
-const MenuIcon = () => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="20" 
-    height="20" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="#A0A0A0" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round"
-  >
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-);
-
-const CloseIcon = () => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="20" 
-    height="20" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="#A0A0A0" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
 
 const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   const location = useLocation();
   const navigate=useNavigate()
-
+  console.log('Sidebar items:', items);
   return (
     <SidebarContainer $isOpen={isOpen}>
-      <SidebarHeader>
-        {isOpen ? (
-          <LogoContainer onClick={()=>navigate('/')}>
-            <span style={{ color: '#A0A0A0', fontWeight: 600 }}>SAMSARA</span>
-          </LogoContainer>
-        ) : (
-          <LogoIcon />
-        )}
-        <ToggleButton onClick={onToggle}>
-          {isOpen ? <CloseIcon /> : <MenuIcon />}
-        </ToggleButton>
-      </SidebarHeader>
-      <SidebarNav>
+   
+   <nav className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 space-y-6">
         {items.map((item) => (
           <NavItem 
+          className="text-white text-xl py-3 px-4 hover:bg-white hover:bg-opacity-10 rounded-lg w-64 text-center"
             key={item.to}
-            onClick={()=>navigate(item.to)}
+            onClick={()=>{navigate(item.to);onToggle()}}
             $isOpen={isOpen}
             $active={location.pathname === item.to}
           >
@@ -155,7 +69,28 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
             <NavLabel $isOpen={isOpen}>{item.label}</NavLabel>
           </NavItem>
         ))}
-      </SidebarNav>
+         <div className="flex flex-col items-center pt-6 w-64 space-y-4">
+          <button className="text-white py-3 px-4 w-full text-center hover:bg-white hover:bg-opacity-10 hover:text-black rounded-lg text-xl">Switch to App</button>
+          <button 
+            onClick={() => {navigate('/profile');onToggle()}}
+            className="bg-black bg-opacity-20 text-white py-3 px-4 w-full rounded-lg hover:bg-white hover:text-black hover:bg-opacity-30 text-xl"
+          >
+            Profile
+          </button>
+        </div>
+        
+        <div className="flex justify-center space-x-8 mt-8">
+          <a href="tw" className="text-white hover:text-gray-300">
+            <Twitter size={24} />
+          </a>
+          <a href="i" className="text-white hover:text-gray-300">
+            <Instagram size={24} />
+          </a>
+          <a href="f" className="text-white hover:text-gray-300">
+            <Facebook size={24} />
+          </a>
+        </div>
+      </nav>
     </SidebarContainer>
   );
 };
