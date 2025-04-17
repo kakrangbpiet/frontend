@@ -8,80 +8,110 @@ import { AppDispatch } from '../../redux/store';
 import { selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import { Typography } from '@mui/material';
-import { UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
+import { UserCategory } from '../../Datatypes/Enums/UserEnums';
+import VideoHero from './VideoHero.tsx'; 
 
 const DashboardGrid = styled.div`
+  width: 100%;
+`;
 
+const PackagesSection = styled.div`
+  padding: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const auth = useSelector(isAuthenticated);
-    const selectedUserType = useSelector(selectUserType);
+  const selectedUserType = useSelector(selectUserType);
+  const dispatch = useDispatch<AppDispatch>();
   
-  const dispatch=useDispatch()
   useEffect(() => {
-    if (auth && selectedUserType==UserCategory.KAKRAN_SUPER_ADMIN) {
+    if (auth && selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
       navigate("/dashboard");
     }
-  }, [auth, navigate]);
+  }, [auth, navigate, selectedUserType]);
 
   const loadingByCategory = useSelector(selectedTravelPackagesLoading);
+  const categoryItemsHotDeals = useSelector(selectTravelPackagesByCategory("hotdeals"));
+  const categoryItemsNew = useSelector(selectTravelPackagesByCategory("pre-planned-trips"));
 
-
-  const  categoryItemsHotDeals  = useSelector(selectTravelPackagesByCategory("hotdeals"));
-  const  categoryItemsNew  = useSelector(selectTravelPackagesByCategory("pre-planned-trips"));
-
- 
   const handleLoadCategories = async () => {
     try {
-      (dispatch as AppDispatch)(
+      dispatch(
         fetchTravelPackagesByCategoryApi({
           pageSize: 10,
           page: 1,
           category: "hotdeals",
-          status:"active"
+          status: "active"
         })
       );
-      (dispatch as AppDispatch)(
+      dispatch(
         fetchTravelPackagesByCategoryApi({
           pageSize: 10,
           page: 1,
           category: "pre-planned-trips",
-          status:"active"
+          status: "active"
         })
       );
     } catch (error) {
-      console.error("Failed to fetch DropShip items:", error);
+      console.error("Failed to fetch travel packages:", error);
     }
   };
 
   useEffect(() => {
-    if(categoryItemsHotDeals.length === 0 || categoryItemsNew.length === 0){
-
+    if (categoryItemsHotDeals.length === 0 || categoryItemsNew.length === 0) {
       handleLoadCategories();
     }
-   }, [dispatch,auth]);
+  }, [dispatch, categoryItemsHotDeals.length, categoryItemsNew.length]);
+
+  const handleDestinationChange = (value: string) => {
+    console.log("Selected destination:", value);
+    // Add logic to filter or navigate based on destination
+  };
+
+  const handleCustomizedTripClick = () => {
+    navigate("/travel-form");
+  };
+
+  const handlePrePlannedTripsClick = () => {
+    navigate("/pre-planned-trips");
+  };
+
   return (
-    <div >
-      <video
-            className="m-0 p-0 w-[100%] h-[80vh] object-cover pointer-events-none"
-            src="trekking.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-          ></video>
+    <div>
+      <VideoHero 
+        videoSrc="trekking.mp4"
+        title="Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
+        onDestinationChange={handleDestinationChange}
+        onCustomizedTripClick={handleCustomizedTripClick}
+        onPrePlannedTripsClick={handlePrePlannedTripsClick}
+      />
+      
       <DashboardGrid>
-      <div className="px-[24px] flat-title mb-0 wow fadeInUp" data-wow-delay="0s">
-        <Typography variant="h6" sx={{ mb: 0 }}>
-          Hot Deals Packages
-        </Typography>
-        <TravelPackages travelPackages={categoryItemsHotDeals} categoryType="hotdeals"  loading={loadingByCategory["hotdeals"] || false} />
-        <TravelPackages travelPackages={categoryItemsNew} categoryType="new"  loading={loadingByCategory["pre-planned-trips"] || false} />
-      </div>
+        <PackagesSection>
+          <Typography variant="h6" sx={{ mb: 4 }}>
+            Hot Deals Packages
+          </Typography>
+          <TravelPackages 
+            travelPackages={categoryItemsHotDeals} 
+            categoryType="hotdeals" 
+            loading={loadingByCategory["hotdeals"] || false} 
+          />
+          
+          <Typography variant="h6" sx={{ mt: 8, mb: 4 }}>
+            Pre-Planned Trips
+          </Typography>
+          <TravelPackages 
+            travelPackages={categoryItemsNew} 
+            categoryType="new" 
+            loading={loadingByCategory["pre-planned-trips"] || false} 
+          />
+        </PackagesSection>
       </DashboardGrid>
-       
     </div>
   );
 };
