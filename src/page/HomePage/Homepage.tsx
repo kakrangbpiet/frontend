@@ -216,7 +216,7 @@ const HomePage: React.FC = () => {
     if (categoryItemsHotDeals.length === 0 || categoryItemsNew.length === 0) {
       handleLoadCategories();
     }
-  }, [dispatch, categoryItemsHotDeals.length, categoryItemsNew.length]);
+  }, [dispatch]);
 
 // const handleDestinationChange = (value: string) => {
 //   console.log("Selected destination:", value);
