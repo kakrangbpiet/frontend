@@ -107,9 +107,9 @@ const SingleTravelPackageDetails = () => {
           >
             {status === 'inactive' ? 'Activate' : 'Deactivate'}
           </button>
-          
-          {/* Admin Edit Package Form would go here */}
-        </div>
+
+                  {/* Admin Edit Package Form would go here */}
+
           <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
           <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
                   id: travelPackageId,
@@ -127,57 +127,64 @@ const SingleTravelPackageDetails = () => {
                   maxTravelers
                 }} userType={userType} />
           </div>
+          
+          <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
+            <p className="text-white">Edit Package Form Placeholder</p>
+          </div>
+        </div>
       </div>
     );
   }
 
-  // todo
   return (
     <div className="min-h-screen w-full bg-transparent">
       <div className="relative h-[500px] w-full">
       <div className="absolute inset-0 overflow-hidden">
       <MediaBackground media={image} />
-</div>
+        </div>
         
         <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black to-transparent text-white">
           <div className="max-w-6xl mx-auto">
             <button 
               onClick={navigateToHome}
-              className="px-4 py-2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg text-black mb-4 hover:bg-opacity-30 transition"
+              className="px-4 py-2 bg-transparent backdrop-filter backdrop-blur-md rounded-lg text-white mb-4 hover:bg-opacity-20 hover:bg-white transition"
             >
               Back to Home
             </button>
             <h1 className="text-4xl font-bold mb-2">{title}</h1>
             <div className="flex items-center gap-4 mb-4">
               <p className="text-lg">{location}</p>
-              <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
               <p className="text-lg capitalize">{category}</p>
-              <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
               <p className="text-lg capitalize">{travelType}</p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Main  layout */}
       <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+        {/*  tabs and content */}
         <div className="w-full md:w-2/3">
+          {/* Navigate tabs */}
           <div className="bg-transparent border-b border-gray-700 mb-4">
             <nav className="flex">
               <button 
                 onClick={() => setActiveTab('overview')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'overview' ? 'text-white bg-black bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'overview' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
               >
                 Overview
               </button>
               <button 
                 onClick={() => setActiveTab('photos')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'photos' ? 'text-white bg-black bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'photos' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
               >
                 Photos
               </button>
               <button 
                 onClick={() => setActiveTab('highlights')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'highlights' ? 'text-white bg-black bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'highlights' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
               >
                 Highlights
               </button>
@@ -194,6 +201,23 @@ const SingleTravelPackageDetails = () => {
               </div>
               
               <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Activities to Enjoy</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
+                  <span className="text-white">River rafting</span>
+                </div>
+                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
+                  <span className="text-white">Paragliding</span>
+                </div>
+                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
+                  <span className="text-white">Skiing</span>
+                </div>
+                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
+                  <span className="text-white">Trekking</span>
+                </div>
+                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
+                  <span className="text-white">Mountain biking</span>
+                </div>
+              </div>
             </div>
           )}
 
@@ -243,117 +267,135 @@ const SingleTravelPackageDetails = () => {
                   <p className="text-white">Professional tour guides</p>
                 </div>
               </div>
-
+              
+              <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Included Services</h3>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-white">
+                <li className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                  Accommodation
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                  Daily breakfast and dinner
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                  Transportation
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                  Guided tours
+                </li>
+              </ul>
             </div>
           )}
 
+          {/* AI Prompt Generator - Only visible on mobile */}
           <div className="md:hidden mt-8 bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 border border-gray-800">
             <h2 className="text-2xl font-bold mb-4 text-white">Need Help Planning?</h2>
             <AiPromptGenerator />
           </div>
         </div>
 
+        {/*  Form */}
         <div className="w-full md:w-1/3">
           <div className="sticky top-6">
+            {/* Package Details and Pricing */}
             <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
               <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
               
               <div className="flex items-end gap-3 mb-2">
                 {originalPrice && (
-                  <span className="text-gray-500 line-through">₹{originalPrice.toLocaleString()}</span>
+                  <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
                 )}
-                <span className="text-3xl font-bold text-blue-600">₹{price.toLocaleString()}</span>
+                <span className="text-3xl font-bold text-blue-400">₹{price.toLocaleString()}</span>
+                <span className="text-gray-300 text-sm">per person</span>
+              </div>
+              
+              <div className="flex items-center mt-2 mb-4">
+                <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  status === 'active' ? 'bg-green-900 text-green-300' : 
+                  status === 'sold-out' ? 'bg-red-900 text-red-300' : 
+                  'bg-yellow-900 text-yellow-300'
+                }`}>
+                  {status === 'active' ? 'Available' : 
+                   status === 'sold-out' ? 'Sold Out' : 
+                   'Coming Soon'}
+                </div>
+                {availableSpots > 0 && (
+                  <p className="text-sm ml-3 text-white">
+                    {availableSpots} spots left out of {maxTravelers}
+                  </p>
+                )}
               </div>
             </div>
-            <div className="flex flex-col items-end">
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                status === 'active' ? 'bg-green-100 text-green-800' : 
-                status === 'sold-out' ? 'bg-red-100 text-red-800' : 
-                'bg-yellow-100 text-yellow-800'
-              }`}>
-                {status === 'active' ? 'Available' : 
-                 status === 'sold-out' ? 'Sold Out' : 
-                 'Coming Soon'}
-              </div>
-              {availableSpots > 0 && (
-                <p className="text-sm mt-1 text-gray-600">
-                  {availableSpots} spots left out of {maxTravelers}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/*  Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/*  2/3 width */}
-          <div className="lg:col-span-2">
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6">
-              <h2 className="text-2xl font-bold mb-4">About This Package</h2>
-              <div className="prose text-gray-800">
-                {description}
-              </div>
-            </div>
-
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Package Highlights</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Duration: 5 Days, 4 Nights</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Category: {category}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Travel Type: {travelType}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Location: {location}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar - 1/3 width */}
-          <div className="lg:col-span-1">
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6">
-              <h2 className="text-2xl font-bold mb-4">Book Now</h2>
+            
+            {/* Registration - Desktop */}
+            <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
+              <h3 className="text-xl font-semibold mb-4 text-white">Book This Trip</h3>
               {status === 'active' && availableSpots > 0 ? (
-                <Registration packageId={travelPackageId} packageTitle={title} />
+                <Registration packageId={travelPackageId || ''} packageTitle={title} />
               ) : (
-                <p className="text-gray-700">
+                <p className="text-white">
                   {status === 'sold-out' ? 'This package is currently sold out.' : 'This package is coming soon!'}
                 </p>
               )}
             </div>
-
-            {/* AI Prompt Generator */}
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Need Help Planning?</h2>
+            
+            {/* AI Prompt Generator - Hidden on mibile */}
+            <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 border border-gray-800">
+              <h3 className="text-xl font-semibold mb-4 text-white">Need Help Planning?</h3>
               <AiPromptGenerator />
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white bg-opacity-100 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-12">
-          <h2 className="text-2xl font-bold mb-4">Gallery</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {images.map((img, index) => (
-              <div key={index} className="rounded-lg overflow-hidden h-48">
-                <img 
-                  src={`data:image/jpeg;base64,${img}`} 
-                  alt={`${title} - image ${index + 1}`} 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
+      {/* Mobile Form  */}
+      {showMobileForm && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4">
+          <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 border border-gray-800 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-white">Book This Trip</h3>
+              <button 
+                onClick={toggleMobileForm}
+                className="text-white hover:text-gray-300"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {status === 'active' && availableSpots > 0 ? (
+              <Registration packageId={travelPackageId || ''} packageTitle={title} />
+            ) : (
+              <p className="text-white">
+                {status === 'sold-out' ? 'This package is currently sold out.' : 'This package is coming soon!'}
+              </p>
+            )}
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Mobile Registertion Button -  on mobile */}
+      {status === 'active' && availableSpots > 0 && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+          <button
+            onClick={toggleMobileForm}
+            className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg text-center shadow-lg transition-all duration-300 flex justify-center items-center"
+          >
+            Chat with us
+          </button>
+        </div>
+      )}
     </div>
   );
 };
