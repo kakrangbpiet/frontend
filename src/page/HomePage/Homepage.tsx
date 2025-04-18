@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchTravelPackagesApi, fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
-import { selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
+import { selectedTravelPackages, selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 // import { Typography } from '@mui/material';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
-import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData'; 
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -192,7 +191,12 @@ const HomePage: React.FC = () => {
 
   const loadingByCategory = useSelector(selectedTravelPackagesLoading);
   const categoryItemsHotDeals = useSelector(selectTravelPackagesByCategory("hotdeals"));
-  const categoryItemsNew = useSelector(selectTravelPackagesByCategory("pre-planned-trips"));
+
+  const travelPackages = useSelector(selectedTravelPackages);
+    const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
+    useEffect(() => {
+        dispatch(fetchTravelPackagesApi({status:"active"}))
+    }, [dispatch]);
 
   const handleLoadCategories = async () => {
     try {
@@ -218,14 +222,12 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (categoryItemsHotDeals.length === 0 || categoryItemsNew.length === 0) {
+    if (categoryItemsHotDeals.length === 0 ) {
       handleLoadCategories();
     }
     
     // Debug logs to verify data
-    console.log("Hot deals:", categoryItemsHotDeals);
-    console.log("Pre-planned trips:", categoryItemsNew);
-  }, [dispatch, categoryItemsHotDeals.length, categoryItemsNew.length]);
+  }, [dispatch]);
 
   const handleCustomizedTripClick = () => {
     navigate("/travel-form");
@@ -288,9 +290,7 @@ const HomePage: React.FC = () => {
 {/*needed to be set*/}
 
                     <TravelPackages 
-            travelPackages={categoryItemsHotDeals && categoryItemsHotDeals.length > 0 
-              ? categoryItemsHotDeals 
-              : mockTravelPackages.filter(p => p.category === 'Beach')} 
+            travelPackages={categoryItemsHotDeals} 
             categoryType="hotdeals" 
             loading={loadingByCategory["hotdeals"] || false} 
           />
@@ -304,11 +304,9 @@ const HomePage: React.FC = () => {
 
           
           <TravelPackages 
-            travelPackages={categoryItemsNew && categoryItemsNew.length > 0 
-              ? categoryItemsNew 
-              : mockTravelPackages.filter(p => p.category === 'Adventure')} 
+            travelPackages={travelPackages.travelPackages} 
             categoryType="new" 
-            loading={loadingByCategory["pre-planned-trips"] || false} 
+            loading={travelPackagesLoading} 
           />
         </PackagesSection>
       </DashboardGrid>

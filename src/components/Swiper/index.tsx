@@ -43,19 +43,19 @@ const CustomSwiper: React.FC<CustomSwiperProps> = ({ images, autoplayDelay = 250
       >
 
         {images && images.map((src, index) => (
-          <SwiperSlide key={index} className='w-[200px] h-[150px]'>
-                <img
-                            className="lazyload img-product"
-                            src={src}
-                            alt={`Slide ${index + 1}`}
-                            style={{
-                              width: '100%',
-                              height: '450px',
-                              objectFit: 'cover',
-                              transition: 'transform 0.3s ease'
-                            }}
-                          />
-          </SwiperSlide>
+         <SwiperSlide key={index} className='w-full h-[350px]'>
+         <img
+           className="lazyload img-product"
+           src={src}
+           alt={`Slide ${index + 1}`}
+           style={{
+             width: '100%',
+             height: '100%',
+             objectFit: 'cover',
+             transition: 'transform 0.3s ease'
+           }}
+         />
+       </SwiperSlide>
         ))}
        
       </Swiper>

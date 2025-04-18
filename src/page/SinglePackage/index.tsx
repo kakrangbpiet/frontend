@@ -9,6 +9,8 @@ import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnu
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
 import Registration from '../../components/Registration';
 import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData';
+import { MediaBackground } from './bgRenderer';
+import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -101,10 +103,24 @@ const SingleTravelPackageDetails = () => {
           </button>
           
           {/* Admin Edit Package Form would go here */}
-          <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
-            <p className="text-gray-700">Edit Package Form Placeholder</p>
-          </div>
         </div>
+          <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
+          <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
+                  id: travelPackageId,
+                  title,
+                  description,
+                  price,
+                  originalPrice,
+                  image,
+                  images,
+                  location,
+                  category,
+                  status,
+                  availableSpots,
+                  travelType,
+                  maxTravelers
+                }} userType={userType} />
+          </div>
       </div>
     );
   }
@@ -113,18 +129,15 @@ const SingleTravelPackageDetails = () => {
   return (
     <div className="min-h-screen w-full bg-transparent">
       <div className="relative h-[500px] w-full">
-        <div 
-          className="absolute inset-0 bg-center bg-cover" 
-          style={{ backgroundImage: `url(${image})` }}
-        >
-          <div className="min-h-screen w-full bg-transparent"></div>
-        </div>
+      <div className="absolute inset-0 overflow-hidden">
+      <MediaBackground media={image} />
+</div>
         
         <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black to-transparent text-white">
           <div className="max-w-6xl mx-auto">
             <button 
               onClick={navigateToHome}
-              className="px-4 py-2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg text-white mb-4 hover:bg-opacity-30 transition"
+              className="px-4 py-2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md rounded-lg text-black mb-4 hover:bg-opacity-30 transition"
             >
               Back to Home
             </button>
@@ -234,7 +247,7 @@ const SingleTravelPackageDetails = () => {
             {images.map((img, index) => (
               <div key={index} className="rounded-lg overflow-hidden h-48">
                 <img 
-                  src={img} 
+                  src={`data:image/jpeg;base64,${img}`} 
                   alt={`${title} - image ${index + 1}`} 
                   className="w-full h-full object-cover"
                 />

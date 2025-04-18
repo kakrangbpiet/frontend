@@ -48,7 +48,7 @@ const MainContent = styled.main<{
 }>`
   flex: 1;
     position: relative;
-
+  padding-top: 50px;
   position: relative;
   z-index: 1; // Ensure content appears above the video
 `;
