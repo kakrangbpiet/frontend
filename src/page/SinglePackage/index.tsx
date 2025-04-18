@@ -294,9 +294,34 @@ const SingleTravelPackageDetails = () => {
                 {description}
               </div>
             </div>
-            
-            <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
-              <h3 className="text-xl font-semibold mb-4 text-white">Book This Trip</h3>
+
+            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold mb-4">Package Highlights</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <p>Duration: 5 Days, 4 Nights</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <p>Category: {category}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <p>Travel Type: {travelType}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <p>Location: {location}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar - 1/3 width */}
+          <div className="lg:col-span-1">
+            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6">
+              <h2 className="text-2xl font-bold mb-4">Book Now</h2>
               {status === 'active' && availableSpots > 0 ? (
                 <Registration packageId={travelPackageId} packageTitle={title} />
               ) : (
