@@ -7,8 +7,9 @@ import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/trav
 import { AppDispatch } from '../../redux/store';
 import { selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
-import { Typography } from '@mui/material';
+// import { Typography } from '@mui/material';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
+import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData'; 
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -16,17 +17,20 @@ const DashboardGrid = styled.div`
 
 const PackagesSection = styled.div`
   padding: 2rem;
+  position: relative; 
+  z-index: 5;
   
   @media (max-width: 768px) {
     padding: 1rem;
   }
 `;
 
+// change height if packge appear in main page
 const ContentOverlay = styled.div`
-
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100vh; 
+  min-height: 60vh; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,7 +38,8 @@ const ContentOverlay = styled.div`
   color: white;
   padding: 2rem;
   text-align: center;
-  z-index:400;
+  z-index: 4; 
+  margin-bottom: 2rem; 
   
   @media (max-width: 768px) {
     padding: 1rem;
@@ -48,7 +53,7 @@ const HeroText = styled.div`
 
 const HeroTitle = styled.h1`
   font-size: 2.5rem;
-  font-weight: 300; // Making it lighter to match the example
+  font-weight: 300; 
   margin-bottom: 1rem;
   
   @media (max-width: 768px) {
@@ -216,37 +221,33 @@ const HomePage: React.FC = () => {
     if (categoryItemsHotDeals.length === 0 || categoryItemsNew.length === 0) {
       handleLoadCategories();
     }
+    
+    // Debug logs to verify data
+    console.log("Hot deals:", categoryItemsHotDeals);
+    console.log("Pre-planned trips:", categoryItemsNew);
   }, [dispatch, categoryItemsHotDeals.length, categoryItemsNew.length]);
 
-// const handleDestinationChange = (value: string) => {
-//   console.log("Selected destination:", value);
-//   // Add logic to filter or navigate based on destination
-// };
-
-const handleCustomizedTripClick = () => {
-  navigate("/travel-form");
-};
-
-const handlePrePlannedTripsClick = () => {
-  navigate("/pre-planned-trips");
-};
-
+  const handleCustomizedTripClick = () => {
+    navigate("/travel-form");
+  };
   
-const toggleDropdown = () => {
-  setIsDropdownOpen(!isDropdownOpen);
-};
+  const handlePrePlannedTripsClick = () => {
+    navigate("/pre-planned-trips");
+  };
+  
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  
+  // const handleDestinationSelect = (_value: string) => {
+  //   setIsDropdownOpen(false);
+  // };
 
-const handleDestinationSelect = (_value: string) => {
-  // if (onDestinationChange) {
-  //   onDestinationChange(value);
-  // }
-  setIsDropdownOpen(false);
-};
   return (
     <div>
-        <ContentOverlay>
+      <ContentOverlay>
         <HeroText>
-          <HeroTitle>{title}</HeroTitle>
+          <HeroTitle>{title || "Discover Amazing Destinations"}</HeroTitle>
         </HeroText>
         
         <ButtonContainer>
@@ -258,10 +259,10 @@ const handleDestinationSelect = (_value: string) => {
             
             {isDropdownOpen && (
               <DropdownMenu>
-                <DropdownItem href="#" onClick={() => handleDestinationSelect('himachal')}>Himachal</DropdownItem>
-                <DropdownItem href="#" onClick={() => handleDestinationSelect('uttrakhand')}>Uttrakhand</DropdownItem>
-                <DropdownItem href="#" onClick={() => handleDestinationSelect('ladakh')}>Ladakh</DropdownItem>
-                <DropdownItem href="#" onClick={() => handleDestinationSelect('kashmir')}>Kashmir</DropdownItem>
+                <DropdownItem href="#" onClick={() => ('himachal')}>Himachal</DropdownItem>
+                <DropdownItem href="#" onClick={() => ('uttrakhand')}>Uttrakhand</DropdownItem>
+                <DropdownItem href="#" onClick={() => ('ladakh')}>Ladakh</DropdownItem>
+                <DropdownItem href="#" onClick={() => ('kashmir')}>Kashmir</DropdownItem>
               </DropdownMenu>
             )}
           </SelectWrapper>
@@ -276,22 +277,36 @@ const handleDestinationSelect = (_value: string) => {
           </ButtonGroup>
         </ButtonContainer>
       </ContentOverlay>
+      
       <DashboardGrid>
         <PackagesSection>
-          <Typography variant="h6" sx={{ mb: 4 }}>
-            Hot Deals Packages
-          </Typography>
-          <TravelPackages 
-            travelPackages={categoryItemsHotDeals} 
+        <div className="text-center mt-8">
+  <div className="inline-block px-6 py-2 text-white text-2xl font-semibold bg-white/10 border border-white/20 rounded-lg backdrop-blur-sm hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    Hot Deals Packages
+  </div>
+</div>
+{/*needed to be set*/}
+
+                    <TravelPackages 
+            travelPackages={categoryItemsHotDeals && categoryItemsHotDeals.length > 0 
+              ? categoryItemsHotDeals 
+              : mockTravelPackages.filter(p => p.category === 'Beach')} 
             categoryType="hotdeals" 
             loading={loadingByCategory["hotdeals"] || false} 
           />
           
-          <Typography variant="h6" sx={{ mt: 8, mb: 4 }}>
-            Pre-Planned Trips
-          </Typography>
+          <div className="text-center mt-8">
+  <div className="inline-block px-6 py-2 text-white text-2xl font-semibold bg-white/10 border border-white/20 rounded-lg backdrop-blur-sm hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+  Pre-Planned Trips
+  </div>
+</div>
+{/*needed to be set*/}
+
+          
           <TravelPackages 
-            travelPackages={categoryItemsNew} 
+            travelPackages={categoryItemsNew && categoryItemsNew.length > 0 
+              ? categoryItemsNew 
+              : mockTravelPackages.filter(p => p.category === 'Adventure')} 
             categoryType="new" 
             loading={loadingByCategory["pre-planned-trips"] || false} 
           />
