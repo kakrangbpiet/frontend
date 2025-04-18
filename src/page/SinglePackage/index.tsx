@@ -16,6 +16,8 @@ const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
   
   const [mockPackage, setMockPackage] = useState<ITravelPackage | undefined>(undefined);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [showMobileForm, setShowMobileForm] = useState(false);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,15 +77,19 @@ const SingleTravelPackageDetails = () => {
     }));
   };
 
+  const toggleMobileForm = () => {
+    setShowMobileForm(!showMobileForm);
+  };
+
   if (!packageData && !mockPackage) {
     return (
       <div className="min-h-screen w-full bg-transparent p-4 flex flex-col items-center justify-center">
         <div className="w-full max-w-6xl animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
-          <div className="h-96 bg-gray-200 rounded mb-6"></div>
-          <div className="h-4 bg-gray-200 rounded mb-2 w-full"></div>
-          <div className="h-4 bg-gray-200 rounded mb-2 w-full"></div>
-          <div className="h-40 bg-gray-200 rounded mb-6 w-full"></div>
+          <div className="h-8 bg-gray-700 rounded w-1/3 mb-6"></div>
+          <div className="h-96 bg-gray-700 rounded mb-6"></div>
+          <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
+          <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
+          <div className="h-40 bg-gray-700 rounded mb-6 w-full"></div>
         </div>
       </div>
     );
@@ -153,14 +159,106 @@ const SingleTravelPackageDetails = () => {
         </div>
       </div>
 
-      {/* Content Container */}
-      <div className="max-w-6xl mx-auto -mt-16 px-4">
-        {/* Pricing todo */}
-        <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-gray-600 text-sm uppercase">Price per person</p>
-              <div className="flex items-end gap-2">
+      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+        <div className="w-full md:w-2/3">
+          <div className="bg-transparent border-b border-gray-700 mb-4">
+            <nav className="flex">
+              <button 
+                onClick={() => setActiveTab('overview')}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'overview' ? 'text-white bg-black bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+              >
+                Overview
+              </button>
+              <button 
+                onClick={() => setActiveTab('photos')}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'photos' ? 'text-white bg-black bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+              >
+                Photos
+              </button>
+              <button 
+                onClick={() => setActiveTab('highlights')}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'highlights' ? 'text-white bg-black bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+              >
+                Highlights
+              </button>
+            </nav>
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === 'overview' && (
+            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
+              <h2 className="text-3xl font-bold mb-6 text-green-400">About {title.split(' ')[0]}</h2>
+              <div className="text-white space-y-4">
+                <p>{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
+                <p>Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
+              </div>
+              
+              <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Activities to Enjoy</h3>
+            </div>
+          )}
+
+          {activeTab === 'photos' && (
+            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
+              <h2 className="text-3xl font-bold mb-6 text-green-400">Photo Gallery</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {images.map((img, index) => (
+                  <div key={index} className="rounded-lg overflow-hidden h-64">
+                    <img 
+                      src={img} 
+                      alt={`${title} - image ${index + 1}`} 
+                      className="w-full h-full object-cover hover:scale-105 transition duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'highlights' && (
+            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
+              <h2 className="text-3xl font-bold mb-6 text-green-400">Package Highlights</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <p className="text-white">Duration: 5 Days, 4 Nights</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <p className="text-white">Category: {category}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <p className="text-white">Travel Type: {travelType}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <p className="text-white">Location: {location}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <p className="text-white">All-inclusive package</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <p className="text-white">Professional tour guides</p>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          <div className="md:hidden mt-8 bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 border border-gray-800">
+            <h2 className="text-2xl font-bold mb-4 text-white">Need Help Planning?</h2>
+            <AiPromptGenerator />
+          </div>
+        </div>
+
+        <div className="w-full md:w-1/3">
+          <div className="sticky top-6">
+            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
+              <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
+              
+              <div className="flex items-end gap-3 mb-2">
                 {originalPrice && (
                   <span className="text-gray-500 line-through">₹{originalPrice.toLocaleString()}</span>
                 )}
@@ -196,34 +294,9 @@ const SingleTravelPackageDetails = () => {
                 {description}
               </div>
             </div>
-
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Package Highlights</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Duration: 5 Days, 4 Nights</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Category: {category}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Travel Type: {travelType}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  <p>Location: {location}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar - 1/3 width */}
-          <div className="lg:col-span-1">
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6">
-              <h2 className="text-2xl font-bold mb-4">Book Now</h2>
+            
+            <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
+              <h3 className="text-xl font-semibold mb-4 text-white">Book This Trip</h3>
               {status === 'active' && availableSpots > 0 ? (
                 <Registration packageId={travelPackageId} packageTitle={title} />
               ) : (
