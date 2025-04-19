@@ -169,7 +169,7 @@ const SingleTravelPackageDetails = () => {
       {/* Main  layout */}
       <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
         {/*  tabs and content */}
-        <div className="w-full md:w-2/3">
+        <div className="w-full md:w-1/2">
           {/* Navigate tabs */}
           <div className="bg-transparent border-b border-gray-700 mb-4">
             <nav className="flex">
@@ -320,7 +320,7 @@ const SingleTravelPackageDetails = () => {
         </div>
 
         {/*  Form */}
-        <div className="w-full md:w-1/3">
+        <div className="w-full md:w-1/2">
           <div className="sticky top-6">
             {/* Package Details and Pricing */}
 <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
