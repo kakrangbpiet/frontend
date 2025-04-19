@@ -3,7 +3,7 @@ import { Box, Tabs, Tab, Typography } from '@mui/material';
 import { DateAvailability } from '../../redux/slices/Travel/TravelSlice';
 import { useState } from 'react';
 import { formatDate } from '../../page/SinglePackage/DateAvailability';
-import CustomTextField from '../CustomTextField';
+import CustomDateField from '../CustomDateField';
 
 interface DateSelectionTabsProps {
   tripType: 'pre-planned' | 'custom';
@@ -16,7 +16,7 @@ interface DateSelectionTabsProps {
 }
 
 function DateSelectionTabs({
-  tripType,
+  // tripType,
   setTripType,
   dateAvailabilities,
   startDate,
@@ -26,7 +26,7 @@ function DateSelectionTabs({
 }: DateSelectionTabsProps) {
   const [tabValue, setTabValue] = useState(0);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
     setTripType(newValue === 0 ? 'pre-planned' : 'custom');
   };
@@ -79,30 +79,18 @@ function DateSelectionTabs({
         </Box>
       ) : (
         <Box sx={{ mt: 2 }}>
-          <CustomTextField
-            id="startDate"
-            type="date"
+          <CustomDateField
             label="Start Date"
-            value={startDate ? new Date(startDate * 1000).toISOString().split('T')[0] : ''}
-            onChange={(e) => {
-              const date = (e.target as HTMLInputElement).value ? Math.floor(new Date((e.target as HTMLInputElement).value).getTime() / 1000) : undefined;
-              setStartDate(date);
-            }}
+            value={startDate || null}
+            onChange={(date) => setStartDate(date || undefined)}
             fullWidth
-            InputLabelProps={{ shrink: true }}
           />
-          <CustomTextField
-            id="endDate"
-            type="date"
+
+          <CustomDateField
             label="End Date"
-            value={endDate ? new Date(endDate * 1000).toISOString().split('T')[0] : ''}
-            onChange={(e) => {
-              const date = (e.target as HTMLInputElement).value ? Math.floor(new Date((e.target as HTMLInputElement).value).getTime() / 1000) : undefined;
-              setEndDate(date);
-            }}
+            value={endDate || null}
+            onChange={(date) => setEndDate(date || undefined)}
             fullWidth
-            sx={{ mt: 2 }}
-            InputLabelProps={{ shrink: true }}
           />
         </Box>
       )}

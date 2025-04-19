@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextField, Box,  Grid, IconButton } from '@mui/material';
+import { Box, Grid, IconButton, TextField } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
+import CustomDateField from '../CustomDateField';
 
 interface UnixDateInputProps {
   startDate: number | null;
@@ -27,80 +28,52 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
   onRemove,
   showRemove = false,
 }) => {
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    onStartDateChange(value ? parseInt(value) : null);
-  };
-
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    onEndDateChange(value ? parseInt(value) : null);
-  };
-
-  const handleMaxTravelersChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || 0;
-    onMaxTravelersChange(value);
-  };
-
-  const handleAvailableSpotsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || 0;
-    onAvailableSpotsChange(value);
-  };
-
   return (
     <Box sx={{ mb: 3, border: '1px solid #eee', p: 2, borderRadius: 1, position: 'relative' }}>
-      
-      <Grid container spacing={2}>
-      <Grid size={{ xs: 12, md: 12 }}>
-
       {showRemove && (
         <IconButton
-        onClick={onRemove}
-        color="error"
+          onClick={onRemove}
+          color="error"
+          sx={{ position: 'absolute', right: 8, top: 8 }}
         >
           <RemoveIcon />
         </IconButton>
       )}
-      </Grid>
-         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            fullWidth
-            type="number"
-            label="Start Date (Unix timestamp)"
-            value={startDate || ''}
-            onChange={handleStartDateChange}
-            placeholder="e.g., 1633046400"
+      
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomDateField
+            label="Start Date"
+            value={startDate}
+            onChange={onStartDateChange}
           />
         </Grid>
-         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            fullWidth
-            type="number"
-            label="End Date (Unix timestamp)"
-            value={endDate || ''}
-            onChange={handleEndDateChange}
-            placeholder="e.g., 1633132800"
+        <Grid size={{ xs: 12, md: 6 }}>
+          <CustomDateField
+            label="End Date"
+            value={endDate}
+            onChange={onEndDateChange}
           />
         </Grid>
       </Grid>
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-         <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             type="number"
             label="Max Travelers"
             value={maxTravelers}
-            onChange={handleMaxTravelersChange}
+            onChange={(e) => onMaxTravelersChange(parseInt(e.target.value) || 0)}
           />
         </Grid>
-         <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             type="number"
             label="Available Spots"
             value={availableSpots}
-            onChange={handleAvailableSpotsChange}
+            onChange={(e) => onAvailableSpotsChange(parseInt(e.target.value) || 0)}
           />
         </Grid>
       </Grid>
