@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { SelectConactVerified, SelectContact, selectTrxId, setContactVerified } from '../../redux/slices/login/authSlice';
 import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
-
+import { InputAdornment, IconButton } from '@mui/material';
 interface ContactDetailsProps {
   inquiryData: any;
   setInquiryData: any;
@@ -92,27 +92,41 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
         onChange={(e) => handleChange('email', e.target.value)}
         margin="normal"
         required
-        disabled={!shouldShowRegister}
+        disabled={!shouldShowRegister && isRegister}
       />
       
       {!isContactVerified ? (
         <>
-          <TextField
-            fullWidth
-            label="Phone Number"
-            type="tel"
-            value={phoneInput}
-            onChange={handlePhoneChange}
-            margin="normal"
-            required
-            disabled={showOtpField || !shouldShowRegister} // Disable if shouldShowRegister is false
-          />
+         <TextField
+  fullWidth
+  label="Phone Number"
+  type="tel"
+  value={phoneInput}
+  onChange={handlePhoneChange}
+  margin="normal"
+  required
+  disabled={showOtpField || (!shouldShowRegister && isRegister)}
+  InputProps={{
+    endAdornment: showOtpField && (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={handleSendOtp}
+          edge="end"
+          disabled={!phoneInput || (!shouldShowRegister && isRegister)}
+        >
+          Resend
+        </IconButton>
+      </InputAdornment>
+    )
+  }}
+/>
+
           
           {!showOtpField ? (
             <Button 
               variant="contained" 
               onClick={handleSendOtp}
-              disabled={!phoneInput || !shouldShowRegister} // Disable if shouldShowRegister is false
+              disabled={!phoneInput || !shouldShowRegister  && isRegister} // Disable if shouldShowRegister is false
               sx={{ mt: 2 }}
             >
               Send Verification Code
@@ -128,13 +142,13 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 margin="normal"
                 required
                 sx={{ mt: 2 }}
-                disabled={!shouldShowRegister} // Disable if shouldShowRegister is false
+                disabled={!shouldShowRegister && isRegister} // Disable if shouldShowRegister is false
               />
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Button 
                   variant="contained" 
                   onClick={handleVerifyOtp}
-                  disabled={!otpInput || isContactVerified || !shouldShowRegister} // Disable if shouldShowRegister is false
+                  disabled={!otpInput || isContactVerified || !shouldShowRegister  && isRegister} // Disable if shouldShowRegister is false
                   sx={{ mt: 2 }}
                 >
                   Verify Phone Number
@@ -144,7 +158,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     variant="outlined" 
                     onClick={handleEditNumber}
                     sx={{ mt: 2 }}
-                    disabled={!shouldShowRegister} // Disable if shouldShowRegister is false
+                    disabled={!shouldShowRegister  && isRegister} // Disable if shouldShowRegister is false
                   >
                     Edit Number
                   </Button>

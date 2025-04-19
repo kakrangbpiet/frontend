@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import { GridColDef } from "@mui/x-data-grid";
+import { formatDate } from "../SinglePackage/DateAvailability";
 
 interface InquiriesColumnProps {
   handleViewDetails?: any
@@ -27,8 +28,22 @@ const InquiriesColumn = ({ handleViewDetails,handleViewPackage }: InquiriesColum
         </span>
       )
     },
-    { field: "departure", headerName: "Origin Point", width: 150, editable: false },
-    { field: "destination", headerName: "Destination", width: 150, editable: false },
+    { field: "address", headerName: "Origin Point", width: 150, editable: false },
+    { field: "tripType", headerName: "Trip Type", width: 150, editable: false },
+    {
+      field: "startDate",
+      headerName: "Start Date",
+      width: 150,
+      editable: false,
+      renderCell: (params) => <span>{formatDate(params.value)}</span>,
+    },
+    {
+      field: "endDate",
+      headerName: "End Date",
+      width: 150,
+      editable: false,
+      renderCell: (params) => <span>{formatDate(params.value)}</span>,
+    },   { field: "destination", headerName: "Destination", width: 150, editable: false },
     { field: "name", headerName: "Name", width: 150, editable: false },
     { field: "email", headerName: "Email", width: 150, editable: false },
     { field: "phoneNumber", headerName: "phoneNumber", width: 150, editable: false },
