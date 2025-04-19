@@ -230,6 +230,7 @@ const HomePage: React.FC = () => {
     // Debug logs to verify data
   }, [dispatch]);
 
+
   const handleCustomizedTripClick = () => {
     navigate("/travel-form");
   };
