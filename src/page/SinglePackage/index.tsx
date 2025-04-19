@@ -323,49 +323,48 @@ const SingleTravelPackageDetails = () => {
         <div className="w-full md:w-1/2">
           <div className="sticky top-6">
             {/* Package Details and Pricing */}
-<div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
-  <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
-  
-  <div className="flex items-end gap-3 mb-2">
-    {originalPrice && (
-      <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
-    )}
-    <span className="text-3xl font-bold text-blue-400">₹{price.toLocaleString()}</span>
-    <span className="text-gray-300 text-sm">per person</span>
-  </div>
-  
-  {dateAvailabilities.length > 0 && (
-    <div className="mb-2">
-      <p className="text-sm text-gray-300">Next available:</p>
-      <p className="text-white font-medium">
-        {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
-      </p>
-    </div>
-  )}
-  
-  <div className="flex items-center mt-2 mb-4">
-    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-      status === 'active' ? 'bg-green-900 text-green-300' : 
-      status === 'sold-out' ? 'bg-red-900 text-red-300' : 
-      'bg-yellow-900 text-yellow-300'
-    }`}>
-      {status === 'active' ? 'Available' : 
-       status === 'sold-out' ? 'Sold Out' : 
-       'Coming Soon'}
-    </div>
-    {availableSpots > 0 && (
-      <p className="text-sm ml-3 text-white">
-        {availableSpots} spots left out of {maxTravelers}
-      </p>
-    )}
-  </div>
-</div>
+            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
+              <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
+
+              <div className="flex items-end gap-3 mb-2">
+                {originalPrice && (
+                  <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
+                )}
+                <span className="text-3xl font-bold text-blue-400">₹{price.toLocaleString()}</span>
+                <span className="text-gray-300 text-sm">per person</span>
+              </div>
+
+              {dateAvailabilities.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-sm text-gray-300">Next available:</p>
+                  <p className="text-white font-medium">
+                    {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex items-center mt-2 mb-4">
+                <div className={`px-3 py-1 rounded-full text-sm font-medium ${status === 'active' ? 'bg-green-900 text-green-300' :
+                    status === 'sold-out' ? 'bg-red-900 text-red-300' :
+                      'bg-yellow-900 text-yellow-300'
+                  }`}>
+                  {status === 'active' ? 'Available' :
+                    status === 'sold-out' ? 'Sold Out' :
+                      'Coming Soon'}
+                </div>
+                {availableSpots > 0 && (
+                  <p className="text-sm ml-3 text-white">
+                    {availableSpots} spots left out of {maxTravelers}
+                  </p>
+                )}
+              </div>
+            </div>
 
             {/* Registration - Desktop */}
             <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
               <h3 className="text-xl font-semibold mb-4 text-white">Book This Trip</h3>
-                <Registration packageId={travelPackageId || ''} packageTitle={title} />
-            
+              <Registration packageId={travelPackageId || ''} packageTitle={title} />
+
             </div>
 
             {/* AI Prompt Generator - Hidden on mibile */}
@@ -392,7 +391,7 @@ const SingleTravelPackageDetails = () => {
                 </svg>
               </button>
             </div>
-              <Registration packageId={travelPackageId || ''} packageTitle={title} />
+            <Registration packageId={travelPackageId || ''} packageTitle={title} />
           </div>
         </div>
       )}
