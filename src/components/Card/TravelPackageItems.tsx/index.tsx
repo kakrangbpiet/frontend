@@ -1,8 +1,10 @@
 import React from 'react';
-import { Box, Typography, Skeleton, Grid, Chip } from '@mui/material';
+import { Skeleton, Chip } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { ITravelPackage } from '../../../redux/slices/Travel/TravelSlice';
 import CustomSwiper from '../../Swiper';
+import { mockTravelPackages } from './mockData';
+
 
 interface TravelPackagesProps {
   categoryType?: string;
@@ -10,10 +12,16 @@ interface TravelPackagesProps {
   travelPackages?: ITravelPackage[];
 }
 
-const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages }) => {
+const TravelPackages: React.FC<TravelPackagesProps> = ({
+  travelPackages = mockTravelPackages,
+  loading = false
+}) => {
   const navigate = useNavigate();
+  
+  // Debug logging to verify data
+  console.log("Travel packages being rendered:", travelPackages);
 
-  const handleNavigate = (id: string,title:string) => {
+  const handleNavigate = (id: string, title: string) => {
     navigate(`/package/${id}/${title}`);
   };
 
@@ -30,99 +38,104 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({  travelPackages }) => {
         label={status.toUpperCase()}
         color={statusColors[status]}
         size="small"
-        sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
+        sx={{ position: 'absolute', top: 8, right: 8, zIndex: 10 }}
       />
     );
   };
 
   return (
-    <div className="">
-     
-      
-      <section className="flat-spacing-0 pt-0">
+    <div className="travel-packages bg-gradient-to-br from-white/10 to-white/20 backdrop-blur-md py-8" style={{ position: 'relative', zIndex: 5 }}>
+      <section className="container mx-auto px-4">
         <div className="hover-sw-nav hover-sw-2">
-          {travelPackages.length==0 ? (
-            <Grid container spacing={3}>
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[...Array(4)].map((_, index) => (
-                <Grid  size={{ xs: 12, sm:6, md: 4,lg:3 }} key={index}>
+                <div key={index} className="w-full">
                   <Skeleton variant="rectangular" height={350} />
                   <Skeleton variant="text" width="80%" />
                   <Skeleton variant="text" width="60%" />
-                </Grid>
+                </div>
               ))}
-            </Grid>
+            </div>
+          ) : travelPackages.length === 0 ? (
+            <div className="text-white p-4 border border-white/20 rounded text-center">
+              No packages found for this category.
+            </div>
           ) : (
-            <Grid container spacing={3}>
-              {travelPackages?.map((pkg: ITravelPackage) => (
-                <Grid  size={{ xs: 12, sm:6, md: 4,lg:3 }} key={pkg.id}>
-                      <Box
-                        sx={{
-                          cursor: 'pointer',
-                          position: 'relative',
-                          overflow: 'hidden',
-                          borderRadius: '18px',
-                        }}
-                        onClick={() => handleNavigate(pkg.id,pkg.title)}
-                        >
-                          <Box  sx={{ position: 'relative',zIndex:"400" }}>
-                        {renderStatusChip(pkg.status)}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {travelPackages.map((pkg: ITravelPackage) => (
+                <div key={pkg.id} className="w-full">
+                  <div 
+                    className="cursor-pointer relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg transition-all duration-300 h-full hover:transform hover:-translate-y-2 hover:shadow-xl"
+                    onClick={() => handleNavigate(pkg.id, pkg.title)}
+                  >
+                    <div className="relative z-10">
+                      {renderStatusChip(pkg.status)}
+                    </div>
+                    
+                    <div className="h-56 overflow-hidden">
+                      {pkg.images && pkg.images.length > 0 ? (
+                        <CustomSwiper 
+                          images={pkg.images.map(img => 
+                             `data:image/jpeg;base64,${img}` 
+                          )} 
+                        />
+                      ) : (
+                        <img
+                          src={pkg.image}
+                          alt={pkg.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
 
-                          </Box>
-                        <CustomSwiper images={pkg.images.map(img => `data:image/png;base64,${img}`)} />
-
-                        <Box sx={{
-                          p: 2,
-                          background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
-                          color: 'white'
-                        }}>
-                          <Typography
-                            variant="h6"
-                            component={Link}
-                            to={`/package/${pkg.id}/${pkg.title}`}
-                            sx={{
-                              display: 'block',
-                              mb: 1,
-                              color: 'white',
-                              textDecoration: 'none',
-                              '&:hover': { color: 'primary.main' }
-                            }}
-                          >
-                            {pkg.title}
-                          </Typography>
-                          <Box display="flex" justifyContent="center" gap={1} alignItems="center">
-                            <Typography variant="body1" fontWeight="bold" color="white">
-                              ₹{pkg.price.toFixed(2)}
-                            </Typography>
-                            {pkg.originalPrice && (
-                              <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
-                                ₹{pkg.originalPrice.toFixed(2)}
-                              </Typography>
-                            )}
-                          </Box>
-                          {pkg.category && (
-                            <Chip
-                              label={pkg.category}
-                              size="small"
-                              sx={{ mt: 1, bgcolor: 'primary.light', color: 'primary.contrastText' }}
-                            />
+                    <div className="p-4 bg-black/40 backdrop-blur-md text-white border-t border-white/10">
+                      <Link 
+                        to={`/package/${pkg.id}/${pkg.title}`}
+                        className="block mb-2 text-lg font-semibold text-white hover:text-blue-300 no-underline"
+                      >
+                        {pkg.title}
+                      </Link>
+                      
+                      {pkg.location && (
+                        <div className="mb-2 text-sm text-white/80">
+                          <span>📍 {pkg.location}</span>
+                        </div>
+                      )}
+                      
+                      <div className="flex justify-between items-center mt-2">
+                        <div>
+                          <div className="font-bold text-white">
+                            ₹{pkg.price.toLocaleString()}
+                          </div>
+                          {pkg.originalPrice && (
+                            <div className="text-sm text-white/70 line-through">
+                              ₹{pkg.originalPrice.toLocaleString()}
+                            </div>
                           )}
-                        </Box>
-                      </Box>
-                </Grid>
+                        </div>
+                        
+                        {pkg.category && (
+                          <span className="px-2 py-1 text-xs rounded-full bg-white/20 text-white border border-white/10 backdrop-blur-sm">
+                            {pkg.category}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </Grid>
+            </div>
           )}
           
-          <Box sx={{ textAlign: 'center', mt: 3 }}>
+          <div className="text-center mt-8">
             <Link
               to="/travel-packages"
-              className="tf-btn btn-line m-0 fs-12 fw-6 mt-0"
+              className="inline-block px-6 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/20 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             >
-              <Typography>
-                VIEW ALL
-              </Typography>
+              VIEW ALL PACKAGES
             </Link>
-          </Box>
+          </div>
         </div>
       </section>
     </div>

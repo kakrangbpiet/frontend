@@ -48,9 +48,7 @@ const MainContent = styled.main<{
 }>`
   flex: 1;
     position: relative;
-  bottom: 100vh;
-
-  margin-top: 100vh; // Push content below the video
+  padding-top: 100px;
   position: relative;
   z-index: 1; // Ensure content appears above the video
 `;
@@ -88,7 +86,7 @@ const Layout = () => {
 
   return (
     <div className="relative w-full overflow-hidden">
-      <Header title={"SAMSARA"} links={HEADER_LINKS} auth={auth} toggleMobileMenu={toggleMobileMenu}
+      <Header title={"SAMSARA"} links={sidebarItem} auth={auth} toggleMobileMenu={toggleMobileMenu}
         mobileMenuOpen={mobileMenuOpen} isMobile={isMobile} />
       
       {isMobile && <Sidebar
@@ -105,7 +103,7 @@ const Layout = () => {
             videoSrc={randomHero.video}
             title={randomHero.title}
           />
-              <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
+        <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
           <a href="http://instagram.com/" className="text-white hover:text-gray-300">
             <Twitter size={24} />
           </a>

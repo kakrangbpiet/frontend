@@ -8,13 +8,12 @@ import { AppDispatch } from '../../redux/store';
 
 interface ContactDetailsProps {
   inquiryData: any;
-  setInquiryData: any
+  setInquiryData: any;
+  isRegister?: boolean;
+  shouldShowRegister?: boolean;
 }
 
-/**
- * Component for collecting contact information
- */
-function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
+function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowRegister }: ContactDetailsProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [phoneInput, setPhoneInput] = useState('');
   const [otpInput, setOtpInput] = useState('');
@@ -31,6 +30,7 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
       }));
     }
   }, [isContactVerified, verifiedPhoneNumber]);
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhoneInput(e.target.value);
   };
@@ -50,7 +50,7 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
 
   const handleVerifyOtp = async () => {
     try {
-      const deviceId = "550e8400-e29b-41d4-a716-446655440000"; // Example device ID
+      const deviceId = "550e8400-e29b-41d4-a716-446655440000";
       await dispatch(registerNumberOtpDispatcher({
         otp: otpInput,
         trxId,
@@ -58,7 +58,6 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
         phoneNumber: phoneInput
       }));
       
-      // Only set the phone number in inquiry data after verification
       setInquiryData(prev => ({
         ...prev,
         phoneNumber: phoneInput
@@ -69,11 +68,11 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
   };
 
   const handleEditNumber = () => {
-    setShowOtpField(false);
-    setOtpInput('');
-    dispatch(setContactVerified({ isContactVerified: false }));
-    
-    // You might want to dispatch an action to reset verification status if needed
+    if (shouldShowRegister) { // Only allow editing if shouldShowRegister is true
+      setShowOtpField(false);
+      setOtpInput('');
+      dispatch(setContactVerified({ isContactVerified: false }));
+    }
   };
 
   const handleChange = (field: keyof TravelInquiry, value: string) => {
@@ -84,19 +83,18 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
   };
 
   return (
-    <Box sx={{ padding: 2, mt: 2 }}>
-      {/* Email input */}
+    <Box sx={{ px: 2 }}>
       <TextField
         fullWidth
         label="Email Address"
         type="email"
-        value={inquiryData.userEmail}
+        value={inquiryData.email}
         onChange={(e) => handleChange('email', e.target.value)}
         margin="normal"
         required
+        disabled={!shouldShowRegister}
       />
       
-      {/* Phone number verification flow */}
       {!isContactVerified ? (
         <>
           <TextField
@@ -107,14 +105,14 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
             onChange={handlePhoneChange}
             margin="normal"
             required
-            disabled={showOtpField}
+            disabled={showOtpField || !shouldShowRegister} // Disable if shouldShowRegister is false
           />
           
           {!showOtpField ? (
             <Button 
               variant="contained" 
               onClick={handleSendOtp}
-              disabled={!phoneInput}
+              disabled={!phoneInput || !shouldShowRegister} // Disable if shouldShowRegister is false
               sx={{ mt: 2 }}
             >
               Send Verification Code
@@ -130,23 +128,27 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
                 margin="normal"
                 required
                 sx={{ mt: 2 }}
+                disabled={!shouldShowRegister} // Disable if shouldShowRegister is false
               />
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Button 
                   variant="contained" 
                   onClick={handleVerifyOtp}
-                  disabled={!otpInput || isContactVerified}
+                  disabled={!otpInput || isContactVerified || !shouldShowRegister} // Disable if shouldShowRegister is false
                   sx={{ mt: 2 }}
                 >
                   Verify Phone Number
                 </Button>
-                <Button 
-                  variant="outlined" 
-                  onClick={handleEditNumber}
-                  sx={{ mt: 2 }}
-                >
-                  Edit Number
-                </Button>
+                {!isRegister && (
+                  <Button 
+                    variant="outlined" 
+                    onClick={handleEditNumber}
+                    sx={{ mt: 2 }}
+                    disabled={!shouldShowRegister} // Disable if shouldShowRegister is false
+                  >
+                    Edit Number
+                  </Button>
+                )}
               </Box>
             </>
           )}
@@ -156,14 +158,15 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
           <Typography variant="body1" sx={{ mt: 2 }}>
             Verified Phone: {verifiedPhoneNumber}
           </Typography>
-          <Button 
-            variant="outlined" 
-            onClick={handleEditNumber}
-            sx={{ mt: 2 }}
-          >
-            Change Phone Number
-          </Button>
-          {/* Hidden field to include verified phone in form data */}
+          {shouldShowRegister && ( // Only show change button if shouldShowRegister is true
+            <Button 
+              variant="outlined" 
+              onClick={handleEditNumber}
+              sx={{ mt: 2 }}
+            >
+              Change Phone Number
+            </Button>
+          )}
           <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
         </>
       )}

@@ -11,8 +11,11 @@ import { registerUserDispatcher } from '../../redux/slices/login/authApiSlice.ts
 import { AppDispatch } from '../../redux/store.ts';
 import { createTravelInquiry } from '../../redux/slices/Travel/Booking/BookTravelApiSlice.tsx';
 import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
-import { isAuthenticated } from '../../redux/slices/login/authSlice.tsx';
+import { isAuthenticated, JwtPayload, selectToken,} from '../../redux/slices/login/authSlice.tsx';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
+// Extend JwtPayload to include custom properties
 /**
  * Steps for the travel inquiry process:
  * 1. Location Details - Where they want to travel
@@ -51,18 +54,36 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   const dispatch=useDispatch<AppDispatch>()
   const [activeStep, setActiveStep] = useState(0);
   const auth = useSelector(isAuthenticated);
+  const token = useSelector(selectToken);
+  
+  const navigate=useNavigate()
+  const getUserDetailsFromToken = (token: string | null): {name?: string, email?: string, phoneNumber?: string} => {
+    if (!token) return {};
+    try {
+      const decoded = jwtDecode(token) as JwtPayload;
+      return {
+        name: decoded.name,
+        email: decoded.email,
+        phoneNumber: decoded.phoneNumber
+      };
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return {};
+    }
+  };
+  const userDetails = getUserDetailsFromToken(token);
   
   // Initialize inquiry data with default values
   const [inquiryData, setInquiryData] = useState<TravelInquiry>({
     packageId:packageId,
     packageTitle:packageTitle,
     destination: packageTitle,
-    departure: "",
+    address: "",
     travelDates: '',
     passengerCount: 1,
-    name: '',
-    email: '',
-    phoneNumber: '',
+    name: userDetails?.name || '',
+    email: userDetails?.email || '',
+    phoneNumber: userDetails?.phoneNumber || '',
     specialRequests: ''
   });
 
@@ -86,20 +107,26 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   /**
    * Resets the form and navigates to the home page
    */
-  const handleReset = () => {
-    setInquiryData({
-      packageId:packageId,
-      packageTitle:packageTitle,
-      destination: packageTitle,
-      departure: '',
-      travelDates: '',
-      passengerCount: 1,
-      name: '',
-      email: '',
-      phoneNumber: '',
-      specialRequests: ''
-    });
-    // navigate("/");
+  // const handleReset = () => {
+  //   setInquiryData({
+  //     packageId:packageId,
+  //     packageTitle:packageTitle,
+  //     destination: packageTitle,
+  //     departure: '',
+  //     travelDates: '',
+  //     passengerCount: 1,
+  //     name: '',
+  //     email: '',
+  //     phoneNumber: '',
+  //     specialRequests: ''
+  //   });
+  //   // navigate("/");
+  // };
+  /**
+   * Resets the form and navigates to the home page
+   */
+  const navigateToProfile = () => {
+    navigate("/profile");
   };
 
   /**
@@ -149,7 +176,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
       };
       if (!auth) {
         // If not authenticated, register first, then create inquiry
-        const registrationResult = await dispatch(registerUserDispatcher(modifiedInquiryData)).unwrap();
+        const registrationResult = await dispatch(registerUserDispatcher({userData:modifiedInquiryData})).unwrap();
         
         // Only proceed if registration was successful
         if (registrationResult) {
@@ -195,10 +222,10 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Button 
                 variant="contained" 
-                onClick={handleReset}
+                onClick={navigateToProfile}
                 sx={{ mr: 1 }}
               >
-                Home
+                View Updates
               </Button>
             </Box>
           </div>

@@ -15,8 +15,14 @@ export interface ITravelPackage {
     maxTravelers?: number;
     availableSpots?: number;
     travelType?: 'group' | 'private' | 'self-guided';
+    dateAvailabilities:DateAvailability[]
   }
-
+  export interface DateAvailability {
+    startDate: number;
+    endDate: number;
+    maxTravelers: number;
+    availableSpots: number;
+  }
 interface TravelState {
   travelPackages: ITravelPackage[];
   travelPackagesByCategory: { [category: string]: ITravelPackage[] };

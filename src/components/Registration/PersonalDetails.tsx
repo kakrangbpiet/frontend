@@ -4,12 +4,14 @@ import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlic
 interface PersonalDetailsProps {
   inquiryData: any;
   setInquiryData:any
+  isRegister?:boolean
+  shouldShowRegister?:boolean
 }
 
 /**
  * Component for collecting personal details and passenger count
  */
-function PersonalDetails({ inquiryData, setInquiryData }: PersonalDetailsProps) {
+function PersonalDetails({ inquiryData, setInquiryData,isRegister, shouldShowRegister }: PersonalDetailsProps) {
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
       ...prev,
@@ -18,19 +20,20 @@ function PersonalDetails({ inquiryData, setInquiryData }: PersonalDetailsProps) 
   };
 
   return (
-    <Box sx={{ padding: 2, mt: 2 }}>
+    <Box sx={{ px: 2, mt: 2 }}>
       {/* Name input */}
       <TextField
         fullWidth
         label="Your Name"
-        value={inquiryData.userName}
+        value={inquiryData.name}
         onChange={(e) => handleChange('name', e.target.value)}
         margin="normal"
         required
+        disabled={!shouldShowRegister}
       />
       
       {/* Passenger count input */}
-      <TextField
+    {!isRegister &&  <TextField
         fullWidth
         label="Number of Passengers"
         type="number"
@@ -40,9 +43,10 @@ function PersonalDetails({ inquiryData, setInquiryData }: PersonalDetailsProps) 
         margin="normal"
         required
       />
+    }
       
       {/* Special requests input */}
-      <TextField
+      {!isRegister &&    <TextField
         fullWidth
         label="Special Requests (Optional)"
         value={inquiryData.specialRequests}
@@ -51,6 +55,7 @@ function PersonalDetails({ inquiryData, setInquiryData }: PersonalDetailsProps) 
         multiline
         rows={4}
       />
+}
     </Box>
   );
 }

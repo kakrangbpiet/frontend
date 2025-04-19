@@ -12,6 +12,6 @@ enum TravelPackageStatus {
   
   export enum UserCategory {
     User = 'user',
-    KAKRAN_SUPER_ADMIN = 'SUPER_ADMIN',
+    KAKRAN_SUPER_ADMIN = 'SAMSARA_SUPER_ADMIN',
   }
   
