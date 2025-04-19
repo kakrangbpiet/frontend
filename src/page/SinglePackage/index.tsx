@@ -11,27 +11,28 @@ import Registration from '../../components/Registration';
 import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData';
 import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
+import { DateAvailabilityDisplay, formatDate } from './DateAvailability';
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
-  
+
   const [mockPackage, setMockPackage] = useState<ITravelPackage | undefined>(undefined);
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
   const userType = useSelector(selectUserType);
-  
+
   // Fetch from Redux 
   const selectedTravelPackage = useSelector(useSelectedTravelPackage(travelPackageId)) as ITravelPackage | undefined;
-  
+
   useEffect(() => {
     //mock
     const foundPackage = mockTravelPackages.find(pkg => pkg.id === travelPackageId);
     setMockPackage(foundPackage);
-    
+
     // db
     if (travelPackageId) {
       (dispatch as AppDispatch)(fetchSingleTravelPackageApi({
@@ -101,7 +102,7 @@ const SingleTravelPackageDetails = () => {
     return (
       <div className="min-h-screen w-full bg-transparent p-6">
         <div className="max-w-6xl mx-auto mt-6 flex flex-wrap justify-between items-center space-x-2 mb-4">
-          <button 
+          <button
             disabled={isUpdating}
             onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 disabled:opacity-50"
@@ -109,27 +110,27 @@ const SingleTravelPackageDetails = () => {
             {status === 'inactive' ? 'Activate' : 'Deactivate'}
           </button>
 
-                  {/* Admin Edit Package Form would go here */}
+          {/* Admin Edit Package Form would go here */}
 
           <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
-          <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
-                  id: travelPackageId,
-                  title,
-                  description,
-                  price,
-                  originalPrice,
-                  image,
-                  images,
-                  location,
-                  category,
-                  status,
-                  availableSpots,
-                  travelType,
-                  maxTravelers,
-                  dateAvailabilities
-                }} userType={userType} />
+            <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
+              id: travelPackageId,
+              title,
+              description,
+              price,
+              originalPrice,
+              image,
+              images,
+              location,
+              category,
+              status,
+              availableSpots,
+              travelType,
+              maxTravelers,
+              dateAvailabilities
+            }} userType={userType} />
           </div>
-          
+
           <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
             <p className="text-white">Edit Package Form Placeholder</p>
           </div>
@@ -141,13 +142,13 @@ const SingleTravelPackageDetails = () => {
   return (
     <div className="min-h-screen w-full bg-transparent">
       <div className="relative h-[500px] w-full">
-      <div className="absolute inset-0 overflow-hidden">
-      <MediaBackground media={image} />
+        <div className="absolute inset-0 overflow-hidden">
+          <MediaBackground media={image} />
         </div>
-        
+
         <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black to-transparent text-white">
           <div className="max-w-6xl mx-auto">
-            <button 
+            <button
               onClick={navigateToHome}
               className="px-4 py-2 bg-transparent backdrop-filter backdrop-blur-md rounded-lg text-white mb-4 hover:bg-opacity-20 hover:bg-white transition"
             >
@@ -172,24 +173,31 @@ const SingleTravelPackageDetails = () => {
           {/* Navigate tabs */}
           <div className="bg-transparent border-b border-gray-700 mb-4">
             <nav className="flex">
-              <button 
+              <button
                 onClick={() => setActiveTab('overview')}
                 className={`px-8 py-4 text-lg font-medium ${activeTab === 'overview' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
               >
                 Overview
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('photos')}
                 className={`px-8 py-4 text-lg font-medium ${activeTab === 'photos' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
               >
                 Photos
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('highlights')}
                 className={`px-8 py-4 text-lg font-medium ${activeTab === 'highlights' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
               >
                 Highlights
               </button>
+              <button
+                onClick={() => setActiveTab('dates')}
+                className={`px-8 py-4 text-lg font-medium ${activeTab === 'dates' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
+              >
+                Dates
+              </button>
+
             </nav>
           </div>
 
@@ -201,7 +209,7 @@ const SingleTravelPackageDetails = () => {
                 <p>{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
                 <p>Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
               </div>
-              
+
               <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Activities to Enjoy</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
@@ -229,9 +237,9 @@ const SingleTravelPackageDetails = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {images.map((img, index) => (
                   <div key={index} className="rounded-lg overflow-hidden h-64">
-                    <img 
-                      src={`data:image/jpeg;base64,${img}`} 
-                      alt={`${title} - image ${index + 1}`} 
+                    <img
+                      src={`data:image/jpeg;base64,${img}`}
+                      alt={`${title} - image ${index + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition duration-300"
                     />
                   </div>
@@ -269,7 +277,7 @@ const SingleTravelPackageDetails = () => {
                   <p className="text-white">Professional tour guides</p>
                 </div>
               </div>
-              
+
               <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Included Services</h3>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-white">
                 <li className="flex items-center gap-2">
@@ -300,6 +308,10 @@ const SingleTravelPackageDetails = () => {
             </div>
           )}
 
+          {activeTab === 'dates' && (
+            <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
+          )}
+
           {/* AI Prompt Generator - Only visible on mobile */}
           <div className="md:hidden mt-8 bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 border border-gray-800">
             <h2 className="text-2xl font-bold mb-4 text-white">Need Help Planning?</h2>
@@ -311,47 +323,51 @@ const SingleTravelPackageDetails = () => {
         <div className="w-full md:w-1/3">
           <div className="sticky top-6">
             {/* Package Details and Pricing */}
-            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
-              <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
-              
-              <div className="flex items-end gap-3 mb-2">
-                {originalPrice && (
-                  <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
-                )}
-                <span className="text-3xl font-bold text-blue-400">₹{price.toLocaleString()}</span>
-                <span className="text-gray-300 text-sm">per person</span>
-              </div>
-              
-              <div className="flex items-center mt-2 mb-4">
-                <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  status === 'active' ? 'bg-green-900 text-green-300' : 
-                  status === 'sold-out' ? 'bg-red-900 text-red-300' : 
-                  'bg-yellow-900 text-yellow-300'
-                }`}>
-                  {status === 'active' ? 'Available' : 
-                   status === 'sold-out' ? 'Sold Out' : 
-                   'Coming Soon'}
-                </div>
-                {availableSpots > 0 && (
-                  <p className="text-sm ml-3 text-white">
-                    {availableSpots} spots left out of {maxTravelers}
-                  </p>
-                )}
-              </div>
-            </div>
-            
+<div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
+  <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
+  
+  <div className="flex items-end gap-3 mb-2">
+    {originalPrice && (
+      <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
+    )}
+    <span className="text-3xl font-bold text-blue-400">₹{price.toLocaleString()}</span>
+    <span className="text-gray-300 text-sm">per person</span>
+  </div>
+  
+  {dateAvailabilities.length > 0 && (
+    <div className="mb-2">
+      <p className="text-sm text-gray-300">Next available:</p>
+      <p className="text-white font-medium">
+        {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
+      </p>
+    </div>
+  )}
+  
+  <div className="flex items-center mt-2 mb-4">
+    <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+      status === 'active' ? 'bg-green-900 text-green-300' : 
+      status === 'sold-out' ? 'bg-red-900 text-red-300' : 
+      'bg-yellow-900 text-yellow-300'
+    }`}>
+      {status === 'active' ? 'Available' : 
+       status === 'sold-out' ? 'Sold Out' : 
+       'Coming Soon'}
+    </div>
+    {availableSpots > 0 && (
+      <p className="text-sm ml-3 text-white">
+        {availableSpots} spots left out of {maxTravelers}
+      </p>
+    )}
+  </div>
+</div>
+
             {/* Registration - Desktop */}
             <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
               <h3 className="text-xl font-semibold mb-4 text-white">Book This Trip</h3>
-              {status === 'active' && availableSpots > 0 ? (
                 <Registration packageId={travelPackageId || ''} packageTitle={title} />
-              ) : (
-                <p className="text-white">
-                  {status === 'sold-out' ? 'This package is currently sold out.' : 'This package is coming soon!'}
-                </p>
-              )}
-            </div>
             
+            </div>
+
             {/* AI Prompt Generator - Hidden on mibile */}
             <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 border border-gray-800">
               <h3 className="text-xl font-semibold mb-4 text-white">Need Help Planning?</h3>
@@ -367,7 +383,7 @@ const SingleTravelPackageDetails = () => {
           <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 border border-gray-800 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-white">Book This Trip</h3>
-              <button 
+              <button
                 onClick={toggleMobileForm}
                 className="text-white hover:text-gray-300"
               >
@@ -376,13 +392,7 @@ const SingleTravelPackageDetails = () => {
                 </svg>
               </button>
             </div>
-            {status === 'active' && availableSpots > 0 ? (
               <Registration packageId={travelPackageId || ''} packageTitle={title} />
-            ) : (
-              <p className="text-white">
-                {status === 'sold-out' ? 'This package is currently sold out.' : 'This package is coming soon!'}
-              </p>
-            )}
           </div>
         </div>
       )}

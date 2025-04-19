@@ -10,10 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerUserDispatcher } from '../../redux/slices/login/authApiSlice.tsx';
 import { AppDispatch } from '../../redux/store.ts';
 import { createTravelInquiry } from '../../redux/slices/Travel/Booking/BookTravelApiSlice.tsx';
-import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
 import { isAuthenticated, JwtPayload, selectToken,} from '../../redux/slices/login/authSlice.tsx';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { DateAvailability, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice.tsx';
+import { formatDate } from '../../page/SinglePackage/DateAvailability.tsx';
 
 // Extend JwtPayload to include custom properties
 /**
@@ -35,10 +36,10 @@ const inquirySteps = [
  * @param setInquiryData Function to update inquiry data
  * @returns JSX component for the current step
  */
-function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>) {
+function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>, dateAvailabilities:DateAvailability[]) {
   switch (step) {
     case 0:
-      return <LocationDetails inquiryData={inquiryData} setInquiryData={setInquiryData} />;
+      return <LocationDetails inquiryData={inquiryData} setInquiryData={setInquiryData} dateAvailabilities={dateAvailabilities} />;
     case 1:
       return <PersonalDetails inquiryData={inquiryData} setInquiryData={setInquiryData} />;
     case 2:
@@ -55,7 +56,8 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   const [activeStep, setActiveStep] = useState(0);
   const auth = useSelector(isAuthenticated);
   const token = useSelector(selectToken);
-  
+  const selectedPackage = useSelector(useSelectedTravelPackage(packageId));
+
   const navigate=useNavigate()
   const getUserDetailsFromToken = (token: string | null): {name?: string, email?: string, phoneNumber?: string} => {
     if (!token) return {};
@@ -79,7 +81,9 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
     packageTitle:packageTitle,
     destination: packageTitle,
     address: "",
-    travelDates: '',
+    tripType: 'custom',
+    startDate: null,
+    endDate: null,
     passengerCount: 1,
     name: userDetails?.name || '',
     email: userDetails?.email || '',
@@ -136,12 +140,24 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   const validateCurrentStep = (): boolean => {
     switch (activeStep) {
       case 0: // Location Details
-        if (!inquiryData.destination  || !inquiryData.travelDates) {
-          alert('Please fill in all required fields');
+        if (!inquiryData.address) {
+          alert('Please select your current location');
+          return false;
+        }
+        if (inquiryData.tripType === 'pre-planned' && (!inquiryData.startDate || !inquiryData.endDate)) {
+          alert('Please select a travel date from the available options');
+          return false;
+        }
+        if (inquiryData.tripType === 'custom' && (!inquiryData.startDate || !inquiryData.endDate)) {
+          alert('Please select your custom travel dates');
+          return false;
+        }
+        if (inquiryData.startDate && inquiryData.endDate && inquiryData.startDate > inquiryData.endDate) {
+          alert('End date must be after start date');
           return false;
         }
         return true;
-      case 1: // Personal Details
+    case 1: // Personal Details
         if (!inquiryData.name || inquiryData.passengerCount < 1) {
           alert('Please provide your name and at least 1 passenger');
           return false;
@@ -168,24 +184,25 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
       }
       // For now, we'll simulate a successful submission
       // dispatch(submitInquiryDispatcher(inquiryData));
-      const modifiedInquiryData = {
+      const inquiryToSend = {
         ...inquiryData,
-        category: UserCategory.User,
-        address: "address",
-        accountStatus: accountStatus.pending,
+        // Remove travelDates if we're no longer using it
+        // Add formatted dates if needed
+        formattedStartDate: inquiryData.startDate ? formatDate(inquiryData.startDate) : undefined,
+        formattedEndDate: inquiryData.endDate ? formatDate(inquiryData.endDate) : undefined
       };
       if (!auth) {
         // If not authenticated, register first, then create inquiry
-        const registrationResult = await dispatch(registerUserDispatcher({userData:modifiedInquiryData})).unwrap();
+        const registrationResult = await dispatch(registerUserDispatcher({userData:inquiryToSend})).unwrap();
         
         // Only proceed if registration was successful
         if (registrationResult) {
-          await dispatch(createTravelInquiry(inquiryData));
+          await dispatch(createTravelInquiry(inquiryToSend));
           handleNext(); // Move to success step
         }
       } else {
         // If already authenticated, just create the inquiry
-        await dispatch(createTravelInquiry(inquiryData));
+        await dispatch(createTravelInquiry(inquiryToSend));
         handleNext(); // Move to success step
       }
       
@@ -232,8 +249,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         ) : (
           <div>
             {/* Render the current step's form */}
-            {getStepContent(activeStep, inquiryData, setInquiryData)}
-            
+            {getStepContent(activeStep, inquiryData, setInquiryData, selectedPackage?.dateAvailabilities || [])} 
             {/* Navigation buttons */}
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
               <Button

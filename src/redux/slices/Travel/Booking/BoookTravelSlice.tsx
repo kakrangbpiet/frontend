@@ -10,7 +10,9 @@ export interface TravelInquiry extends IUser {
   address: string;
   destination: string;
   passengerCount: number;
-  travelDates: string;
+  tripType: string;
+  startDate: number;
+  endDate: number;
   specialRequests?: string;
   status?: 'pending' | 'confirmed' | 'rejected' | 'completed';
   createdAt?: string;
