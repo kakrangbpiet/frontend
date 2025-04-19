@@ -5,9 +5,10 @@ import { useState } from 'react';
 import ChooseLocation from '../Location/ChooseLocation';
 import { DateAvailability } from '../../redux/slices/Travel/TravelSlice';
 import DateSelectionTabs from './DateSelection';
+import { SignUpData } from '../../Datatypes';
 
 interface LocationDetailsProps {
-  inquiryData: TravelInquiry;
+  inquiryData: TravelInquiry | SignUpData;
   setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>;
   isRegister?: boolean;
   shouldShowRegister?: boolean;
@@ -60,32 +61,36 @@ function LocationDetails({
 
       {!isRegister && (
         <>
-          <TextField
-            fullWidth
-            label="Destination"
-            disabled={true}
-            value={inquiryData.destination}
-            onChange={(e) => handleChange('destination', e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PlaceIcon />
-                </InputAdornment>
-              ),
-            }}
-            margin="normal"
-            required
-          />
+          {('destination' in inquiryData) && (
+            <TextField
+              fullWidth
+              label="Destination"
+              disabled={true}
+              value={inquiryData.destination}
+              onChange={(e) => handleChange('destination', e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PlaceIcon />
+                  </InputAdornment>
+                ),
+              }}
+              margin="normal"
+              required
+            />
+          )}
 
-          <DateSelectionTabs
-            tripType={(inquiryData.tripType as 'pre-planned' | 'custom') || 'pre-planned'}
-            setTripType={(type) => handleChange('tripType', type)}
-            dateAvailabilities={dateAvailabilities}
-            startDate={inquiryData.startDate}
-            endDate={inquiryData.endDate}
-            setStartDate={(date) => handleChange('startDate', date)}
-            setEndDate={(date) => handleChange('endDate', date)}
-          />
+          {'startDate' in inquiryData && 'endDate' in inquiryData && (
+            <DateSelectionTabs
+              tripType={('tripType' in inquiryData ? inquiryData.tripType : 'pre-planned') as 'pre-planned' | 'custom'}
+              setTripType={(type) => handleChange('tripType', type)}
+              dateAvailabilities={dateAvailabilities}
+              startDate={inquiryData.startDate}
+              endDate={inquiryData.endDate}
+              setStartDate={(date) => handleChange('startDate', date)}
+              setEndDate={(date) => handleChange('endDate', date)}
+            />
+          )}
         </>
       )}
 

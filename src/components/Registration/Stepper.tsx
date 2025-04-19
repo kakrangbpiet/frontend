@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { DateAvailability, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice.tsx';
 import { formatDate } from '../../page/SinglePackage/DateAvailability.tsx';
+import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
 
 // Extend JwtPayload to include custom properties
 /**
@@ -188,6 +189,9 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         ...inquiryData,
         // Remove travelDates if we're no longer using it
         // Add formatted dates if needed
+        category: UserCategory.User,
+        address: "address",
+        accountStatus: accountStatus.pending,
         formattedStartDate: inquiryData.startDate ? formatDate(inquiryData.startDate) : undefined,
         formattedEndDate: inquiryData.endDate ? formatDate(inquiryData.endDate) : undefined
       };
