@@ -12,6 +12,7 @@ import { UserCategory } from '../Datatypes/Enums/UserEnums';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
 import { Twitter, Instagram, Facebook } from 'lucide-react';
 import VideoHero from '../page/HomePage/VideoHero';
+import ScrollToTop from './ScrollToTop';
 
 const heroContent = [
   {
@@ -86,6 +87,7 @@ const Layout = () => {
 
   return (
     <div className="relative w-full overflow-hidden">
+    <ScrollToTop />
       <Header title={"SAMSARA"} links={sidebarItem} auth={auth} toggleMobileMenu={toggleMobileMenu}
         mobileMenuOpen={mobileMenuOpen} isMobile={isMobile} />
       
