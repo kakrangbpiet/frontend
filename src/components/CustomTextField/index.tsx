@@ -15,6 +15,7 @@ interface CustomTextFieldProps extends InputBaseComponentProps {
   showPassword?: boolean;
   handleClickShowPassword?: () => void;
   handleMouseDownPassword?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  disable?:boolean
 }
 
 const CustomTextField : React.FC<CustomTextFieldProps> =({
@@ -29,6 +30,7 @@ const CustomTextField : React.FC<CustomTextFieldProps> =({
   showPassword,
   handleClickShowPassword,
   handleMouseDownPassword,
+  disable
 }) => {
   return (
     <FormControl fullWidth error={isError}>
@@ -37,6 +39,7 @@ const CustomTextField : React.FC<CustomTextFieldProps> =({
         id={id}
         type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
         value={value}
+        disabled={disable}
         onChange={onChange}
         placeholder={placeholder}
         endAdornment={

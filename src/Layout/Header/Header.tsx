@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="fixed z-100 pt-0 px-6 md:px-6 lg:px-12 flex justify-between items-center w-full">
       <div className="flex items-center justify-center h-20 w-40 sm:h-20 sm:w-32 md:h-28 md:w-48"  onClick={()=>navigate('/')}>
-        <img src={"Smasara-Logo.png"} alt="Logo" className=" object-contain" />
+        <img src={"/Smasara-Logo.png"} alt="Logo" className=" object-contain" />
       </div>
   
       <div className="flex items-center">

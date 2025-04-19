@@ -45,10 +45,11 @@ const SingleTravelPackageDetails = () => {
 
   // Default values and null checks
   const description = packageData?.description ?? '';
+  const dateAvailabilities = packageData?.dateAvailabilities ?? [];
   const image = packageData?.image ?? '';
   const images = packageData?.images ?? [image];
   const title = packageData?.title ?? travelPackageTitle ?? '';
-  const location = packageData?.location ?? '';
+  const location = packageData?.title ?? '';
   const category = packageData?.category ?? '';
   const status = packageData?.status ?? 'inactive';
   const availableSpots = packageData?.availableSpots ?? 0;
@@ -124,7 +125,8 @@ const SingleTravelPackageDetails = () => {
                   status,
                   availableSpots,
                   travelType,
-                  maxTravelers
+                  maxTravelers,
+                  dateAvailabilities
                 }} userType={userType} />
           </div>
           
@@ -228,7 +230,7 @@ const SingleTravelPackageDetails = () => {
                 {images.map((img, index) => (
                   <div key={index} className="rounded-lg overflow-hidden h-64">
                     <img 
-                      src={img} 
+                      src={`data:image/jpeg;base64,${img}`} 
                       alt={`${title} - image ${index + 1}`} 
                       className="w-full h-full object-cover hover:scale-105 transition duration-300"
                     />

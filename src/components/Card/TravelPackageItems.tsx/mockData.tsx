@@ -16,7 +16,9 @@ export const mockTravelPackages: ITravelPackage[] = [
     status: 'active',
     maxTravelers: 15,
     availableSpots: 8,
-    travelType: 'group'
+    travelType: 'group',
+    dateAvailabilities:[]
+
   },
   {
     id: '2',
@@ -32,7 +34,9 @@ export const mockTravelPackages: ITravelPackage[] = [
     status: 'active',
     maxTravelers: 12,
     availableSpots: 5, 
-    travelType: 'group'
+    travelType: 'group',
+    dateAvailabilities:[]
+
   },
 
 
@@ -50,7 +54,8 @@ export const mockTravelPackages: ITravelPackage[] = [
     status: 'sold-out',
     maxTravelers: 15,
     availableSpots: 0,
-    travelType: 'group'
+    travelType: 'group',
+    dateAvailabilities:[],
   },
 
 
@@ -68,6 +73,8 @@ export const mockTravelPackages: ITravelPackage[] = [
     status: 'coming-soon',
     maxTravelers: 10,
     availableSpots: 10,
-    travelType: 'group'
+    travelType: 'group',
+    dateAvailabilities:[]
+
   }
 ];

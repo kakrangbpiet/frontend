@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box } from '@mui/material';
+import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, TextField } from '@mui/material';
 // import 'react-quill/dist/quill.snow.css';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
 import { AppDispatch } from '../../redux/store';
-import { ITravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { DateAvailability, ITravelPackage } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
 import CustomTextField from '../CustomTextField';
 import { addTravelPackageApi } from '../../redux/slices/Travel/travelApiSlice';
+import locationsData from './Location.json';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
+import AddIcon from '@mui/icons-material/Add';  // Fixed import
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import UnixDateInput from './DatePicker';
 
 interface AddTravelPackageProps {
   itemInfo?: ITravelPackage;
   formEvent: string;
   userType: string;
 }
+
+
 
 interface ErrorMessages {
   [key: string]: string;
@@ -52,10 +62,22 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
           maxTravelers: undefined,
           availableSpots: undefined,
           travelType: undefined,
+          dateAvailabilities:[]
         }
   );
+  const [startDate, setStartDate] = useState<number | null>(null);
+  const [endDate, setEndDate] = useState<number | null>(null);
+  const [maxTravelers, setMaxTravelers] = useState<number>(10);
+  const [availableSpots, setAvailableSpots] = useState<number>(10);
+
+  const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
+    itemInfo?.dateAvailabilities || []
+  );
+  
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>(newErrors);
+
+
 
   const clearForm = () => {
     setFormData({
@@ -72,8 +94,36 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       maxTravelers: undefined,
       availableSpots: undefined,
       travelType: undefined,
+      dateAvailabilities:[]
     });
     setErrors(newErrors);
+  };
+
+  const handleAddDateAvailability = () => {
+    setDateAvailabilities([
+      ...dateAvailabilities,
+      {
+        startDate: null,
+        endDate: null,
+        maxTravelers: 10,
+        availableSpots: 10
+      }
+    ]);
+  };
+
+  const handleRemoveDateAvailability = (index: number) => {
+    const updated = [...dateAvailabilities];
+    updated.splice(index, 1);
+    setDateAvailabilities(updated);
+  };
+
+  const handleDateAvailabilityChange = (index: number, field: keyof DateAvailability, value: any) => {
+    const updated = [...dateAvailabilities];
+    updated[index] = {
+      ...updated[index],
+      [field]: value
+    };
+    setDateAvailabilities(updated);
   };
 
   const handleFormSubmit = async (event: React.FormEvent) => {
@@ -96,10 +146,12 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     });
 
     if (!hasErrors) {
+      
       (dispatch as AppDispatch)(
-        addTravelPackageApi({
+          addTravelPackageApi({
           newTravelPackageData: {
             ...formData,
+            dateAvailabilities: dateAvailabilities.length > 0 ? dateAvailabilities : undefined,
             id: itemInfo?.id || '',
           },
           formEvent,
@@ -145,8 +197,21 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     );
   };
 
+  useEffect(() => {
+    const totalTravelers = dateAvailabilities.reduce((sum, d) => sum + d.maxTravelers, 0);
+    const totalSpots = dateAvailabilities.reduce((sum, d) => sum + d.availableSpots, 0);
+    setFormData((prev) => ({
+      ...prev,
+      maxTravelers: totalTravelers,
+      availableSpots: totalSpots,
+    }));
+  }, [dateAvailabilities]);
+  
   return (
-    <Box>
+    <Box sx={{
+      background:"white",
+      p:4
+    }}>
 
     <form onSubmit={handleFormSubmit}>
     <Grid container spacing={2}>
@@ -193,22 +258,63 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
           fullWidth
         />
       </Grid>
-  
+      <Grid size={{ xs: 12, md: 12 }}>
+      <Typography variant="h6" gutterBottom>
+      Date Availabilities
+    </Typography>
+    
+    {dateAvailabilities.map((dateAvailability, index) => (
+      <UnixDateInput
+        key={index}
+        startDate={dateAvailability.startDate}
+        endDate={dateAvailability.endDate}
+        maxTravelers={dateAvailability.maxTravelers}
+        availableSpots={dateAvailability.availableSpots}
+        onStartDateChange={(value) => handleDateAvailabilityChange(index, 'startDate', value)}
+        onEndDateChange={(value) => handleDateAvailabilityChange(index, 'endDate', value)}
+        onMaxTravelersChange={(value) => handleDateAvailabilityChange(index, 'maxTravelers', value)}
+        onAvailableSpotsChange={(value) => handleDateAvailabilityChange(index, 'availableSpots', value)}
+        onRemove={() => handleRemoveDateAvailability(index)}
+        showRemove={dateAvailabilities.length > 1}
+      />
+    ))}
+    
+    <Button
+      variant="outlined"
+      startIcon={<AddIcon />}
+      onClick={handleAddDateAvailability}
+      sx={{ mt: 2 }}
+    >
+      Add Date Availability
+    </Button>
+  </Grid>
+
       {/* Location and Category in one row */}
       <Grid size={{ xs: 12, md: 6 }}>
-        <Typography variant="h6">Location</Typography>
-        <CustomTextField
-          id="location"
-          type="text"
-          label="Location"
-          value={formData.location}
-          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'location')}
-          placeholder="Enter location"
-          error={errors.location}
-          isError={!!errors.location}
-          fullWidth
-        />
-      </Grid>
+  <Typography variant="h6">Location</Typography>
+  <FormControl fullWidth>
+    <Select
+      value={formData.location}
+      onChange={(e) => setFormData({ ...formData, location: e.target.value as string })}
+      displayEmpty
+      error={!!errors.location}
+    >
+      <MenuItem value="" disabled>
+        Select Location
+      </MenuItem>
+      {locationsData.locations.map((location) => (
+        <MenuItem key={location.value} value={location.value}>
+          {location.label}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+  {errors.location && (
+    <Typography color="error" variant="body2">
+      {errors.location}
+    </Typography>
+  )}
+</Grid>
       <Grid size={{ xs: 12, md: 6 }}>
         <Typography variant="h6">Category</Typography>
         <CustomTextField
@@ -267,6 +373,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         <CustomTextField
           id="maxTravelers"
           type="number"
+          disable={true}
           label="Max Travelers"
           value={formData.maxTravelers || ''}
           onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleNumberChange(e, 'maxTravelers')}
@@ -279,6 +386,8 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         <CustomTextField
           id="availableSpots"
           type="number"
+          disable={true}
+
           label="Available Spots"
           value={formData.availableSpots || ''}
           onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleNumberChange(e, 'availableSpots')}

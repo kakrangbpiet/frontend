@@ -9,6 +9,7 @@ import { selectedTravelPackages, selectedTravelPackagesLoading, selectTravelPack
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 // import { Typography } from '@mui/material';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
+import locationsData from '../../components/Forms/Location.json';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -260,13 +261,21 @@ const HomePage: React.FC = () => {
             </DestinationSelectButton>
             
             {isDropdownOpen && (
-              <DropdownMenu>
-                <DropdownItem href="#" onClick={() => ('himachal')}>Himachal</DropdownItem>
-                <DropdownItem href="#" onClick={() => ('uttrakhand')}>Uttrakhand</DropdownItem>
-                <DropdownItem href="#" onClick={() => ('ladakh')}>Ladakh</DropdownItem>
-                <DropdownItem href="#" onClick={() => ('kashmir')}>Kashmir</DropdownItem>
-              </DropdownMenu>
-            )}
+  <DropdownMenu>
+    {locationsData.locations.map((location) => (
+      <DropdownItem 
+        key={location.value} 
+        href="#" 
+        onClick={() => {
+          // Handle location selection
+          setIsDropdownOpen(false);
+        }}
+      >
+        {location.label}
+      </DropdownItem>
+    ))}
+  </DropdownMenu>
+)}
           </SelectWrapper>
           
           <ButtonGroup>
