@@ -7,7 +7,7 @@ export interface TravelInquiry extends IUser {
   inquiryId?: string;
   packageId: string;
   packageTitle: string;
-  departure: string;
+  address: string;
   destination: string;
   passengerCount: number;
   travelDates: string;

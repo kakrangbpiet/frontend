@@ -8,13 +8,15 @@ import ChooseLocation from '../Location/ChooseLocation';
 interface LocationDetailsProps {
   inquiryData: any;
   setInquiryData: any;
+  isRegister?:boolean
+  shouldShowRegister?:boolean
 }
 
 /**
  * Component for collecting travel destination and dates
  */
-function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) {
-  const [openDepartureDialog, setOpenDepartureDialog] = useState(false);
+function LocationDetails({ inquiryData, setInquiryData,isRegister, shouldShowRegister }: LocationDetailsProps) {
+  const [openDepartureDialog, setOpenAddressDialog] = useState(false);
 
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
@@ -23,14 +25,14 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
     }));
   };
 
-  const handleDepartureClose = () => {
-    setOpenDepartureDialog(false);
+  const handleLocationClose = () => {
+    setOpenAddressDialog(false);
   };
 
 
 
-  const setDeparture = (address: string) => {
-    handleChange('departure', address);
+  const setLocation = (address: string) => {
+    handleChange('address', address);
   };
 
   return (
@@ -38,9 +40,9 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
       {/* Departure input */}
       <TextField
         fullWidth
-        label="Origin or Departure point"
-        value={inquiryData.departure}
-        onClick={() => setOpenDepartureDialog(true)}
+        label="Choose Current Location"
+        value={inquiryData.address}
+        onClick={() => setOpenAddressDialog(true)}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -51,8 +53,11 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
         }}
         margin="normal"
         required
+        disabled={!shouldShowRegister}
       />
 
+{!isRegister &&
+<>
 <TextField
         fullWidth
         label="Destination"
@@ -82,14 +87,15 @@ function LocationDetails({ inquiryData, setInquiryData }: LocationDetailsProps) 
 
       />
 
+
+</>
+}
       {/* Departure Location Dialog */}
       <ChooseLocation
         open={openDepartureDialog}
-        handleClose={handleDepartureClose}
-        setAddress={setDeparture}
+        handleClose={handleLocationClose}
+        setAddress={setLocation}
       />
-
-
     </Box>
   );
 }

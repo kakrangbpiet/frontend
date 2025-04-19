@@ -8,8 +8,11 @@ export interface JwtPayload {
   id?: string;
   sub?: string;
   name?: string;
+  address?: string;
   email?: string;
   phoneNumber?: string;
+  userCategory?: string;
+  accountStatus?: string;
   // Add other possible JWT payload fields here
 }
 

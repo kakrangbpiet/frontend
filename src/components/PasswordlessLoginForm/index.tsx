@@ -10,10 +10,9 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { registerNumberDispatcher, registerNumberOtpDispatcher, registerUserDispatcher,  } from '../../redux/slices/login/authApiSlice';
+import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
 import { authLoading, isAuthenticated, SelectConactVerified, SelectContact, selectTrxId } from '../../redux/slices/login/authSlice';
-import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { useNavigate } from 'react-router-dom';
 
 interface LoginProps {
@@ -36,7 +35,13 @@ const navigate=useNavigate()
   const verifiedContactState = useSelector(SelectContact);
   const [verifiedContact, setVerifiedContact] = useState<string>(verifiedContactState);
 
+  useEffect(() => {
+    if (isContactVerified) {
+      navigate('/profile');
+      onVerified(verifiedContact);
 
+    }
+  }, [isContactVerified, navigate]);
   useEffect(() => {
     if (isUserAuthenticated) {
       navigate("/profile")
@@ -48,7 +53,6 @@ const navigate=useNavigate()
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [otp, setOtp] = useState<string>('');
   const [otpSent, setOtpSent] = useState(false);
-
 
   const handleSendOtp = async () => {
     try {
@@ -82,39 +86,13 @@ const navigate=useNavigate()
           phoneNumber,
         })
       ).unwrap();
-    } catch (error) {
-      setError('Failed to verify OTP');
-    }
-  };
-
-  const handleRegister = async () => {
-    try {
-      if (!otp) {
-        setError('OTP is required');
-        return;
-      }
-      setError('');
-
-      if (!isUserAuthenticated) {
-        dispatch(
-          registerUserDispatcher({
-            userData:{
-            email: "email",
-            name:" address.name,",
-            phoneNumber: verifiedContact,
-            address: `my address`,
-            accountStatus: accountStatus.pending,
-            category: UserCategory.User,
-            },
-            onVerified
-          })
-        );
-      }
+      onVerified(verifiedContact);
 
     } catch (error) {
       setError('Failed to verify OTP');
     }
   };
+
 
   return (
     <div>
@@ -212,17 +190,7 @@ const navigate=useNavigate()
                 <TextField>
 
                 </TextField>
-              <Button
-                disableElevation
-                fullWidth
-                size="large"
-                onClick={handleRegister}
-                variant="contained"
-                color="primary"
-                disabled={isAuthLoading}
-              >
-                Register
-              </Button>
+              
               </>
             )}
           </Grid>
