@@ -112,7 +112,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   //     packageId:packageId,
   //     packageTitle:packageTitle,
   //     destination: packageTitle,
-  //     departure: '',
+  //     address: '',
   //     travelDates: '',
   //     passengerCount: 1,
   //     name: '',

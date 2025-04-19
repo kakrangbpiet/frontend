@@ -27,7 +27,7 @@ const InquiriesColumn = ({ handleViewDetails,handleViewPackage }: InquiriesColum
         </span>
       )
     },
-    { field: "departure", headerName: "Origin Point", width: 150, editable: false },
+    { field: "address", headerName: "Origin Point", width: 150, editable: false },
     { field: "destination", headerName: "Destination", width: 150, editable: false },
     { field: "name", headerName: "Name", width: 150, editable: false },
     { field: "email", headerName: "Email", width: 150, editable: false },

@@ -29,7 +29,7 @@ function PersonalDetails({ inquiryData, setInquiryData,isRegister, shouldShowReg
         onChange={(e) => handleChange('name', e.target.value)}
         margin="normal"
         required
-        disabled={!shouldShowRegister}
+        disabled={!shouldShowRegister && isRegister}
       />
       
       {/* Passenger count input */}
