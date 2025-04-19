@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { FooterProps } from '../../Datatypes/interface';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import LoginForm from '../../components/Login';
-import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { useDispatch, useSelector } from 'react-redux';
 import { isAuthenticated, logout } from '../../redux/slices/login/authSlice';
 import { Container } from '@mui/material';
+import PasswordlessLoginForm from '../../components/PasswordlessLoginForm';
 
 const Footer: React.FC<FooterProps> = ({
   companyName = 'SAMSARA',
@@ -157,8 +156,9 @@ const Footer: React.FC<FooterProps> = ({
       </div>
 
       <Dialog open={open} onClose={handleClose}>
-        <LoginForm loginTitle="" OnFormSuccess={handleClose} userType={UserCategory.KAKRAN_SUPER_ADMIN} />
+      <PasswordlessLoginForm onVerified={handleClose}/>
       </Dialog>
+
     </footer>
     </Container>
 

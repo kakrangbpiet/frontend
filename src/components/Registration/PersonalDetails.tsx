@@ -23,7 +23,7 @@ function PersonalDetails({ inquiryData, setInquiryData }: PersonalDetailsProps) 
       <TextField
         fullWidth
         label="Your Name"
-        value={inquiryData.userName}
+        value={inquiryData.name}
         onChange={(e) => handleChange('name', e.target.value)}
         margin="normal"
         required

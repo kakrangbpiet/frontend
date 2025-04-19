@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, TextField } from '@mui/material';
+import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box } from '@mui/material';
 // import 'react-quill/dist/quill.snow.css';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
@@ -10,12 +10,7 @@ import { DateAvailability, ITravelPackage } from '../../redux/slices/Travel/Trav
 import CustomTextField from '../CustomTextField';
 import { addTravelPackageApi } from '../../redux/slices/Travel/travelApiSlice';
 import locationsData from './Location.json';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
 import AddIcon from '@mui/icons-material/Add';  // Fixed import
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import UnixDateInput from './DatePicker';
 
 interface AddTravelPackageProps {
@@ -65,10 +60,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
           dateAvailabilities:[]
         }
   );
-  const [startDate, setStartDate] = useState<number | null>(null);
-  const [endDate, setEndDate] = useState<number | null>(null);
-  const [maxTravelers, setMaxTravelers] = useState<number>(10);
-  const [availableSpots, setAvailableSpots] = useState<number>(10);
 
   const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
     itemInfo?.dateAvailabilities || []

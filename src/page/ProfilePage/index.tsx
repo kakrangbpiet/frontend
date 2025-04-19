@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Button from '../../components/common/Button';
 import { useSelector } from 'react-redux';
-import { selectToken } from '../../redux/slices/login/authSlice';
+import { isAuthenticated, selectToken } from '../../redux/slices/login/authSlice';
 import { jwtDecode } from 'jwt-decode'; // Make sure to install this package
+import { useEffect } from 'react';
 
 const ProfileContainer = styled.div`
   text-align: center;
@@ -38,6 +39,13 @@ const ProfileContainer = styled.div`
 const ProfilePage = () => {
   const token = useSelector(selectToken);
   const navigate = useNavigate();
+  const isUserAuthenticated = useSelector(isAuthenticated);
+
+  useEffect(() => {
+    if (!isUserAuthenticated) {
+      navigate("/")
+    }
+  }, [isUserAuthenticated]);
 
   // Function to decode the token and get user ID
 const getUserIdFromToken = () => {

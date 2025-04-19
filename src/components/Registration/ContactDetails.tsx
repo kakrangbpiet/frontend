@@ -90,7 +90,7 @@ function ContactDetails({ inquiryData, setInquiryData }: ContactDetailsProps) {
         fullWidth
         label="Email Address"
         type="email"
-        value={inquiryData.userEmail}
+        value={inquiryData.email}
         onChange={(e) => handleChange('email', e.target.value)}
         margin="normal"
         required

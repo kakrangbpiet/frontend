@@ -4,6 +4,15 @@ import Cookies from 'js-cookie';
 import { AuthState } from '../../../Datatypes';
 import { UserCategory } from '../../../Datatypes/Enums/UserEnums';
 
+export interface JwtPayload {
+  id?: string;
+  sub?: string;
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  // Add other possible JWT payload fields here
+}
+
 const storedUser = Cookies.get('user');
 const storedAccessToken = Cookies.get('access');
 const storedRefreshToken = Cookies.get('refresh');

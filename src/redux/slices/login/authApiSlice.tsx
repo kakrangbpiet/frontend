@@ -183,7 +183,7 @@ export const registerNumberOtpDispatcher = createAsyncThunk(
 );
 export const registerUserDispatcher = createAsyncThunk(
   'RegisterUserPasswordLess',
-  async (userData: IUser, { rejectWithValue, dispatch }) => {
+  async ({userData,onVerified}: {userData:IUser,onVerified?:any}, { rejectWithValue, dispatch }) => {
     try {
       // Dispatch loading state
       dispatch(setLoading({ isLoading: true }));
@@ -208,7 +208,7 @@ export const registerUserDispatcher = createAsyncThunk(
       }
 
       dispatch(setLoading({ isLoading: false }));
-
+      onVerified && onVerified()
       // Return the API response as a success object
       const apiSuccess: ApiSuccess = {
         statusCode: response.status,
