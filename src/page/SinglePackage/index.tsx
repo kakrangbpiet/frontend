@@ -105,14 +105,12 @@ const SingleTravelPackageDetails = () => {
           <button
             disabled={isUpdating}
             onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 disabled:opacity-50"
+            className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white rounded-lg shadow-lg disabled:opacity-50 transition duration-300 font-medium"
           >
             {status === 'inactive' ? 'Activate' : 'Deactivate'}
           </button>
 
-          {/* Admin Edit Package Form would go here */}
-
-          <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
             <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
               id: travelPackageId,
               title,
@@ -130,263 +128,279 @@ const SingleTravelPackageDetails = () => {
               dateAvailabilities
             }} userType={userType} />
           </div>
-
-          <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-4">
-            <p className="text-white">Edit Package Form Placeholder</p>
-          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full bg-transparent">
-      <div className="relative h-[500px] w-full">
-        <div className="absolute inset-0 overflow-hidden">
-          <MediaBackground media={image} />
-        </div>
+    <div className="relative z-10">
+      <div className="absolute inset-0 overflow-hidden">
+        <MediaBackground media={image} />
+      </div>
 
-        <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black to-transparent text-white">
-          <div className="max-w-6xl mx-auto">
+      <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-24">
+      <div className="max-w-[90%] mx-auto px-4 py-12">
+          <div className="relative rounded-xl overflow-hidden mb-12 shadow-2xl">
+            <img
+              src={`data:image/jpeg;base64,${image}`}
+              alt={title}
+              className="w-full h-96 object-cover"
+            />
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
+              <div className="p-10 text-white">
+                <h1 className="text-5xl font-bold mb-4 drop-shadow-lg bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
+                  {title}
+                </h1>
+                <p className="text-xl max-w-3xl drop-shadow-md">
+                  {description.length > 120 ? description.substring(0, 120) + '...' : description}
+                </p>
+              </div>
+            </div>
             <button
               onClick={navigateToHome}
-              className="px-4 py-2 bg-transparent backdrop-filter backdrop-blur-md rounded-lg text-white mb-4 hover:bg-opacity-20 hover:bg-white transition"
+              className="absolute top-6 left-6 px-5 py-2.5 bg-black/40 hover:bg-black/60 backdrop-filter backdrop-blur-md rounded-lg text-white flex items-center gap-2 border border-white/10 transition-all duration-300 shadow-lg"
             >
               Back to Home
             </button>
-            <h1 className="text-4xl font-bold mb-2">{title}</h1>
-            <div className="flex items-center gap-4 mb-4">
-              <p className="text-lg">{location}</p>
-              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
-              <p className="text-lg capitalize">{category}</p>
-              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
-              <p className="text-lg capitalize">{travelType}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main  layout */}
-      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
-        {/*  tabs and content */}
-        <div className="w-full md:w-1/2">
-          {/* Navigate tabs */}
-          <div className="bg-transparent border-b border-gray-700 mb-4">
-            <nav className="flex">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'overview' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
-              >
-                Overview
-              </button>
-              <button
-                onClick={() => setActiveTab('photos')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'photos' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
-              >
-                Photos
-              </button>
-              <button
-                onClick={() => setActiveTab('highlights')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'highlights' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
-              >
-                Highlights
-              </button>
-              <button
-                onClick={() => setActiveTab('dates')}
-                className={`px-8 py-4 text-lg font-medium ${activeTab === 'dates' ? 'text-white bg-blue-600 bg-opacity-30 rounded-t-lg' : 'text-gray-300 hover:text-white'}`}
-              >
-                Dates
-              </button>
-
-            </nav>
           </div>
 
-          {/* Tab Content */}
-          {activeTab === 'overview' && (
-            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
-              <h2 className="text-3xl font-bold mb-6 text-green-400">About {title.split(' ')[0]}</h2>
-              <div className="text-white space-y-4">
-                <p>{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
-                <p>Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
-              </div>
+          {/* Tabs Navigation */}
+          <div className="flex mb-8 overflow-x-auto bg-white/10 backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg">
+            {['overview', 'photos', 'highlights', 'dates'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-6 py-3 text-white font-medium rounded-lg transition flex-none ${
+                  activeTab === tab 
+                    ? 'bg-white/20 shadow-md border border-white/30' 
+                    : 'hover:bg-white/10 border border-transparent'
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
 
-              <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Activities to Enjoy</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
-                  <span className="text-white">River rafting</span>
-                </div>
-                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
-                  <span className="text-white">Paragliding</span>
-                </div>
-                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
-                  <span className="text-white">Skiing</span>
-                </div>
-                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
-                  <span className="text-white">Trekking</span>
-                </div>
-                <div className="bg-transparent border border-gray-600 backdrop-filter backdrop-blur-lg rounded-lg p-4 text-center hover:bg-white hover:bg-opacity-10 transition cursor-pointer">
-                  <span className="text-white">Mountain biking</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'photos' && (
-            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
-              <h2 className="text-3xl font-bold mb-6 text-green-400">Photo Gallery</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {images.map((img, index) => (
-                  <div key={index} className="rounded-lg overflow-hidden h-64">
-                    <img
-                      src={`data:image/jpeg;base64,${img}`}
-                      alt={`${title} - image ${index + 1}`}
-                      className="w-full h-full object-cover hover:scale-105 transition duration-300"
-                    />
+          <div className="mb-12 flex flex-col lg:flex-row">
+            <div className="w-full lg:w-3/4 lg:pr-8">
+              {activeTab === 'overview' && (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-2xl font-semibold text-emerald-300 mb-4">
+                    About {title}
+                  </h2>
+                  <p className="mb-6">{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
+                  <p className="mb-6">Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
+                  
+                  <div className="relative mb-8 rounded-lg overflow-hidden shadow-md bg-black/50 transform hover:scale-[1.01] transition duration-500 cursor-pointer">
+                    <div className="aspect-w-16 aspect-h-9 bg-gray-200 relative">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <img
+                          src={`data:image/jpeg;base64,${images[0] || image}`}
+                          alt={`${title} video thumbnail`}
+                          className="w-full h-full object-cover opacity-90"
+                        />
+                        <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent">
+                          <p className="text-white font-medium">
+                            Experience the magic of {title}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
 
-          {activeTab === 'highlights' && (
-            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
-              <h2 className="text-3xl font-bold mb-6 text-green-400">Package Highlights</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <p className="text-white">Duration: 5 Days, 4 Nights</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <p className="text-white">Category: {category}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <p className="text-white">Travel Type: {travelType}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <p className="text-white">Location: {location}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <p className="text-white">All-inclusive package</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <p className="text-white">Professional tour guides</p>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-bold mt-10 mb-6 text-green-400">Included Services</h3>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-white">
-                <li className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  Accommodation
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  Daily breakfast and dinner
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  Transportation
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  Guided tours
-                </li>
-              </ul>
-            </div>
-          )}
-
-          {activeTab === 'dates' && (
-            <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
-          )}
-
-          {/* AI Prompt Generator - Only visible on mobile */}
-          <div className="md:hidden mt-8 bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-8 border border-gray-800">
-            <h2 className="text-2xl font-bold mb-4 text-white">Need Help Planning?</h2>
-            <AiPromptGenerator />
-          </div>
-        </div>
-
-        {/*  Form */}
-        <div className="w-full md:w-1/2">
-          <div className="sticky top-6">
-            {/* Package Details and Pricing */}
-            <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
-              <h3 className="text-xl font-semibold mb-3 text-white">Package Details</h3>
-
-              <div className="flex items-end gap-3 mb-2">
-                {originalPrice && (
-                  <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
-                )}
-                <span className="text-3xl font-bold text-blue-400">₹{price.toLocaleString()}</span>
-                <span className="text-gray-300 text-sm">per person</span>
-              </div>
-
-              {dateAvailabilities.length > 0 && (
-                <div className="mb-2">
-                  <p className="text-sm text-gray-300">Next available:</p>
-                  <p className="text-white font-medium">
-                    {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
-                  </p>
+                  <h3 className="text-xl font-semibold text-emerald-300 mb-4">
+                    Activities to Enjoy
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {['River rafting', 'Paragliding', 'Skiing', 'Trekking', 'Mountain biking'].map((activity, index) => (
+                      <div
+                        key={index}
+                        className="bg-white/10 backdrop-blur-md rounded-lg p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300"
+                      >
+                        <span className="block text-sm font-medium">{activity}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
-              <div className="flex items-center mt-2 mb-4">
-                <div className={`px-3 py-1 rounded-full text-sm font-medium ${status === 'active' ? 'bg-green-900 text-green-300' :
-                    status === 'sold-out' ? 'bg-red-900 text-red-300' :
-                      'bg-yellow-900 text-yellow-300'
-                  }`}>
-                  {status === 'active' ? 'Available' :
-                    status === 'sold-out' ? 'Sold Out' :
-                      'Coming Soon'}
+              {activeTab === 'photos' && (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-2xl font-semibold text-emerald-300 mb-6">Photo Gallery</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {images.map((img, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
+                      >
+                        <img
+                          src={`data:image/jpeg;base64,${img}`}
+                          alt={`${title} - image ${index + 1}`}
+                          className="w-full h-64 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                {availableSpots > 0 && (
-                  <p className="text-sm ml-3 text-white">
-                    {availableSpots} spots left out of {maxTravelers}
-                  </p>
-                )}
+              )}
+
+              {activeTab === 'highlights' && (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-2xl font-semibold text-emerald-300 mb-6">Package Highlights</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                      <p className="text-white">Duration:  Days,  Nights</p>
+                    </div>
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                      <p className="text-white">Category: {category}</p>
+                    </div>
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                      <p className="text-white">Travel Type: {travelType}</p>
+                    </div>
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                      <p className="text-white">Location: {location}</p>
+                    </div>
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                      <p className="text-white">All-inclusive package</p>
+                    </div>
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                      <p className="text-white">Professional tour guides</p>
+                    </div>
+                  </div>
+                  
+
+                  {/*To add more space div , rmoveable but would be better if add added to protect from view area */}
+                  <h3 className="text-xl font-semibold text-emerald-300 mb-4">Included Services</h3>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-white">
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                      </svg>
+                      Accommodation
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                      </svg>
+                      Daily breakfast and dinner
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                      </svg>
+                      Transportation
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                      </svg>
+                      Guided tours
+                    </li>
+                  </ul>
+                </div>
+              )}
+
+              {activeTab === 'dates' && (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-2xl font-semibold text-emerald-300 mb-6">Available Dates</h2>
+                  <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
+                </div>
+              )}
+            </div>
+            
+            <div className="hidden lg:block lg:w-1/4">
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-xl sticky top-24 max-h-[80vh] overflow-auto">
+            <h3 className="text-xl font-semibold mb-4 text-emerald-300">Book This Trip</h3>
+                <Registration packageId={travelPackageId || ''} packageTitle={title} />
               </div>
             </div>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20 shadow-xl">
+            <h3 className="text-xl font-semibold mb-3 text-emerald-300">Package Details</h3>
 
-            {/* Registration - Desktop */}
-            <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6 border border-gray-800">
-              <h3 className="text-xl font-semibold mb-4 text-white">Book This Trip</h3>
-              <Registration packageId={travelPackageId || ''} packageTitle={title} />
-
+            <div className="flex items-end gap-3 mb-4">
+              {originalPrice && (
+                <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
+              )}
+              <span className="text-3xl font-bold text-emerald-400">₹{price.toLocaleString()}</span>
             </div>
 
-            {/* AI Prompt Generator - Hidden on mibile */}
-            <div className="hidden md:block bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 border border-gray-800">
-              <h3 className="text-xl font-semibold mb-4 text-white">Need Help Planning?</h3>
-              <AiPromptGenerator />
+            {dateAvailabilities.length > 0 && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-300">Next available:</p>
+                <p className="text-white font-medium">
+                  {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
+                </p>
+              </div>
+            )}
+
+            <div className="flex items-center mb-6">
+              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                status === 'active' ? 'bg-emerald-900/70 text-emerald-300 border border-emerald-700' :
+                status === 'sold-out' ? 'bg-red-900/70 text-red-300 border border-red-700' :
+                'bg-yellow-900/70 text-yellow-300 border border-yellow-700'
+              }`}>
+                {status === 'active' ? 'Available' :
+                  status === 'sold-out' ? 'Sold Out' :
+                  'Coming Soon'}
+              </div>
+              {availableSpots > 0 && (
+                <p className="text-sm ml-3 text-white">
+                  {availableSpots} spots left out of {maxTravelers}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="flex flex-col md:flex-row items-center">
+              <div className="w-full md:w-1/2 mb-6 md:mb-0 md:pr-8">
+                <h2 className="text-2xl font-semibold mb-4 text-white">Need Help Planning Your Trip?</h2>
+                <p className="text-gray-200 mb-4">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
+                <div className="flex items-center space-x-2 mb-6">
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white">Get instant answers</p>
+                </div>
+                <div className="flex items-center space-x-2 mb-6">
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white">Personalized suggestions</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white">24/7 virtual assistance</p>
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 shadow-xl">
+                <h3 className="text-xl font-semibold mb-4 text-emerald-300">Ask Our AI Assistant</h3>
+                <AiPromptGenerator />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Form  */}
+      {/* Mobile Form Modal */}
       {showMobileForm && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4">
-          <div className="bg-transparent backdrop-filter backdrop-blur-lg rounded-lg shadow-lg p-6 border border-gray-800 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold text-white">Book This Trip</h3>
+              <h3 className="text-xl font-semibold text-emerald-300">Book This Trip</h3>
               <button
                 onClick={toggleMobileForm}
-                className="text-white hover:text-gray-300"
+                className="text-white hover:text-gray-300 bg-black/20 hover:bg-black/40 rounded-full p-2 transition-all duration-300"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -396,14 +410,14 @@ const SingleTravelPackageDetails = () => {
         </div>
       )}
 
-      {/* Mobile Registertion Button -  on mobile */}
+      {/* Mobile Book Now Button */}
       {status === 'active' && availableSpots > 0 && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
           <button
             onClick={toggleMobileForm}
-            className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg text-center shadow-lg transition-all duration-300 flex justify-center items-center"
+            className="w-full py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500"
           >
-            Chat with us
+            Book Now
           </button>
         </div>
       )}
