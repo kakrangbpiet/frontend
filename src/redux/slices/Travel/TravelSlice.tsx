@@ -9,7 +9,7 @@ export interface ITravelPackage {
     originalPrice?: number; // For showing discounts
     image: string;
     images?: string[]; // Additional images for gallery
-    videos?: IVideosResponse[]; 
+    videos?: IVideosResponse[] | string[]; 
     location?: string;
     category: string;
     status: 'active' | 'inactive' | 'sold-out' | 'coming-soon';
