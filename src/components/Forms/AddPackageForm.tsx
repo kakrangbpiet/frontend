@@ -5,7 +5,7 @@ import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Bo
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
 import { AppDispatch } from '../../redux/store';
-import { DateAvailability, ITravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { DateAvailability, ITravelPackage, IVideosResponse } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
 import CustomTextField from '../CustomTextField';
 import { addTravelPackageApi } from '../../redux/slices/Travel/travelApiSlice';
@@ -174,7 +174,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
   const handleGalleryImagesUpload = (imageUrls: string[]) => {
     setFormData({ ...formData, images: imageUrls });
   };
-  const handleGalleryVideoUpload = (videoUrls: string[]) => {
+  const handleGalleryVideoUpload = (videoUrls: IVideosResponse[]) => {
     setFormData({ ...formData, videos: videoUrls });
   };
 
