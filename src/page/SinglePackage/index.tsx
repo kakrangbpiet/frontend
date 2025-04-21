@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
 import { selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchSingleTravelPackageApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchSingleTravelPackageApi, fetchTravelItemVideosApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
 import { ITravelPackage, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
@@ -20,13 +20,16 @@ const SingleTravelPackageDetails = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
   const userType = useSelector(selectUserType);
 
   // Fetch from Redux 
   const selectedTravelPackage = useSelector(useSelectedTravelPackage(travelPackageId)) as ITravelPackage | undefined;
+  useEffect(() => {
+    dispatch(fetchTravelItemVideosApi({ itemId: travelPackageId }));
+  }, []);
 
   useEffect(() => {
     //mock
@@ -35,7 +38,7 @@ const SingleTravelPackageDetails = () => {
 
     // db
     if (travelPackageId) {
-      (dispatch as AppDispatch)(fetchSingleTravelPackageApi({
+      dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId
       }));
     }
@@ -49,6 +52,7 @@ const SingleTravelPackageDetails = () => {
   const dateAvailabilities = packageData?.dateAvailabilities ?? [];
   const image = packageData?.image ?? '';
   const images = packageData?.images ?? [image];
+  const videos = packageData?.videos ?? [];
   const title = packageData?.title ?? travelPackageTitle ?? '';
   const location = packageData?.title ?? '';
   const category = packageData?.category ?? '';
@@ -136,18 +140,18 @@ const SingleTravelPackageDetails = () => {
   return (
     <div className="relative z-10">
       <div className="absolute inset-0 overflow-hidden">
-        <MediaBackground media={image} />
+        {videos.length > 0 &&
+          <MediaBackground media={videos.length > 0 ? videos[Math.floor(Math.random() * videos.length)] : image} />
+        }
       </div>
-
       <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-24">
-      <div className="max-w-[90%] mx-auto px-4 py-12">
+        <div className="max-w-[90%] mx-auto px-4 py-12">
           <div className="relative rounded-xl overflow-hidden mb-12 shadow-2xl">
             <img
               src={`data:image/jpeg;base64,${image}`}
               alt={title}
               className="w-full h-96 object-cover"
             />
-            
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
               <div className="p-10 text-white">
                 <h1 className="text-5xl font-bold mb-4 drop-shadow-lg bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
@@ -172,11 +176,10 @@ const SingleTravelPackageDetails = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 text-white font-medium rounded-lg transition flex-none ${
-                  activeTab === tab 
-                    ? 'bg-white/20 shadow-md border border-white/30' 
+                className={`px-6 py-3 text-white font-medium rounded-lg transition flex-none ${activeTab === tab
+                    ? 'bg-white/20 shadow-md border border-white/30'
                     : 'hover:bg-white/10 border border-transparent'
-                }`}
+                  }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
@@ -192,7 +195,7 @@ const SingleTravelPackageDetails = () => {
                   </h2>
                   <p className="mb-6">{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
                   <p className="mb-6">Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
-                  
+
                   <div className="relative mb-8 rounded-lg overflow-hidden shadow-md bg-black/50 transform hover:scale-[1.01] transition duration-500 cursor-pointer">
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200 relative">
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -277,7 +280,7 @@ const SingleTravelPackageDetails = () => {
                       <p className="text-white">Professional tour guides</p>
                     </div>
                   </div>
-                  
+
 
                   {/*To add more space div , rmoveable but would be better if add added to protect from view area */}
                   <h3 className="text-xl font-semibold text-emerald-300 mb-4">Included Services</h3>
@@ -317,15 +320,15 @@ const SingleTravelPackageDetails = () => {
                 </div>
               )}
             </div>
-            
+
             <div className="hidden lg:block lg:w-1/4">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-xl sticky top-24 max-h-[80vh] overflow-auto">
-            <h3 className="text-xl font-semibold mb-4 text-emerald-300">Book This Trip</h3>
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-xl sticky top-24 max-h-[80vh] overflow-auto">
+                <h3 className="text-xl font-semibold mb-4 text-emerald-300">Book This Trip</h3>
                 <Registration packageId={travelPackageId || ''} packageTitle={title} />
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20 shadow-xl">
             <h3 className="text-xl font-semibold mb-3 text-emerald-300">Package Details</h3>
 
@@ -346,14 +349,13 @@ const SingleTravelPackageDetails = () => {
             )}
 
             <div className="flex items-center mb-6">
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                status === 'active' ? 'bg-emerald-900/70 text-emerald-300 border border-emerald-700' :
-                status === 'sold-out' ? 'bg-red-900/70 text-red-300 border border-red-700' :
-                'bg-yellow-900/70 text-yellow-300 border border-yellow-700'
-              }`}>
+              <div className={`px-3 py-1 rounded-full text-sm font-medium ${status === 'active' ? 'bg-emerald-900/70 text-emerald-300 border border-emerald-700' :
+                  status === 'sold-out' ? 'bg-red-900/70 text-red-300 border border-red-700' :
+                    'bg-yellow-900/70 text-yellow-300 border border-yellow-700'
+                }`}>
                 {status === 'active' ? 'Available' :
                   status === 'sold-out' ? 'Sold Out' :
-                  'Coming Soon'}
+                    'Coming Soon'}
               </div>
               {availableSpots > 0 && (
                 <p className="text-sm ml-3 text-white">

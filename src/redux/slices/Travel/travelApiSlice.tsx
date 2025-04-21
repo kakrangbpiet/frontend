@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage, setTravelItemVideos } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
@@ -385,6 +385,36 @@ export const removeItemQuantityApi = createAsyncThunk(
       } catch (error) {
         return rejectWithValue('Failed to update item in sessionStorage');
       }
+    }
+  }
+);
+
+
+
+export const fetchTravelItemVideosApi = createAsyncThunk(
+  'travelCollection/setTravelItemVideos',
+  async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
+    dispatch(setLoadedItems({ loading: true }));
+    try {
+      const response = await Request({
+        endpointId: 'GET_TRAVEL_ITEM_VIDEOS',
+        slug: `?id=${itemId}`,
+      });
+
+      dispatch(setTravelItemVideos(response.data || []));
+      dispatch(setLoadedItems({ loading: false }));
+
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Videos fetched successfully',
+        data: response,
+      };
+
+      return apiSuccess;
+    } catch (error) {
+      dispatch(setLoadedItems({ loading: false }));
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error === "string" ? castedError?.error : 'Unknown Error');
     }
   }
 );
