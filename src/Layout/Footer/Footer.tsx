@@ -124,38 +124,38 @@ const Footer: React.FC<FooterProps> = ({
     textTransform: 'none' as const,
   };
 
-  const socialIconsStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
-    padding: '16px 0',
-    borderTop: `1px solid ${variant === 'light' ? 'rgba(233, 236, 239, 0.6)' : 'rgba(55, 65, 81, 0.4)'}`,
-    borderBottom: `1px solid ${variant === 'light' ? 'rgba(233, 236, 239, 0.6)' : 'rgba(55, 65, 81, 0.4)'}`,
-    margin: '8px 0',
-    flexWrap: 'wrap' as const,
-    width: '100%',
-  };
+  // const socialIconsStyle = {
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   gap: '20px',
+  //   padding: '16px 0',
+  //   borderTop: `1px solid ${variant === 'light' ? 'rgba(233, 236, 239, 0.6)' : 'rgba(55, 65, 81, 0.4)'}`,
+  //   borderBottom: `1px solid ${variant === 'light' ? 'rgba(233, 236, 239, 0.6)' : 'rgba(55, 65, 81, 0.4)'}`,
+  //   margin: '8px 0',
+  //   flexWrap: 'wrap' as const,
+  //   width: '100%',
+  // };
 
-  const socialIconStyle = {
-    width: '40px',
-    height: '40px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '12px',
-    background: variant === 'light' 
-      ? 'rgba(233, 236, 239, 0.8)'
-      : 'rgba(55, 65, 81, 0.6)',
-    backdropFilter: 'blur(5px)',
-    WebkitBackdropFilter: 'blur(5px)',
-    color: variant === 'light' ? '#495057' : '#e5e7eb',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    transition: 'all 0.3s ease',
-    boxShadow: variant === 'light'
-      ? '0 4px 12px rgba(0, 0, 0, 0.05)'
-      : '0 4px 12px rgba(0, 0, 0, 0.2)',
-  };
+  // const socialIconStyle = {
+  //   width: '40px',
+  //   height: '40px',
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   borderRadius: '12px',
+  //   background: variant === 'light' 
+  //     ? 'rgba(233, 236, 239, 0.8)'
+  //     : 'rgba(55, 65, 81, 0.6)',
+  //   backdropFilter: 'blur(5px)',
+  //   WebkitBackdropFilter: 'blur(5px)',
+  //   color: variant === 'light' ? '#495057' : '#e5e7eb',
+  //   fontSize: '16px',
+  //   fontWeight: 'bold',
+  //   transition: 'all 0.3s ease',
+  //   boxShadow: variant === 'light'
+  //     ? '0 4px 12px rgba(0, 0, 0, 0.05)'
+  //     : '0 4px 12px rgba(0, 0, 0, 0.2)',
+  // };
 
   const copyrightStyle = {
     fontSize: '14px',
