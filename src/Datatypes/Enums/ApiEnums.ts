@@ -1,5 +1,5 @@
-const backendUrl="http://localhost:3000/v1"
-// const backendUrl="http://54.237.234.107:3000/v1"
+// const backendUrl="http://localhost:3000/v1"
+const backendUrl="http://54.237.234.107:3000/v1"
 
 export const ApiEndpoint: Record<string, any> = {
   // AUTHENTICATION ENDPOINTS
