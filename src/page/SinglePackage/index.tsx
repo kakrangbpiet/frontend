@@ -62,7 +62,7 @@ const SingleTravelPackageDetails = () => {
   const price = packageData?.price ?? 0;
   const originalPrice = packageData?.originalPrice;
   const maxTravelers = packageData?.maxTravelers ?? 0;
-
+console.log(videos)
   const navigateToHome = () => {
     navigate("/");
   };
@@ -140,9 +140,11 @@ const SingleTravelPackageDetails = () => {
   return (
     <div className="relative z-10">
       <div className="absolute inset-0 overflow-hidden">
-        {videos.length > 0 &&
-          <MediaBackground media={videos.length > 0 ? videos[Math.floor(Math.random() * videos.length)] : image} />
-        }
+<div className="absolute inset-0 overflow-hidden">
+  {videos.length > 0 &&
+    <MediaBackground video={{ base64Data: videos[0] }} /> 
+}
+</div>
       </div>
       <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-24">
         <div className="max-w-[90%] mx-auto px-4 py-12">

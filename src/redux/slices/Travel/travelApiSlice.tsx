@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage, setTravelItemVideos } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage, setTravelItemVideos, IVideosResponse } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
@@ -15,10 +15,8 @@ export const fetchTravelPackagesApi = createAsyncThunk(
         endpointId: "GET_TRAVEL_ITEMS",
         slug: `?status=${status}&pagesize=${pageSize}&page=${page}`,
       });
-console.log(response,"responsel");
 
       const items: any[] = response.data;
-      console.log(response.data,"reponse");
       
       dispatch(setLoadedItems({ itemData: items, loading: false }));
 
@@ -102,8 +100,6 @@ export const fetchSingleTravelPackageApi = createAsyncThunk(
         endpointId: "GET_SINGLE_TRAVEL_ITEM",
         slug: `/${itemId}`,
       });
-      console.log(response,"response");
-      
 
       const item: ITravelPackage = response.data;
       dispatch(setLoadedItems({ itemData: [item], loading: false }));
@@ -240,8 +236,6 @@ export const addToCartApi = createAsyncThunk(
 
         return { message: 'Item saved to cart in sessionStorage', item };
       } catch (error) {
-        console.log("forbidden", error);
-
         return rejectWithValue('Failed to save item to cart in sessionStorage');
       }
     }
@@ -280,8 +274,6 @@ export const fetchCartApi = createAsyncThunk(
               };
             })
           );
-
-          console.log(detailedCartItems);
 
           // Dispatch the loaded cart
           dispatch(loadCart(detailedCartItems));
@@ -362,7 +354,6 @@ export const removeItemQuantityApi = createAsyncThunk(
         let cartItems = existingCart ? JSON.parse(existingCart) : [];
 
         const existingItemIndex = cartItems.findIndex((cartItem: CartItem) => cartItem.id === itemId);
-        console.log(existingItemIndex);
 
         if (existingItemIndex !== -1) {
           const item = cartItems[existingItemIndex];
@@ -394,22 +385,44 @@ export const removeItemQuantityApi = createAsyncThunk(
 export const fetchTravelItemVideosApi = createAsyncThunk(
   'travelCollection/setTravelItemVideos',
   async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
+    if (!itemId) {
+      return rejectWithValue('Item ID is required');
+    }
+
     dispatch(setLoadedItems({ loading: true }));
     try {
       const response = await Request({
         endpointId: 'GET_TRAVEL_ITEM_VIDEOS',
-        slug: `?id=${itemId}`,
+        slug: `/${itemId}`,
       });
 
-      dispatch(setTravelItemVideos(response.data || []));
+      // Type the response data as IVideosResponse[]
+      const videosData: IVideosResponse[] = Array.isArray(response.data) 
+        ? response.data.map((item: any) => ({
+            videoCount: item.videoCount,
+            randomVideo: {
+              id: item.randomVideo.id,
+              base64Data: item.randomVideo.base64Data
+            }
+          }))
+        : [{
+            videoCount: response.data.videoCount,
+            randomVideo: {
+              id: response.data.randomVideo.id,
+              base64Data: response.data.randomVideo.base64Data
+            }
+          }];
+
+      dispatch(setTravelItemVideos({
+        packageId: itemId,
+        videos: videosData
+      }));
       dispatch(setLoadedItems({ loading: false }));
 
       const apiSuccess: ApiSuccess = {
-        statusCode: response.status,
         message: 'Videos fetched successfully',
-        data: response,
+        data: videosData,
       };
-
       return apiSuccess;
     } catch (error) {
       dispatch(setLoadedItems({ loading: false }));

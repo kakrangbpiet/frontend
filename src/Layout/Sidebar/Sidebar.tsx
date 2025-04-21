@@ -50,7 +50,6 @@ const NavLabel = styled.span<{ $isOpen: boolean }>`
 const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   const location = useLocation();
   const navigate=useNavigate()
-  console.log('Sidebar items:', items);
   return (
     <SidebarContainer $isOpen={isOpen}>
    

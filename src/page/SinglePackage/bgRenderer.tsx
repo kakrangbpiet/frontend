@@ -1,4 +1,10 @@
-export const MediaBackground = ({ media }) => {
+// bgRenderer.tsx
+export const MediaBackground = ({ video }: { video: { base64Data: any } }) => {
+  if (!video?.base64Data) return null;
+  console.log(video.base64Data.randomVideo.base64Data,"video");
+  
+  const videoSrc = `data:video/mp4;base64,${video.base64Data.randomVideo.base64Data}`;
+
   return (
     <div className="absolute inset-0 overflow-hidden">
       <video
@@ -9,8 +15,8 @@ export const MediaBackground = ({ media }) => {
         className="w-full h-full object-cover"
       >
         <source
-          src={media}
-          type={`video/${media.split('.').pop()}`}
+          src={videoSrc}
+          type="video/mp4"
         />
         Your browser does not support the video tag.
       </video>
