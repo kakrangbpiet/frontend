@@ -77,7 +77,7 @@ const ButtonContainer = styled.div`
 const DestinationSelectButton = styled.button`
   width: 100%;
   max-width: 20rem;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 7rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: rgba(255, 255, 255, 0.2);
@@ -94,16 +94,6 @@ const DestinationSelectButton = styled.button`
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
   }
-`;
-
-const ChevronIcon = styled.div<{ isOpen: boolean }>`
-  width: 10px;
-  height: 10px;
-  border-style: solid;
-  border-width: 0 2px 2px 0;
-  transform: ${props => props.isOpen ? 'rotate(225deg)' : 'rotate(45deg)'};
-  transition: transform 0.3s;
-  margin-top: ${props => props.isOpen ? '0' : '3px'};
 `;
 
 const DropdownMenu = styled.div`
@@ -258,7 +248,6 @@ const HomePage: React.FC = () => {
           <SelectWrapper>
             <DestinationSelectButton onClick={toggleDropdown}>
               <span>Destination</span>
-              <ChevronIcon isOpen={isDropdownOpen} />
             </DestinationSelectButton>
             
             {isDropdownOpen && (
@@ -281,7 +270,7 @@ const HomePage: React.FC = () => {
           
           <ButtonGroup>
             <Button onClick={handleCustomizedTripClick}>
-              Your Customized Trip
+              Plan Your Own Trip
             </Button>
             <Button onClick={handlePrePlannedTripsClick}>
               Pre-planned Trips

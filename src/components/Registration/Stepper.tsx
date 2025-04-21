@@ -190,7 +190,6 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         // Remove travelDates if we're no longer using it
         // Add formatted dates if needed
         category: UserCategory.User,
-        address: "address",
         accountStatus: accountStatus.pending,
         formattedStartDate: inquiryData.startDate ? formatDate(inquiryData.startDate) : undefined,
         formattedEndDate: inquiryData.endDate ? formatDate(inquiryData.endDate) : undefined
@@ -219,14 +218,67 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   };
 
   return (
-    <Container >
-      <Paper elevation={3} sx={{ mt: 4, mb: 4, p: 2 }}>
-        <Typography variant="h5" align="center" gutterBottom>
+    <Container>
+    <Paper 
+      elevation={3} 
+      sx={{ 
+        mt: 4, 
+        mb: 4, 
+        p: 3,
+        backdropFilter: 'blur(1px)',  
+        backgroundColor: 'rgba(92, 71, 71, 0.7)',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.3)',
+        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+        overflow: 'hidden',
+        position: 'relative',
+        transition: 'backdrop-filter 0.3s ease',  
+        '&:hover': {
+          backdropFilter: 'blur(5px)',  
+        },
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -1,
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%)',
+          borderRadius: '16px',
+        }
+      }}
+    >
+        <Typography 
+          variant="h5" 
+          align="center" 
+          gutterBottom
+          sx={{
+            fontWeight: 600,
+            color: 'rgba(0, 0, 0, 0.8)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+          }}
+        >
           Travel Inquiry Form
         </Typography>
         
         {/* Stepper showing progress through the form */}
-        <Stepper activeStep={activeStep} alternativeLabel>
+        <Stepper 
+          activeStep={activeStep} 
+          alternativeLabel
+          sx={{
+            mb: 4,
+            '& .MuiStepLabel-root .Mui-completed': {
+              color: 'primary.main',
+            },
+            '& .MuiStepLabel-root .Mui-active': {
+              color: 'primary.main',
+            },
+            '& .MuiStepLabel-label': {
+              mt: 1,
+            }
+          }}
+        >
           {inquirySteps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
@@ -237,14 +289,28 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         {/* Show success message or form content */}
         {activeStep === inquirySteps.length ? (
           <div>
-            <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+            <Typography 
+              variant="h6" 
+              align="center" 
+              sx={{ mt: 2, mb: 3, color: 'rgba(0, 0, 0, 0.8)' }}
+            >
               Thank you for your inquiry!
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Button 
                 variant="contained" 
                 onClick={navigateToProfile}
-                sx={{ mr: 1 }}
+                sx={{ 
+                  mr: 1,
+                  background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.7) 100%)',
+                  backdropFilter: 'blur(4px)',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                  textTransform: 'none',
+                  '&:hover': {
+                    boxShadow: '0 6px 20px rgba(0, 123, 255, 0.4)',
+                  }
+                }}
               >
                 View Updates
               </Button>
@@ -253,13 +319,29 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         ) : (
           <div>
             {/* Render the current step's form */}
-            {getStepContent(activeStep, inquiryData, setInquiryData, selectedPackage?.dateAvailabilities || [])} 
+            <Box sx={{ 
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: '12px',
+              p: 2,
+              mb: 3
+            }}>
+              {getStepContent(activeStep, inquiryData, setInquiryData, selectedPackage?.dateAvailabilities || [])}
+            </Box>
+            
             {/* Navigation buttons */}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}
+                sx={{ 
+                  mr: 1,
+                  color: 'rgba(0, 0, 0, 0.6)',
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                  }
+                }}
               >
                 Back
               </Button>
@@ -267,6 +349,16 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
               <Button
                 variant="contained"
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
+                sx={{ 
+                  background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.7) 100%)',
+                  backdropFilter: 'blur(4px)',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                  textTransform: 'none',
+                  '&:hover': {
+                    boxShadow: '0 6px 20px rgba(0, 123, 255, 0.4)',
+                  }
+                }}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Next'}
               </Button>

@@ -91,9 +91,9 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 bg-white bg-opacity-70 p-6 rounded-lg">
           <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
             My Profile
           </h1>
@@ -109,7 +109,7 @@ const ProfilePage = () => {
             handleRegister={handleRegister}
           />
         {!shouldShowRegister &&
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
+          <div className="bg-white bg-opacity-80 shadow overflow-hidden sm:rounded-lg p-6">
             <div className="flex flex-col sm:flex-row justify-between items-center">
               <div className="mb-4 sm:mb-0">
                 <h3 className="text-lg font-medium text-gray-900">Travel Inquiries</h3>
