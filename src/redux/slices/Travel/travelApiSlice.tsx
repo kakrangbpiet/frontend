@@ -385,6 +385,10 @@ export const removeItemQuantityApi = createAsyncThunk(
 export const fetchTravelItemVideosApi = createAsyncThunk(
   'travelCollection/setTravelItemVideos',
   async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
+    if (!itemId) {
+      return rejectWithValue('Item ID is required');
+    }
+
     dispatch(setLoadedItems({ loading: true }));
     try {
       const response = await Request({
@@ -392,18 +396,32 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
         slug: `/${itemId}`,
       });
 
-      // Type the response data as IVideosResponse
-      const videoData: IVideosResponse = {
-        videoCount: response.data.videoCount,
-        randomVideo: response.data.randomVideo
-      };
+      // Type the response data as IVideosResponse[]
+      const videosData: IVideosResponse[] = Array.isArray(response.data) 
+        ? response.data.map((item: any) => ({
+            videoCount: item.videoCount,
+            randomVideo: {
+              id: item.randomVideo.id,
+              base64Data: item.randomVideo.base64Data
+            }
+          }))
+        : [{
+            videoCount: response.data.videoCount,
+            randomVideo: {
+              id: response.data.randomVideo.id,
+              base64Data: response.data.randomVideo.base64Data
+            }
+          }];
 
-      dispatch(setTravelItemVideos(videoData));
+      dispatch(setTravelItemVideos({
+        packageId: itemId,
+        videos: videosData
+      }));
       dispatch(setLoadedItems({ loading: false }));
 
       const apiSuccess: ApiSuccess = {
         message: 'Videos fetched successfully',
-        data: videoData,
+        data: videosData,
       };
       return apiSuccess;
     } catch (error) {

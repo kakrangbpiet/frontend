@@ -62,7 +62,7 @@ const SingleTravelPackageDetails = () => {
   const price = packageData?.price ?? 0;
   const originalPrice = packageData?.originalPrice;
   const maxTravelers = packageData?.maxTravelers ?? 0;
-
+console.log(videos)
   const navigateToHome = () => {
     navigate("/");
   };

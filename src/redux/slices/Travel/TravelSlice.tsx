@@ -9,7 +9,7 @@ export interface ITravelPackage {
     originalPrice?: number; // For showing discounts
     image: string;
     images?: string[]; // Additional images for gallery
-    videos?: string[]; 
+    videos?: IVideosResponse[]; 
     location?: string;
     category: string;
     status: 'active' | 'inactive' | 'sold-out' | 'coming-soon';
@@ -41,7 +41,6 @@ interface TravelState {
   travelPackagesByCategory: { [category: string]: ITravelPackage[] };
   loading: boolean;
   loadingByCategory: { [category: string]: boolean };
-  travelItemVideos:IVideosResponse | null
 }
 
 
@@ -50,7 +49,6 @@ const initialState: TravelState = {
   travelPackagesByCategory: {} as { [category: string]: ITravelPackage[] },
   loading: false,
   loadingByCategory: {},
-  travelItemVideos:null,
 };
 
 const travelSlice = createSlice({
@@ -90,8 +88,24 @@ const travelSlice = createSlice({
     addItem: (state, action: PayloadAction<ITravelPackage>) => {
       state.travelPackages.push(action.payload);
     },
-    setTravelItemVideos: (state, action) => {
-      state.travelItemVideos = action.payload;
+    setTravelItemVideos: (state, action: PayloadAction<{ packageId: string; videos: IVideosResponse[] }>) => {
+      const { packageId, videos } = action.payload;
+      const packageIndex = state.travelPackages.findIndex((item) => item.id === packageId);
+      
+      if (packageIndex !== -1) {
+        // Update the main travelPackages array
+        state.travelPackages[packageIndex].videos = videos;
+        
+        // Also update any instances in the categorized packages
+        for (const category in state.travelPackagesByCategory) {
+          const categoryPackageIndex = state.travelPackagesByCategory[category].findIndex(
+            (item) => item.id === packageId
+          );
+          if (categoryPackageIndex !== -1) {
+            state.travelPackagesByCategory[category][categoryPackageIndex].videos = videos;
+          }
+        }
+      }
     },
     updateItem: (state, action: PayloadAction<ITravelPackage>) => {
       const updatedItem = action.payload;
