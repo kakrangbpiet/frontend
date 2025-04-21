@@ -493,7 +493,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
                     onClick={() => {
                       const updatedVideos= [...(formData.videos || [])];
                       updatedVideos.splice(index, 1);
-                      setFormData({ ...formData, videos: updatedVideos });
+                      setFormData({ ...formData, videos: updatedVideos as string[] });
                     }}
                   >
                     <RemoveIcon fontSize="small" />
