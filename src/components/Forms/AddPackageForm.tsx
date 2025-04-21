@@ -49,6 +49,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         originalPrice: undefined,
         image: '',
         images: [],
+        videos: [],
         location: '',
         category: '',
         status: 'active',
@@ -75,6 +76,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       originalPrice: undefined,
       image: '',
       images: [],
+      videos: [],
       location: '',
       category: '',
       status: 'active',
@@ -171,6 +173,9 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
 
   const handleGalleryImagesUpload = (imageUrls: string[]) => {
     setFormData({ ...formData, images: imageUrls });
+  };
+  const handleGalleryVideoUpload = (videoUrls: string[]) => {
+    setFormData({ ...formData, videos: videoUrls });
   };
 
   const areAllFieldsFilled = () => {
@@ -455,6 +460,40 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
                       const updatedImages = [...(formData.images || [])];
                       updatedImages.splice(index, 1);
                       setFormData({ ...formData, images: updatedImages });
+                    }}
+                  >
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+          </Grid>
+          <Grid size={{ xs: 12, md: 12 }}>
+            <Typography variant="h6">Gallery Videos</Typography>
+            <ImageUploader
+              register={(url) => handleGalleryVideoUpload([...(formData.videos || []), url])}
+              uploadFormat="BASE64"
+            />
+            <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
+              {formData.videos?.map((video, index) => (
+                <Box key={index} position="relative">
+                  <img
+                    src={`data:image/jpeg;base64,${video}`}
+                    alt={`Gallery ${index + 1}`}
+                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  />
+                  <IconButton
+                    size="small"
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      backgroundColor: 'rgba(255,255,255,0.7)'
+                    }}
+                    onClick={() => {
+                      const updatedVideos= [...(formData.videos || [])];
+                      updatedVideos.splice(index, 1);
+                      setFormData({ ...formData, videos: updatedVideos });
                     }}
                   >
                     <RemoveIcon fontSize="small" />

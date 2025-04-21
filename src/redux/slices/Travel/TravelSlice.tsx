@@ -9,6 +9,7 @@ export interface ITravelPackage {
     originalPrice?: number; // For showing discounts
     image: string;
     images?: string[]; // Additional images for gallery
+    videos?: string[]; 
     location?: string;
     category: string;
     status: 'active' | 'inactive' | 'sold-out' | 'coming-soon';
@@ -28,13 +29,16 @@ interface TravelState {
   travelPackagesByCategory: { [category: string]: ITravelPackage[] };
   loading: boolean;
   loadingByCategory: { [category: string]: boolean };
+  travelItemVideos:[]
 }
+
 
 const initialState: TravelState = {
   travelPackages: [] as ITravelPackage[],
   travelPackagesByCategory: {} as { [category: string]: ITravelPackage[] },
   loading: false,
   loadingByCategory: {},
+  travelItemVideos: [],
 };
 
 const travelSlice = createSlice({
@@ -74,6 +78,9 @@ const travelSlice = createSlice({
     addItem: (state, action: PayloadAction<ITravelPackage>) => {
       state.travelPackages.push(action.payload);
     },
+    setTravelItemVideos: (state, action) => {
+      state.travelItemVideos = action.payload;
+    },
     updateItem: (state, action: PayloadAction<ITravelPackage>) => {
       const updatedItem = action.payload;
       const itemIndex = state.travelPackages.findIndex((item) => item.id === updatedItem.id);
@@ -84,7 +91,7 @@ const travelSlice = createSlice({
   },
 });
 
-export const { setLoadedItems, setCategoryLoading, setTravelPackagesByCategory, addItem, updateItem } = travelSlice.actions;
+export const { setLoadedItems, setCategoryLoading, setTravelPackagesByCategory, addItem, updateItem,setTravelItemVideos } = travelSlice.actions;
 
 export default travelSlice.reducer;
 

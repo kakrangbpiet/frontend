@@ -1,5 +1,5 @@
-// const backendUrl="https://backend-am9k.onrender.com/v1"
-const backendUrl="http://54.237.234.107:3000/v1"
+const backendUrl="http://localhost:3000/v1"
+// const backendUrl="http://54.237.234.107:3000/v1"
 
 export const ApiEndpoint: Record<string, any> = {
   // AUTHENTICATION ENDPOINTS
@@ -123,6 +123,16 @@ export const ApiEndpoint: Record<string, any> = {
     loadingMessage: "Editing travel item",
     successMessage: "Travel item updated successfully",
     errorMessage: "Error updating travel item"
+  },
+  GET_TRAVEL_ITEM_VIDEOS: { 
+    apiId: 25, 
+    withAuth: true, 
+    url: `${backendUrl}/Travel/videos`, 
+    method: 'GET', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Getting Package Videos",
+    successMessage: "Package Videos Fetched successfully",
+    errorMessage: "Error Getting Package Videos"
   },
 
   // TRAVEL INQUIRY ENDPOINTS
