@@ -18,6 +18,18 @@ export interface ITravelPackage {
     travelType?: 'group' | 'private' | 'self-guided';
     dateAvailabilities:DateAvailability[]
   }
+
+  export interface IVideoItem {
+    id: string;
+    base64Data: string;
+    // title?: string;
+    // duration?: number;
+    // thumbnail?: string;
+  }
+  export interface IVideosResponse {
+    videoCount: number;
+    randomVideo: IVideoItem;
+  }
   export interface DateAvailability {
     startDate: number;
     endDate: number;
@@ -29,7 +41,7 @@ interface TravelState {
   travelPackagesByCategory: { [category: string]: ITravelPackage[] };
   loading: boolean;
   loadingByCategory: { [category: string]: boolean };
-  travelItemVideos:[]
+  travelItemVideos:IVideosResponse | null
 }
 
 
@@ -38,7 +50,7 @@ const initialState: TravelState = {
   travelPackagesByCategory: {} as { [category: string]: ITravelPackage[] },
   loading: false,
   loadingByCategory: {},
-  travelItemVideos: [],
+  travelItemVideos:null,
 };
 
 const travelSlice = createSlice({

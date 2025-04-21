@@ -85,7 +85,6 @@ const ProfilePage = () => {
     dispatch(registerUserDispatcher({
       userData: emptyUserData,
       onVerified: () => {
-        console.log('User registration completed');
       }
     }));
   };
