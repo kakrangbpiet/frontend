@@ -411,7 +411,7 @@ const SingleTravelPackageDetails = () => {
       )}
 
       {/* Mobile Book Now Button */}
-      {status === 'active' && availableSpots > 0 && (
+      {status === 'active' && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
           <button
             onClick={toggleMobileForm}
