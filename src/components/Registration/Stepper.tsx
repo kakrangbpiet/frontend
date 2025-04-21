@@ -190,7 +190,6 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         // Remove travelDates if we're no longer using it
         // Add formatted dates if needed
         category: UserCategory.User,
-        address: "address",
         accountStatus: accountStatus.pending,
         formattedStartDate: inquiryData.startDate ? formatDate(inquiryData.startDate) : undefined,
         formattedEndDate: inquiryData.endDate ? formatDate(inquiryData.endDate) : undefined
