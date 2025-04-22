@@ -17,26 +17,12 @@ import { DateAvailability, useSelectedTravelPackage } from '../../redux/slices/T
 import { formatDate } from '../../page/SinglePackage/DateAvailability.tsx';
 import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums.ts';
 
-// Extend JwtPayload to include custom properties
-/**
- * Steps for the travel inquiry process:
- * 1. Location Details - Where they want to travel
- * 2. Personal Details - Basic information about the traveler
- * 3. Contact Details - How to reach the traveler
- */
 const inquirySteps = [
   'Travel Destination', 
   'Personal Information', 
   'Contact Details'
 ];
 
-/**
- * Renders the appropriate component based on the current step
- * @param step Current step index
- * @param inquiryData Current inquiry data
- * @param setInquiryData Function to update inquiry data
- * @returns JSX component for the current step
- */
 function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>, dateAvailabilities:DateAvailability[]) {
   switch (step) {
     case 0:
@@ -49,8 +35,6 @@ function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData
       return 'Unknown step';
   }
 }
-
-// Type definition for travel inquiry data
 
 function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packageTitle: string}) {
   const dispatch=useDispatch<AppDispatch>()
@@ -76,7 +60,6 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   };
   const userDetails = getUserDetailsFromToken(token);
   
-  // Initialize inquiry data with default values
   const [inquiryData, setInquiryData] = useState<TravelInquiry>({
     packageId:packageId,
     packageTitle:packageTitle,
@@ -92,55 +75,23 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
     specialRequests: ''
   });
 
-  /**
-   * Handles moving to the next step in the inquiry process
-   */
   const handleNext = () => {
-    // Validate current step data before proceeding
     if (validateCurrentStep()) {
       setActiveStep(activeStep + 1);
     }
   };
 
-  /**
-   * Handles returning to the previous step
-   */
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
 
-  /**
-   * Resets the form and navigates to the home page
-   */
-  // const handleReset = () => {
-  //   setInquiryData({
-  //     packageId:packageId,
-  //     packageTitle:packageTitle,
-  //     destination: packageTitle,
-  //     address: '',
-  //     travelDates: '',
-  //     passengerCount: 1,
-  //     name: '',
-  //     email: '',
-  //     phoneNumber: '',
-  //     specialRequests: ''
-  //   });
-  //   // navigate("/");
-  // };
-  /**
-   * Resets the form and navigates to the home page
-   */
   const navigateToProfile = () => {
     navigate("/profile");
   };
 
-  /**
-   * Validates the data for the current step
-   * @returns boolean indicating if the data is valid
-   */
   const validateCurrentStep = (): boolean => {
     switch (activeStep) {
-      case 0: // Location Details
+      case 0:
         if (!inquiryData.address) {
           alert('Please select your current location');
           return false;
@@ -158,7 +109,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
           return false;
         }
         return true;
-    case 1: // Personal Details
+    case 1:
         if (!inquiryData.name || inquiryData.passengerCount < 1) {
           alert('Please provide your name and at least 1 passenger');
           return false;
@@ -169,12 +120,8 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
     }
   };
 
-  /**
-   * Submits the travel inquiry to the server
-   */
   const submitTravelInquiry = async () => {
     try {
-      // Here you would typically dispatch an action to send the inquiry to your backend
       if (!inquiryData.phoneNumber) {
         alert('Please provide your phone number');
         return false;
@@ -183,34 +130,26 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         alert('Please provide your email');
         return false;
       }
-      // For now, we'll simulate a successful submission
-      // dispatch(submitInquiryDispatcher(inquiryData));
+      
       const inquiryToSend = {
         ...inquiryData,
-        // Remove travelDates if we're no longer using it
-        // Add formatted dates if needed
         category: UserCategory.User,
         accountStatus: accountStatus.pending,
         formattedStartDate: inquiryData.startDate ? formatDate(inquiryData.startDate) : undefined,
         formattedEndDate: inquiryData.endDate ? formatDate(inquiryData.endDate) : undefined
       };
+      
       if (!auth) {
-        // If not authenticated, register first, then create inquiry
         const registrationResult = await dispatch(registerUserDispatcher({userData:inquiryToSend})).unwrap();
         
-        // Only proceed if registration was successful
         if (registrationResult) {
           await dispatch(createTravelInquiry(inquiryToSend));
-          handleNext(); // Move to success step
+          handleNext();
         }
       } else {
-        // If already authenticated, just create the inquiry
         await dispatch(createTravelInquiry(inquiryToSend));
-        handleNext(); // Move to success step
+        handleNext();
       }
-      
-      // handleReset();
-      // handleNext()
     } catch (error) {
       console.error('Error submitting inquiry:', error);
       alert('There was an error submitting your inquiry. Please try again.');
@@ -218,64 +157,68 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   };
 
   return (
-    <Container>
-    <Paper 
-      elevation={3} 
-      sx={{ 
-        mt: 4, 
-        mb: 4, 
-        p: 3,
-        backdropFilter: 'blur(1px)',  
-        backgroundColor: 'rgba(92, 71, 71, 0.7)',
-        borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.3)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-        overflow: 'hidden',
-        position: 'relative',
-        transition: 'backdrop-filter 0.3s ease',  
-        '&:hover': {
-          backdropFilter: 'blur(5px)',  
-        },
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: -1,
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%)',
+    <Container maxWidth="xl" sx={{ width: '92%' }}>
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          mt: 4, 
+          mb: 4, 
+          p: 3,
+          backdropFilter: 'blur(12px)',
+          backgroundColor: 'rgba(128, 128, 128, 0.1)', // Gray with high transparency
           borderRadius: '16px',
-        }
-      }}
-    >
+          border: '1px solid rgba(211, 211, 211, 0.2)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+          overflow: 'hidden',
+          position: 'relative',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            backdropFilter: 'blur(15px)',
+            backgroundColor: 'rgba(128, 128, 128, 0.15)',
+          },
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: -1,
+            background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.2) 0%, rgba(128, 128, 128, 0.05) 100%)',
+            borderRadius: '16px',
+          }
+        }}
+      >
         <Typography 
           variant="h5" 
           align="center" 
-          gutterBottom
           sx={{
             fontWeight: 600,
-            color: 'rgba(0, 0, 0, 0.8)',
-            textShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+            color: 'rgba(255, 255, 255, 0.9)',
+            textShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            mb: 2
           }}
         >
           Travel Inquiry Form
         </Typography>
         
-        {/* Stepper showing progress through the form */}
         <Stepper 
           activeStep={activeStep} 
           alternativeLabel
           sx={{
-            mb: 4,
+            mb: 3,
             '& .MuiStepLabel-root .Mui-completed': {
-              color: 'primary.main',
+              color: 'rgba(255, 255, 255, 0.8)',
             },
             '& .MuiStepLabel-root .Mui-active': {
-              color: 'primary.main',
+              color: 'rgba(255, 255, 255, 0.9)',
             },
             '& .MuiStepLabel-label': {
               mt: 1,
+              color: 'rgba(255, 255, 255, 0.7)',
+            },
+            '& .MuiStepConnector-line': {
+              borderColor: 'rgba(255, 255, 255, 0.2)',
             }
           }}
         >
@@ -286,60 +229,75 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
           ))}
         </Stepper>
 
-        {/* Show success message or form content */}
         {activeStep === inquirySteps.length ? (
-          <div>
+          <Box sx={{ 
+            textAlign: 'center',
+            p: 3,
+            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgba(211, 211, 211, 0.1)',
+            borderRadius: '12px',
+          }}>
             <Typography 
               variant="h6" 
-              align="center" 
-              sx={{ mt: 2, mb: 3, color: 'rgba(0, 0, 0, 0.8)' }}
+              sx={{ 
+                color: 'rgba(255, 255, 255, 0.9)',
+                mb: 2
+              }}
             >
               Thank you for your inquiry!
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-              <Button 
-                variant="contained" 
-                onClick={navigateToProfile}
-                sx={{ 
-                  mr: 1,
-                  background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.7) 100%)',
-                  backdropFilter: 'blur(4px)',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
-                  textTransform: 'none',
-                  '&:hover': {
-                    boxShadow: '0 6px 20px rgba(0, 123, 255, 0.4)',
-                  }
-                }}
-              >
-                View Updates
-              </Button>
-            </Box>
-          </div>
+            <Button 
+              variant="contained" 
+              onClick={navigateToProfile}
+              sx={{ 
+                mt: 1,
+                py: 1,
+                px: 3,
+                background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.3) 0%, rgba(128, 128, 128, 0.2) 100%)',
+                backdropFilter: 'blur(8px)',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                textTransform: 'none',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontWeight: 500,
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.4) 0%, rgba(128, 128, 128, 0.3) 100%)',
+                }
+              }}
+            >
+              View Updates
+            </Button>
+          </Box>
         ) : (
           <div>
-            {/* Render the current step's form */}
             <Box sx={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              backdropFilter: 'blur(8px)',
+              backgroundColor: 'rgba(211, 211, 211, 0.1)',
               borderRadius: '12px',
-              p: 2,
-              mb: 3
+              p: 2.5,
+              mb: 2,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
             }}>
               {getStepContent(activeStep, inquiryData, setInquiryData, selectedPackage?.dateAvailabilities || [])}
             </Box>
             
-            {/* Navigation buttons */}
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ 
-                  mr: 1,
-                  color: 'rgba(0, 0, 0, 0.6)',
+                  color: 'rgba(255, 255, 255, 0.7)',
                   borderRadius: '8px',
                   textTransform: 'none',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(4px)',
+                  backgroundColor: activeStep === 0 ? 'rgba(128, 128, 128, 0.05)' : 'rgba(128, 128, 128, 0.1)',
                   '&:hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    backgroundColor: 'rgba(128, 128, 128, 0.2)',
+                  },
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.3)',
                   }
                 }}
               >
@@ -350,13 +308,16 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
                 variant="contained"
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
                 sx={{ 
-                  background: 'linear-gradient(135deg, rgba(0, 123, 255, 0.9) 0%, rgba(0, 123, 255, 0.7) 100%)',
-                  backdropFilter: 'blur(4px)',
+                  background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.3) 0%, rgba(128, 128, 128, 0.2) 100%)',
+                  backdropFilter: 'blur(8px)',
                   borderRadius: '8px',
-                  boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   textTransform: 'none',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontWeight: 500,
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
                   '&:hover': {
-                    boxShadow: '0 6px 20px rgba(0, 123, 255, 0.4)',
+                    background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.4) 0%, rgba(128, 128, 128, 0.3) 100%)',
                   }
                 }}
               >
