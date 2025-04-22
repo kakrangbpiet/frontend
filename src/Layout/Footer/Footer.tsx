@@ -7,6 +7,7 @@ import { isAuthenticated, logout } from '../../redux/slices/login/authSlice';
 import { Container } from '@mui/material';
 import PasswordlessLoginForm from '../../components/PasswordlessLoginForm';
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 
 const Footer: React.FC<FooterProps> = ({
@@ -19,7 +20,7 @@ const Footer: React.FC<FooterProps> = ({
   const auth = useSelector(isAuthenticated);
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
+  const navigate = useNavigate();
   // Handle window resize for responsiveness
   useEffect(() => {
     const handleResize = () => {
@@ -46,13 +47,13 @@ const Footer: React.FC<FooterProps> = ({
 
   const footerStyle: React.CSSProperties = {
     padding: isMobile ? '24px 16px' : '32px 40px',
-    background: variant === 'light' 
+    background: variant === 'light'
       ? 'rgba(248, 249, 250, 0.8)'
       : 'rgba(18, 18, 18, 0.85)',
     backdropFilter: 'blur(10px)',
     WebkitBackdropFilter: 'blur(10px)',
     borderTop: `1px solid ${variant === 'light' ? 'rgba(233, 236, 239, 0.6)' : 'rgba(55, 65, 81, 0.6)'}`,
-    boxShadow: variant === 'light' 
+    boxShadow: variant === 'light'
       ? '0 -10px 30px rgba(0, 0, 0, 0.05)'
       : '0 -10px 30px rgba(0, 0, 0, 0.2)',
     color: variant === 'light' ? '#495057' : '#e5e7eb',
@@ -60,7 +61,7 @@ const Footer: React.FC<FooterProps> = ({
     width: '100%',
     boxSizing: 'border-box',
   };
-  
+
 
   const containerStyle = {
     maxWidth: '100%',
@@ -85,7 +86,7 @@ const Footer: React.FC<FooterProps> = ({
     fontSize: '22px',
     fontWeight: 'bold',
     letterSpacing: '0.8px',
-    background: variant === 'light' 
+    background: variant === 'light'
       ? 'linear-gradient(135deg, #4a6cf7 0%, #24bddf 100%)'
       : 'linear-gradient(135deg, #6e8ffb 0%, #42d3f8 100%)',
     WebkitBackgroundClip: 'text',
@@ -118,7 +119,7 @@ const Footer: React.FC<FooterProps> = ({
     fontWeight: 500,
     borderRadius: '8px',
     transition: 'all 0.3s ease',
-    background: variant === 'light' 
+    background: variant === 'light'
       ? 'rgba(74, 108, 247, 0.1)'
       : 'rgba(110, 143, 251, 0.2)',
     textTransform: 'none' as const,
@@ -179,12 +180,27 @@ const Footer: React.FC<FooterProps> = ({
           <div style={topSectionStyle}>
             <div style={logoStyle}>{companyName}</div>
             <nav style={navStyle}>
-              <a href="/about-us" style={linkStyle}>About</a>
-              <a href="/contact" style={linkStyle}>Contact</a>
-              <a href="/privacy" style={linkStyle}>Privacy Policy</a>
+              <div
+                onClick={() => navigate('/about-us')}
+                style={{ ...linkStyle, cursor: 'pointer' }}
+              >
+                About
+              </div>
+              <div
+                onClick={() => navigate('/contact')}
+                style={{ ...linkStyle, cursor: 'pointer' }}
+              >
+                Contact
+              </div>
+              <div
+                onClick={() => navigate('/privacy')}
+                style={{ ...linkStyle, cursor: 'pointer' }}
+              >
+                Privacy Policy
+              </div>
               {!auth ? (
-                <Button 
-                  style={buttonStyle} 
+                <Button
+                  style={buttonStyle}
                   onClick={handleClickOpen}
                   disableRipple
                 >
@@ -202,32 +218,32 @@ const Footer: React.FC<FooterProps> = ({
             </nav>
           </div>
 
-  {/*Icons instead of FB and oterh ,,,, size can be changed */}
-        {showSocials && (
-<div className="flex justify-center items-center space-x-20">
-    <a href="https://facebook.com" aria-label="Facebook" className="text-white/70 hover:text-white transition">
-      <Facebook size={28} />
-    </a>
-    <a href="https://twitter.com" aria-label="Twitter" className="text-white/70 hover:text-white transition">
-      <Twitter size={28} />
-    </a>
-    <a href="https://instagram.com" aria-label="Instagram" className="text-white/70 hover:text-white transition">
-      <Instagram size={28} />
-    </a>
-    <a href="https://linkedin.com" aria-label="LinkedIn" className="text-white/70 hover:text-white transition">
-      <Linkedin size={28} />
-    </a>
-  </div>
+          {/*Icons instead of FB and oterh ,,,, size can be changed */}
+          {showSocials && (
+            <div className="flex justify-center items-center space-x-20">
+              <a href="https://facebook.com" target='_blank' aria-label="Facebook" className="text-white/70 hover:text-white transition">
+                <Facebook size={24} />
+              </a>
+              <a href="https://twitter.com" target='_blank' aria-label="Twitter" className="text-white/70 hover:text-white transition">
+                <Twitter size={24} />
+              </a>
+              <a href="https://instagram.com" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
+                <Instagram size={24} />
+              </a>
+              <a href="https://linkedin.com" target='_blank' aria-label="LinkedIn" className="text-white/70 hover:text-white transition">
+                <Linkedin size={24} />
+              </a>
+            </div>
 
           )}
-          
+
           <div style={copyrightStyle}>
             © {year} {companyName}. All rights reserved.
           </div>
         </div>
 
         <Dialog open={open} onClose={handleClose}>
-          <PasswordlessLoginForm onVerified={handleClose}/>
+          <PasswordlessLoginForm onVerified={handleClose} />
         </Dialog>
       </footer>
     </Container>

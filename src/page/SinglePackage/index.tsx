@@ -29,7 +29,7 @@ const SingleTravelPackageDetails = () => {
   const selectedTravelPackage = useSelector(useSelectedTravelPackage(travelPackageId)) as ITravelPackage | undefined;
   useEffect(() => {
     dispatch(fetchTravelItemVideosApi({ itemId: travelPackageId }));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     //mock

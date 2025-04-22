@@ -1,3 +1,6 @@
+import { VideoHeroContainer } from "../../Layout";
+import VideoHero from "../HomePage/VideoHero";
+
 // bgRenderer.tsx
 export const MediaBackground = ({ video }: { video: { base64Data: any } }) => {
   if (!video?.base64Data) return null;
@@ -7,19 +10,12 @@ export const MediaBackground = ({ video }: { video: { base64Data: any } }) => {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="w-full h-full object-cover"
-      >
-        <source
-          src={videoSrc}
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
-      </video>
+      <VideoHeroContainer>
+          <VideoHero
+            videoSrc={videoSrc}
+            title={"video"}
+            />
+            </VideoHeroContainer>
     </div>
   );
 };

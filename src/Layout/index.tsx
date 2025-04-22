@@ -33,7 +33,7 @@ const heroContent = [
   }
 ];
 
-const VideoHeroContainer = styled.div`
+export const VideoHeroContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -49,7 +49,6 @@ const MainContent = styled.main<{
 }>`
   flex: 1;
     position: relative;
-  padding-top: 100px;
   position: relative;
   z-index: 1; // Ensure content appears above the video
 `;
