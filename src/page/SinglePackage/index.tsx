@@ -323,12 +323,9 @@ console.log(videos)
               )}
             </div>
 
-            <div className="hidden lg:block lg:w-1/4">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-xl sticky top-24 max-h-[80vh] overflow-auto">
-                <h3 className="text-xl font-semibold mb-4 text-emerald-300">Book This Trip</h3>
+  
                 <Registration packageId={travelPackageId || ''} packageTitle={title} />
-              </div>
-            </div>
+ 
           </div>
 
           <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20 shadow-xl">

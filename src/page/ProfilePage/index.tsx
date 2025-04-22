@@ -92,14 +92,16 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10 bg-white bg-opacity-70 p-6 rounded-lg">
+        <div className="text-center mb-10 backdrop-blur-sm bg-gray-200/30 p-6 rounded-lg shadow-md">
           <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
             My Profile
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-700">
             Manage your account and travel inquiries
           </p>
         </div>
+        
+        <div className="backdrop-blur-sm bg-gray-200/20 p-6 rounded-lg shadow-md mb-6">
           <UserDetails
             shouldShowRegister={shouldShowRegister}
             userData={userData}
@@ -107,12 +109,14 @@ const ProfilePage = () => {
             isRegister={true}
             handleRegister={handleRegister}
           />
-        {!shouldShowRegister &&
-          <div className="bg-white bg-opacity-80 shadow overflow-hidden sm:rounded-lg p-6">
+        </div>
+        
+        {!shouldShowRegister && (
+          <div className="backdrop-blur-sm bg-gray-200/20 shadow-md overflow-hidden sm:rounded-lg p-6">
             <div className="flex flex-col sm:flex-row justify-between items-center">
               <div className="mb-4 sm:mb-0">
                 <h3 className="text-lg font-medium text-gray-900">Travel Inquiries</h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-700">
                   View and manage your travel requests
                 </p>
               </div>
@@ -125,7 +129,7 @@ const ProfilePage = () => {
               </button>
             </div>
           </div>
-        }
+        )}
       </div>
     </div>
   );

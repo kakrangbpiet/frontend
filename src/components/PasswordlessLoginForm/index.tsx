@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   FormHelperText,
@@ -8,51 +8,76 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
-  TextField,
+  Typography,
+  Box,
+  Divider,
+  Container,
 } from '@mui/material';
+
 import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
-import { authLoading, isAuthenticated, SelectConactVerified, SelectContact, selectTrxId } from '../../redux/slices/login/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { 
+  authLoading, 
+  isAuthenticated, 
+  SelectConactVerified, 
+  SelectContact, 
+  selectTrxId 
+} from '../../redux/slices/login/authSlice';
+
+import GoogleIcon from '@mui/icons-material/Google';
+import AppleIcon from '@mui/icons-material/Apple';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 interface LoginProps {
   onVerified?: (phoneNumber: string) => void;
 }
 
-
-
-
 const PasswordlessLoginForm: React.FC<LoginProps> = ({ onVerified }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  
+  // Redux state
   const isAuthLoading = useSelector(authLoading);
   const trxId = useSelector(selectTrxId);
   const isUserAuthenticated = useSelector(isAuthenticated);
   const isContactVerified = useSelector(SelectConactVerified);
-  const [error, setError] = useState<string | null>(null);
-const navigate=useNavigate()
-//   const [contactVerified, setContactVerified] = useState(isContactVerified);
-
   const verifiedContactState = useSelector(SelectContact);
+  
+  // Local state
   const [verifiedContact, setVerifiedContact] = useState<string>(verifiedContactState);
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [otp, setOtp] = useState<string>('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
   useEffect(() => {
     if (isContactVerified) {
       navigate('/profile');
-      onVerified(verifiedContact);
-
+      onVerified && onVerified(verifiedContact);
     }
-  }, [isContactVerified, navigate]);
+  }, [isContactVerified, navigate, verifiedContact, onVerified]);
+
   useEffect(() => {
     if (isUserAuthenticated) {
-      navigate("/profile")
-      onVerified(verifiedContact);
-    //   setContactVerified(true);
+      navigate("/profile");
+      onVerified && onVerified(verifiedContact);
     }
-  }, [isUserAuthenticated, verifiedContactState]);
+  }, [isUserAuthenticated, verifiedContact, navigate, onVerified]);
 
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [otp, setOtp] = useState<string>('');
-  const [otpSent, setOtpSent] = useState(false);
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (resendDisabled && resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (resendTimer === 0) {
+      setResendDisabled(false);
+    }
+    return () => clearInterval(interval);
+  }, [resendDisabled, resendTimer]);
 
   const handleSendOtp = async () => {
     try {
@@ -64,13 +89,30 @@ const navigate=useNavigate()
       await dispatch(registerNumberDispatcher(phoneNumber)).unwrap();
       setVerifiedContact(phoneNumber);
       setOtpSent(true);
+      // Set resend timer
+      setResendDisabled(true);
+      setResendTimer(30);
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
       setError('Failed to send OTP');
     }
   };
 
+  // Handle resend OTP
+  const handleResendOtp = async () => {
+    if (resendDisabled) return;
+    
+    try {
+      await dispatch(registerNumberDispatcher(phoneNumber)).unwrap();
+      setResendDisabled(true);
+      setResendTimer(30);
+    } catch (error) {
+      console.log(error);
+      setError('Failed to resend OTP');
+    }
+  };
+
+  // Handle OTP verification
   const handleVerifyOtp = async () => {
     try {
       if (!otp) {
@@ -86,117 +128,269 @@ const navigate=useNavigate()
           phoneNumber,
         })
       ).unwrap();
-      onVerified(verifiedContact);
-
+      onVerified && onVerified(verifiedContact);
     } catch (error) {
       setError('Failed to verify OTP');
     }
   };
 
+  const handleGoogleSignIn = () => {
+    console.log("Google sign-in clicked");
+  };
+
+  const handleAppleSignIn = () => {
+    console.log("Apple sign-in clicked");
+  };
+
+  const handleEmailSignIn = () => {
+    console.log("Email sign-in clicked");
+  };
 
   return (
-    <div>
-      <form noValidate>
-        <Grid container spacing={1}>
-          {!isContactVerified && (
-            <Grid size={{xs:12}} >
-              <Stack spacing={1}>
-                <InputLabel htmlFor="phone-number">Phone Number</InputLabel>
-                <OutlinedInput
-                  id="phone-number"
-                  type="tel"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="Enter phone number"
-                  fullWidth
-                  error={!!error && !otpSent}
-                />
-                {error && !otpSent && <FormHelperText error>{error}</FormHelperText>}
-              </Stack>
-            </Grid>
-          )}
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          mt: 4,
+          mb: 4,
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: '#f7f7f7',
+          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
+          width: '100%',
+        }}
+      >
+        <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+         Login to Your Account
+        </Typography>
+        
+        <form noValidate>
+          <Grid container spacing={3}>
+            {!isContactVerified && (
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  {!otpSent ? (
+                    <>
+                      <InputLabel htmlFor="phone-number" sx={{ fontWeight: 'medium' }}>
+                        Phone Number
+                      </InputLabel>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <OutlinedInput
+                          id="phone-number"
+                          type="tel"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          placeholder="Enter phone number"
+                          fullWidth
+                          error={!!error && !otpSent}
+                          startAdornment={<PhoneIcon sx={{ color: 'text.secondary', mr: 1 }} />}
+                          sx={{
+                            borderRadius: 2,
+                            backgroundColor: 'white',
+                            '&:hover': { backgroundColor: 'white' },
+                          }}
+                        />
+                        <Button
+                          disableElevation
+                          size="large"
+                          onClick={handleSendOtp}
+                          variant="contained"
+                          disabled={isAuthLoading}
+                          sx={{
+                            borderRadius: 2,
+                            py: 1.5,
+                            px: 3,
+                            backgroundColor: 'black',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            '&:hover': {
+                              backgroundColor: '#333',
+                            },
+                          }}
+                        >
+                          SEND OTP
+                        </Button>
+                      </Box>
+                      {error && !otpSent && (
+                        <FormHelperText error sx={{ ml: 1 }}>
+                          {error}
+                        </FormHelperText>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <InputLabel htmlFor="otp" sx={{ fontWeight: 'medium' }}>
+                        Enter OTP sent to {phoneNumber}
+                      </InputLabel>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <OutlinedInput
+                          id="otp"
+                          type="text"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
+                          placeholder="Enter 6-digit OTP"
+                          fullWidth
+                          error={!!error && otpSent}
+                          sx={{
+                            borderRadius: 2,
+                            backgroundColor: 'white',
+                            '&:hover': { backgroundColor: 'white' },
+                            letterSpacing: '0.5rem',
+                            textAlign: 'center'
+                          }}
+                        />
+                        <Button
+                          disableElevation
+                          size="large"
+                          onClick={handleVerifyOtp}
+                          variant="contained"
+                          disabled={isAuthLoading}
+                          sx={{
+                            borderRadius: 2,
+                            py: 1.5,
+                            px: 3,
+                            backgroundColor: 'black',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            '&:hover': {
+                              backgroundColor: '#333',
+                            },
+                          }}
+                        >
+                          VERIFY OTP
+                        </Button>
+                      </Box>
+                      {error && otpSent && (
+                        <FormHelperText error sx={{ ml: 1 }}>
+                          {error}
+                        </FormHelperText>
+                      )}
+                      <Box sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center',
+                        mt: 2
+                      }}>
+                        <Button
+                          variant="text"
+                          size="small"
+                          onClick={() => setOtpSent(false)}
+                          sx={{ 
+                            color: 'primary.main',
+                            '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' }
+                          }}
+                        >
+                          Change number?
+                        </Button>
+                        <Button
+                          variant="text"
+                          size="small"
+                          onClick={handleResendOtp}
+                          disabled={resendDisabled}
+                          sx={{ 
+                            color: resendDisabled ? 'text.disabled' : 'primary.main',
+                            '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' }
+                          }}
+                        >
+                          {resendDisabled ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
+                        </Button>
+                      </Box>
+                    </>
+                  )}
+                </Stack>
+              </Grid>
+            )}
 
-          {otpSent && !isContactVerified && (
-            <Grid size={{xs:12}} >
-              <Stack spacing={1}>
-                <InputLabel htmlFor="otp">OTP</InputLabel>
-                <OutlinedInput
-                  id="otp"
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  placeholder="Enter OTP"
-                  fullWidth
-                  error={!!error && otpSent}
-                />
-                {error && otpSent && <FormHelperText error>{error}</FormHelperText>}
-              </Stack>
-            </Grid>
-          )}
-
-          {/* {!isUserAuthenticated && isContactVerified && (
-            <Grid item xs={12}>
-              {openMap && <ChooseLocation setAddress={handleAddressChange} open={openMap} handleClose={toggleMapInfo} />}
-
-              <Box
-                className="relative flex items-center w-full h-12 rounded-lg border border-black focus-within:shadow-lg overflow-hidden"
-                onClick={toggleMapInfo}
-              >
-                {formData.address && typeof formData.address === 'string' ? (
-                  <Typography variant="body2" className="flex overflow-hidden">
-                    {formData.address}
-                  </Typography>
-                ) : (
-                  <Box className="grid place-items-center h-full w-16">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#5f6368">
-                      <path d="M0 0h24v24H0z" fill="none" />
-                      <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
-                    </svg>
+            {!otpSent && (
+              <>
+                <Grid item xs={12}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
+                    <Divider sx={{ flexGrow: 1 }} />
+                    <Typography variant="body2" sx={{ mx: 2, color: 'text.secondary' }}>
+                      OR CONTINUE WITH
+                    </Typography>
+                    <Divider sx={{ flexGrow: 1 }} />
                   </Box>
-                )}
-              </Box>
-            </Grid>
-          )} */}
+                </Grid>
 
-          <Grid size={{xs:12}} >
-            {!isContactVerified ? (
-              !otpSent ? (
-                <Button
-                  disableElevation
-                  fullWidth
-                  size="large"
-                  onClick={handleSendOtp}
-                  variant="contained"
-                  color="primary"
-                  disabled={isAuthLoading}
-                >
-                  Send OTP
-                </Button>
-              ) : (
-                <Button
-                  disableElevation
-                  fullWidth
-                  size="large"
-                  onClick={handleVerifyOtp}
-                  variant="contained"
-                  color="primary"
-                  disabled={isAuthLoading}
-                >
-                  Verify OTP
-                </Button>
-              )
-            ) : (
-                <>
-                <TextField>
+                <Grid item xs={12}>
+                  <Stack spacing={2}>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<GoogleIcon />}
+                      onClick={handleGoogleSignIn}
+                      sx={{
+                        borderRadius: 2,
+                        py: 1.5,
+                        borderColor: '#ddd',
+                        color: '#333',
+                        backgroundColor: 'white',
+                        '&:hover': {
+                          backgroundColor: '#f5f5f5',
+                          borderColor: '#ccc',
+                        },
+                      }}
+                    >
+                      Continue with Google
+                    </Button>
 
-                </TextField>
-              
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<AppleIcon />}
+                      onClick={handleAppleSignIn}
+                      sx={{
+                        borderRadius: 2,
+                        py: 1.5,
+                        borderColor: '#ddd',
+                        color: '#333',
+                        backgroundColor: 'white',
+                        '&:hover': {
+                          backgroundColor: '#f5f5f5',
+                          borderColor: '#ccc',
+                        },
+                      }}
+                    >
+                      Continue with Apple
+                    </Button>
+
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<EmailIcon />}
+                      onClick={handleEmailSignIn}
+                      sx={{
+                        borderRadius: 2,
+                        py: 1.5,
+                        borderColor: '#ddd',
+                        color: '#333',
+                        backgroundColor: 'white',
+                        '&:hover': {
+                          backgroundColor: '#f5f5f5',
+                          borderColor: '#ccc',
+                        },
+                      }}
+                    >
+                      Continue with Email
+                    </Button>
+                  </Stack>
+                </Grid>
               </>
             )}
           </Grid>
-        </Grid>
-      </form>
-    </div>
+        </form>
+
+        <Typography 
+          variant="body2" 
+          align="center" 
+          sx={{ mt: 3, color: 'text.secondary' }}
+        >
+          By continuing, you agree to our Terms of Service and Privacy Policy
+        </Typography>
+      </Box>
+    </Container>
   );
 };
 
