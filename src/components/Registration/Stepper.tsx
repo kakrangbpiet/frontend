@@ -157,24 +157,27 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
   };
 
   return (
-    <Container maxWidth="xl" sx={{ width: '92%' }}>
+    <Container maxWidth="xl" sx={{ width: '98%' }}>
       <Paper 
         elevation={0} 
         sx={{ 
-          mt: 4, 
+          mt: 2, 
           mb: 4, 
-          p: 3,
-          backdropFilter: 'blur(12px)',
-          backgroundColor: 'rgba(128, 128, 128, 0.1)', // Gray with high transparency
-          borderRadius: '16px',
-          border: '1px solid rgba(211, 211, 211, 0.2)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+          p: 4,
+          height: 'auto',
+          minHeight: '600px',
+          backdropFilter: 'blur(16px)',
+          backgroundColor: 'rgba(16, 16, 22, 0.63)', 
+          borderRadius: '20px',
+          border: '1px solid rgba(180, 180, 190, 0.6)',
+          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
           overflow: 'hidden',
           position: 'relative',
           transition: 'all 0.3s ease',
           '&:hover': {
-            backdropFilter: 'blur(15px)',
-            backgroundColor: 'rgba(128, 128, 128, 0.15)',
+            backdropFilter: 'blur(20px)',
+            backgroundColor: 'rgba(45, 46, 41, 0.9)',
+            boxShadow: '0 15px 50px rgba(0, 0, 0, 0.25)',
           },
           '&::before': {
             content: '""',
@@ -184,19 +187,20 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
             right: 0,
             bottom: 0,
             zIndex: -1,
-            background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.2) 0%, rgba(128, 128, 128, 0.05) 100%)',
-            borderRadius: '16px',
+            background: 'linear-gradient(135deg, rgba(230, 230, 250, 0.5) 0%, rgba(200, 200, 240, 0.4) 100%)',
+            borderRadius: '20px',
           }
         }}
       >
         <Typography 
-          variant="h5" 
+          variant="h4"
           align="center" 
           sx={{
-            fontWeight: 600,
-            color: 'rgba(255, 255, 255, 0.9)',
-            textShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-            mb: 2
+            fontWeight: 700,
+            color: 'rgba(30, 30, 70, 0.95)', 
+            textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)',
+            mb: 4, 
+            letterSpacing: '1px'
           }}
         >
           Travel Inquiry Form
@@ -206,19 +210,30 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
           activeStep={activeStep} 
           alternativeLabel
           sx={{
-            mb: 3,
+            mb: 5,
             '& .MuiStepLabel-root .Mui-completed': {
-              color: 'rgba(255, 255, 255, 0.8)',
+              color: 'rgba(20, 80, 160, 0.95)', 
             },
             '& .MuiStepLabel-root .Mui-active': {
-              color: 'rgba(255, 255, 255, 0.9)',
+              color: 'rgba(10, 60, 140, 1)', 
             },
             '& .MuiStepLabel-label': {
-              mt: 1,
-              color: 'rgba(255, 255, 255, 0.7)',
+              mt: 1.5,
+              color: 'rgba(20, 20, 50, 0.95)',
+              fontWeight: 700, 
+              fontSize: '1.1rem',
             },
             '& .MuiStepConnector-line': {
-              borderColor: 'rgba(255, 255, 255, 0.2)',
+              borderColor: 'rgba(60, 60, 100, 0.7)',
+              borderWidth: '2px',
+            },
+            '& .MuiStepIcon-root': {
+              fontSize: '2rem',
+              filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))', 
+            },
+            '& .MuiStepIcon-text': {
+              fill: '#ffffff', 
+              fontWeight: 'bold',
             }
           }}
         >
@@ -232,16 +247,26 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         {activeStep === inquirySteps.length ? (
           <Box sx={{ 
             textAlign: 'center',
-            p: 3,
-            backdropFilter: 'blur(8px)',
-            backgroundColor: 'rgba(211, 211, 211, 0.1)',
-            borderRadius: '12px',
+            p: 5,
+            backdropFilter: 'blur(12px)',
+            backgroundColor: 'rgba(230, 230, 250, 0.7)', // Lighter background for success message
+            borderRadius: '16px',
+            border: '1px solid rgba(180, 180, 190, 0.6)',
+            boxShadow: 'inset 0 2px 10px rgba(255, 255, 255, 0.3)',
+            height: '300px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
             <Typography 
-              variant="h6" 
+              variant="h5"
               sx={{ 
-                color: 'rgba(255, 255, 255, 0.9)',
-                mb: 2
+                color: 'rgba(20, 20, 60, 0.95)', // Much darker text for visibility
+                mb: 4,
+                textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)',
+                fontWeight: 700, // Bolder text
+                letterSpacing: '0.5px',
               }}
             >
               Thank you for your inquiry!
@@ -250,19 +275,23 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
               variant="contained" 
               onClick={navigateToProfile}
               sx={{ 
-                mt: 1,
-                py: 1,
-                px: 3,
-                background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.3) 0%, rgba(128, 128, 128, 0.2) 100%)',
+                mt: 3,
+                py: 1.5,
+                px: 5,
+                background: 'linear-gradient(135deg, rgba(25, 80, 170, 0.95) 0%, rgba(10, 40, 130, 1) 100%)', // Darker blue button
                 backdropFilter: 'blur(8px)',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+                boxShadow: '0 6px 15px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(50, 90, 200, 0.4)',
                 textTransform: 'none',
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontWeight: 500,
-                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: '#ffffff', // Pure white text for maximum contrast
+                fontWeight: 700, // Bolder text
+                letterSpacing: '0.5px',
+                fontSize: '1.1rem',
+                border: '1px solid rgba(60, 100, 200, 0.7)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.4) 0%, rgba(128, 128, 128, 0.3) 100%)',
+                  background: 'linear-gradient(135deg, rgba(35, 90, 180, 1) 0%, rgba(20, 50, 150, 1) 100%)',
+                  boxShadow: '0 8px 20px rgba(0, 0, 0, 0.35), 0 3px 8px rgba(50, 90, 200, 0.5)',
+                  transform: 'translateY(-2px)',
                 }
               }}
             >
@@ -272,33 +301,47 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
         ) : (
           <div>
             <Box sx={{ 
-              backdropFilter: 'blur(8px)',
-              backgroundColor: 'rgba(211, 211, 211, 0.1)',
-              borderRadius: '12px',
-              p: 2.5,
-              mb: 2,
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(12px)',
+              backgroundColor: 'rgba(240, 240, 255, 0.7)', // Lighter background for form content
+              borderRadius: '16px',
+              p: 4,
+              mb: 4,
+              minHeight: '320px',
+              border: '1px solid rgba(180, 180, 190, 0.6)',
+              boxShadow: 'inset 0 1px 8px rgba(255, 255, 255, 0.3)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
             }}>
               {getStepContent(activeStep, inquiryData, setInquiryData, selectedPackage?.dateAvailabilities || [])}
             </Box>
             
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, px: 2 }}>
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ 
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  borderRadius: '8px',
+                  color: 'rgba(20, 20, 60, 0.95)', // Much darker text for visibility
+                  borderRadius: '10px',
                   textTransform: 'none',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(70, 70, 100, 0.7)', // Darker border
                   backdropFilter: 'blur(4px)',
-                  backgroundColor: activeStep === 0 ? 'rgba(128, 128, 128, 0.05)' : 'rgba(128, 128, 128, 0.1)',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1rem',
+                  backgroundColor: activeStep === 0 ? 'rgba(200, 200, 220, 0.5)' : 'rgba(210, 210, 230, 0.7)',
                   '&:hover': {
-                    backgroundColor: 'rgba(128, 128, 128, 0.2)',
+                    backgroundColor: 'rgba(190, 190, 210, 0.85)',
+                    borderColor: 'rgba(50, 50, 90, 0.8)',
+                    transform: 'translateY(-2px)',
                   },
                   '&.Mui-disabled': {
-                    color: 'rgba(255, 255, 255, 0.3)',
-                  }
+                    color: 'rgba(80, 80, 110, 0.5)', // Darker disabled text
+                    border: '1px solid rgba(100, 100, 130, 0.5)',
+                  },
+                  letterSpacing: '0.5px',
+                  fontWeight: 700, // Bolder text
+                  transition: 'all 0.3s ease',
                 }}
               >
                 Back
@@ -308,17 +351,24 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
                 variant="contained"
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
                 sx={{ 
-                  background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.3) 0%, rgba(128, 128, 128, 0.2) 100%)',
+                  background: 'linear-gradient(135deg, rgba(25, 80, 170, 0.95) 0%, rgba(10, 40, 130, 1) 100%)', // Darker blue button
                   backdropFilter: 'blur(8px)',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  borderRadius: '10px',
+                  boxShadow: '0 6px 15px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(50, 90, 200, 0.4)',
                   textTransform: 'none',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  fontWeight: 500,
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: '#ffffff', // Pure white text for maximum contrast
+                  fontWeight: 700, // Bolder text
+                  letterSpacing: '0.5px',
+                  border: '1px solid rgba(60, 100, 200, 0.7)',
+                  px: 4.5,
+                  py: 1.5,
+                  fontSize: '1rem',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, rgba(211, 211, 211, 0.4) 0%, rgba(128, 128, 128, 0.3) 100%)',
-                  }
+                    background: 'linear-gradient(135deg, rgba(35, 90, 180, 1) 0%, rgba(20, 50, 150, 1) 100%)',
+                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.35), 0 3px 8px rgba(50, 90, 200, 0.5)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
                 }}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Next'}

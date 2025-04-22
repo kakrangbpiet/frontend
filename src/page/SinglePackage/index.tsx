@@ -393,21 +393,14 @@ console.log(videos)
 
       {/* Mobile Form Modal */}
       {showMobileForm && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold text-emerald-300">Book This Trip</h3>
+        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-70 flex items-center justify-center p-4 backdrop-blur-sm">
               <button
                 onClick={toggleMobileForm}
                 className="text-white hover:text-gray-300 bg-black/20 hover:bg-black/40 rounded-full p-2 transition-all duration-300"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+
               </button>
-            </div>
             <Registration packageId={travelPackageId || ''} packageTitle={title} />
-          </div>
         </div>
       )}
 
