@@ -79,7 +79,7 @@ const Layout = () => {
 
   useEffect(() => {
     slectSidebarItemms();
-  }, [selectedUserType]);
+  }, [selectedUserType,auth,selectedUserType]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);

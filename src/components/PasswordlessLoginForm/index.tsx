@@ -166,7 +166,7 @@ const PasswordlessLoginForm: React.FC<LoginProps> = ({ onVerified }) => {
         <form noValidate>
           <Grid container spacing={3}>
             {!isContactVerified && (
-              <Grid item xs={12}>
+               <Grid size={{xs:12}}>
                 <Stack spacing={1}>
                   {!otpSent ? (
                     <>
@@ -304,7 +304,7 @@ const PasswordlessLoginForm: React.FC<LoginProps> = ({ onVerified }) => {
 
             {!otpSent && (
               <>
-                <Grid item xs={12}>
+                <Grid size={{xs:12}}>
                   <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
                     <Divider sx={{ flexGrow: 1 }} />
                     <Typography variant="body2" sx={{ mx: 2, color: 'text.secondary' }}>
@@ -314,7 +314,7 @@ const PasswordlessLoginForm: React.FC<LoginProps> = ({ onVerified }) => {
                   </Box>
                 </Grid>
 
-                <Grid item xs={12}>
+                 <Grid size={{xs:12}}>
                   <Stack spacing={2}>
                     <Button
                       fullWidth
