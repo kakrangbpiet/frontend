@@ -62,7 +62,7 @@ const SingleTravelPackageDetails = () => {
   const price = packageData?.price ?? 0;
   const originalPrice = packageData?.originalPrice;
   const maxTravelers = packageData?.maxTravelers ?? 0;
-console.log(videos)
+
   const navigateToHome = () => {
     navigate("/");
   };
@@ -140,45 +140,45 @@ console.log(videos)
   return (
     <div className="relative z-10">
       <div className="absolute inset-0 overflow-hidden">
-<div className="absolute inset-0 overflow-hidden">
-  {videos.length > 0 &&
-    <MediaBackground video={{ base64Data: videos[0] }} /> 
-}
-</div>
+        <div className="absolute inset-0 overflow-hidden">
+          {videos.length > 0 &&
+            <MediaBackground video={{ base64Data: videos[0] }} /> 
+          }
+        </div>
       </div>
-      <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-24">
-        <div className="max-w-[90%] mx-auto px-4 py-12">
-          <div className="relative rounded-xl overflow-hidden mb-12 shadow-2xl">
+      <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-16 md:pt-24">
+        <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
+          <div className="relative rounded-xl overflow-hidden mb-8 md:mb-12 shadow-2xl">
             <img
               src={`data:image/jpeg;base64,${image}`}
               alt={title}
-              className="w-full h-96 object-cover"
+              className="w-full h-64 md:h-96 object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
-              <div className="p-10 text-white">
-                <h1 className="text-5xl font-bold mb-4 drop-shadow-lg bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
+              <div className="p-4 md:p-10 text-white">
+                <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 drop-shadow-lg bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
                   {title}
                 </h1>
-                <p className="text-xl max-w-3xl drop-shadow-md">
+                <p className="text-lg md:text-xl max-w-3xl drop-shadow-md hidden md:block">
                   {description.length > 120 ? description.substring(0, 120) + '...' : description}
                 </p>
               </div>
             </div>
             <button
               onClick={navigateToHome}
-              className="absolute top-6 left-6 px-5 py-2.5 bg-black/40 hover:bg-black/60 backdrop-filter backdrop-blur-md rounded-lg text-white flex items-center gap-2 border border-white/10 transition-all duration-300 shadow-lg"
+              className="absolute top-4 left-4 md:top-6 md:left-6 px-3 py-1.5 md:px-5 md:py-2.5 bg-black/40 hover:bg-black/60 backdrop-filter backdrop-blur-md rounded-lg text-white flex items-center gap-2 border border-white/10 transition-all duration-300 shadow-lg text-sm md:text-base"
             >
               Back to Home
             </button>
           </div>
 
-          {/* Tabs Navigation */}
-          <div className="flex mb-8 overflow-x-auto bg-white/10 backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg">
+          {/* Tabs Navigation - Scrollable on mobile */}
+          <div className="flex mb-6 md:mb-8 overflow-x-auto bg-white/10 backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg">
             {['overview', 'photos', 'highlights', 'dates'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 text-white font-medium rounded-lg transition flex-none ${activeTab === tab
+                className={`px-4 py-2 md:px-6 md:py-3 text-white font-medium rounded-lg transition flex-none text-sm md:text-base whitespace-nowrap ${activeTab === tab
                     ? 'bg-white/20 shadow-md border border-white/30'
                     : 'hover:bg-white/10 border border-transparent'
                   }`}
@@ -188,11 +188,11 @@ console.log(videos)
             ))}
           </div>
 
-          <div className="mb-12 flex flex-col lg:flex-row">
+          <div className="mb-8 md:mb-12 flex flex-col lg:flex-row">
             <div className="w-full lg:w-3/4 lg:pr-8">
               {activeTab === 'overview' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-2xl font-semibold text-emerald-300 mb-4">
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
                     About {title}
                   </h2>
                   <p className="mb-6">{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
@@ -215,16 +215,16 @@ console.log(videos)
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-semibold text-emerald-300 mb-4">
+                  <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-4">
                     Activities to Enjoy
                   </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
                     {['River rafting', 'Paragliding', 'Skiing', 'Trekking', 'Mountain biking'].map((activity, index) => (
                       <div
                         key={index}
-                        className="bg-white/10 backdrop-blur-md rounded-lg p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300"
+                        className="bg-white/10 backdrop-blur-md rounded-lg p-2 md:p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300 text-sm md:text-base"
                       >
-                        <span className="block text-sm font-medium">{activity}</span>
+                        <span className="block font-medium">{activity}</span>
                       </div>
                     ))}
                   </div>
@@ -232,9 +232,9 @@ console.log(videos)
               )}
 
               {activeTab === 'photos' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-2xl font-semibold text-emerald-300 mb-6">Photo Gallery</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
                     {images.map((img, index) => (
                       <div
                         key={index}
@@ -243,7 +243,7 @@ console.log(videos)
                         <img
                           src={`data:image/jpeg;base64,${img}`}
                           alt={`${title} - image ${index + 1}`}
-                          className="w-full h-64 object-cover"
+                          className="w-full h-48 md:h-64 object-cover"
                         />
                         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         </div>
@@ -254,59 +254,59 @@ console.log(videos)
               )}
 
               {activeTab === 'highlights' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-2xl font-semibold text-emerald-300 mb-6">Package Highlights</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Package Highlights</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-6 md:mb-8">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
                       <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white">Duration:  Days,  Nights</p>
+                      <p className="text-white text-sm md:text-base">Duration:  Days,  Nights</p>
                     </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
                       <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white">Category: {category}</p>
+                      <p className="text-white text-sm md:text-base">Category: {category}</p>
                     </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
                       <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white">Travel Type: {travelType}</p>
+                      <p className="text-white text-sm md:text-base">Travel Type: {travelType}</p>
                     </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
                       <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white">Location: {location}</p>
+                      <p className="text-white text-sm md:text-base">Location: {location}</p>
                     </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
                       <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white">All-inclusive package</p>
+                      <p className="text-white text-sm md:text-base">All-inclusive package</p>
                     </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-3 rounded-lg transition-all duration-300">
+                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
                       <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white">Professional tour guides</p>
+                      <p className="text-white text-sm md:text-base">Professional tour guides</p>
                     </div>
                   </div>
 
-
-                  {/*To add more space div , rmoveable but would be better if add added to protect from view area */}
-                  <h3 className="text-xl font-semibold text-emerald-300 mb-4">Included Services</h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-white">
+                  <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-3 md:mb-4">
+                    Included Services
+                  </h3>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 text-white text-sm md:text-base">
                     <li className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                       </svg>
                       Accommodation
                     </li>
                     <li className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                       </svg>
                       Daily breakfast and dinner
                     </li>
                     <li className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                       </svg>
                       Transportation
                     </li>
                     <li className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                       </svg>
                       Guided tours
@@ -316,39 +316,40 @@ console.log(videos)
               )}
 
               {activeTab === 'dates' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-2xl font-semibold text-emerald-300 mb-6">Available Dates</h2>
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Available Dates</h2>
                   <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
                 </div>
               )}
             </div>
 
-  
-                <Registration packageId={travelPackageId || ''} packageTitle={title} />
- 
+            {/* Hide travel inquiry form on mobile - only show in desktop */}
+            <div className="hidden lg:block">
+              <Registration packageId={travelPackageId || ''} packageTitle={title} />
+            </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-6 border border-white/20 shadow-xl">
-            <h3 className="text-xl font-semibold mb-3 text-emerald-300">Package Details</h3>
+          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 mb-4 md:mb-6 border border-white/20 shadow-xl">
+            <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-emerald-300">Package Details</h3>
 
-            <div className="flex items-end gap-3 mb-4">
+            <div className="flex items-end gap-2 md:gap-3 mb-3 md:mb-4">
               {originalPrice && (
-                <span className="text-gray-300 line-through">₹{originalPrice.toLocaleString()}</span>
+                <span className="text-gray-300 line-through text-sm md:text-base">₹{originalPrice.toLocaleString()}</span>
               )}
-              <span className="text-3xl font-bold text-emerald-400">₹{price.toLocaleString()}</span>
+              <span className="text-2xl md:text-3xl font-bold text-emerald-400">₹{price.toLocaleString()}</span>
             </div>
 
             {dateAvailabilities.length > 0 && (
-              <div className="mb-4">
-                <p className="text-sm text-gray-300">Next available:</p>
-                <p className="text-white font-medium">
+              <div className="mb-3 md:mb-4">
+                <p className="text-xs md:text-sm text-gray-300">Next available:</p>
+                <p className="text-white font-medium text-sm md:text-base">
                   {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
                 </p>
               </div>
             )}
 
-            <div className="flex items-center mb-6">
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${status === 'active' ? 'bg-emerald-900/70 text-emerald-300 border border-emerald-700' :
+            <div className="flex items-center mb-4 md:mb-6">
+              <div className={`px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium ${status === 'active' ? 'bg-emerald-900/70 text-emerald-300 border border-emerald-700' :
                   status === 'sold-out' ? 'bg-red-900/70 text-red-300 border border-red-700' :
                     'bg-yellow-900/70 text-yellow-300 border border-yellow-700'
                 }`}>
@@ -357,33 +358,33 @@ console.log(videos)
                     'Coming Soon'}
               </div>
               {availableSpots > 0 && (
-                <p className="text-sm ml-3 text-white">
+                <p className="text-xs md:text-sm ml-2 md:ml-3 text-white">
                   {availableSpots} spots left out of {maxTravelers}
                 </p>
               )}
             </div>
           </div>
 
-          <div className="mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+          <div className="mb-8 md:mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
             <div className="flex flex-col md:flex-row items-center">
-              <div className="w-full md:w-1/2 mb-6 md:mb-0 md:pr-8">
-                <h2 className="text-2xl font-semibold mb-4 text-white">Need Help Planning Your Trip?</h2>
-                <p className="text-gray-200 mb-4">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
-                <div className="flex items-center space-x-2 mb-6">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white">Get instant answers</p>
+              <div className="w-full md:w-1/2 mb-4 md:mb-0 md:pr-6 lg:pr-8">
+                <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-white">Need Help Planning Your Trip?</h2>
+                <p className="text-gray-200 mb-3 md:mb-4 text-sm md:text-base">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
+                <div className="flex items-center space-x-2 mb-2 md:mb-6">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white text-sm md:text-base">Get instant answers</p>
                 </div>
-                <div className="flex items-center space-x-2 mb-6">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white">Personalized suggestions</p>
+                <div className="flex items-center space-x-2 mb-2 md:mb-6">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white text-sm md:text-base">Personalized suggestions</p>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white">24/7 virtual assistance</p>
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white text-sm md:text-base">24/7 virtual assistance</p>
                 </div>
               </div>
-              <div className="w-full md:w-1/2 bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 shadow-xl">
-                <h3 className="text-xl font-semibold mb-4 text-emerald-300">Ask Our AI Assistant</h3>
+              <div className="w-full md:w-1/2 bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
+                <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-emerald-300">Ask Our AI Assistant</h3>
                 <AiPromptGenerator />
               </div>
             </div>
@@ -391,25 +392,30 @@ console.log(videos)
         </div>
       </div>
 
-      {/* Mobile Form Modal */}
+      {/* Mobile Form Modal with improved styling */}
       {showMobileForm && (
-        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-70 flex items-center justify-center p-4 backdrop-blur-sm">
-              <button
-                onClick={toggleMobileForm}
-                className="text-white hover:text-gray-300 bg-black/20 hover:bg-black/40 rounded-full p-2 transition-all duration-300"
-              >
-
-              </button>
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center p-2 backdrop-blur-sm">
+          <div className="relative w-full max-w-md max-h-[90vh] overflow-auto rounded-xl">
+            <button
+              onClick={toggleMobileForm}
+              className="absolute top-2 right-2 z-10 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300"
+              aria-label="Close form"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
             <Registration packageId={travelPackageId || ''} packageTitle={title} />
+          </div>
         </div>
       )}
 
-      {/* Mobile Book Now Button */}
+      {/* Mobile Book Now Button - fixed at bottom */}
       {status === 'active' && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent z-30">
           <button
             onClick={toggleMobileForm}
-            className="w-full py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500"
+            className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
           >
             Book Now
           </button>

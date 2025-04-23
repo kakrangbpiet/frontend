@@ -249,7 +249,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
             textAlign: 'center',
             p: 5,
             backdropFilter: 'blur(12px)',
-            backgroundColor: 'rgba(230, 230, 250, 0.7)', // Lighter background for success message
+            backgroundColor: 'rgba(230, 230, 250, 0.7)', //  background for success message
             borderRadius: '16px',
             border: '1px solid rgba(180, 180, 190, 0.6)',
             boxShadow: 'inset 0 2px 10px rgba(255, 255, 255, 0.3)',
@@ -262,7 +262,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
             <Typography 
               variant="h5"
               sx={{ 
-                color: 'rgba(20, 20, 60, 0.95)', // Much darker text for visibility
+                color: 'rgba(20, 20, 60, 0.95)', // darker text for visibility
                 mb: 4,
                 textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)',
                 fontWeight: 700, // Bolder text
@@ -283,7 +283,7 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
                 borderRadius: '10px',
                 boxShadow: '0 6px 15px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(50, 90, 200, 0.4)',
                 textTransform: 'none',
-                color: '#ffffff', // Pure white text for maximum contrast
+                color: '#ffffff', 
                 fontWeight: 700, // Bolder text
                 letterSpacing: '0.5px',
                 fontSize: '1.1rem',
@@ -321,10 +321,10 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ 
-                  color: 'rgba(20, 20, 60, 0.95)', // Much darker text for visibility
+                  color: 'rgba(20, 20, 60, 0.95)', //  dark text for visibility
                   borderRadius: '10px',
                   textTransform: 'none',
-                  border: '1px solid rgba(70, 70, 100, 0.7)', // Darker border
+                  border: '1px solid rgba(70, 70, 100, 0.7)', // arker border
                   backdropFilter: 'blur(4px)',
                   px: 4,
                   py: 1.5,
@@ -356,8 +356,8 @@ function TravelInquiryForm({packageId, packageTitle}: {packageId: string, packag
                   borderRadius: '10px',
                   boxShadow: '0 6px 15px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(50, 90, 200, 0.4)',
                   textTransform: 'none',
-                  color: '#ffffff', // Pure white text for maximum contrast
-                  fontWeight: 700, // Bolder text
+                  color: '#ffffff', 
+                  fontWeight: 700, 
                   letterSpacing: '0.5px',
                   border: '1px solid rgba(60, 100, 200, 0.7)',
                   px: 4.5,
