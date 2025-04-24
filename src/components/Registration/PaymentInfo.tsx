@@ -11,7 +11,7 @@ function PaymentInfo({ stepData, setStepData }) {
   };
 
   return (
-    <Box sx={{ padding: 2, mt: 2 }}>
+    <Box sx={{}}>
       <FormControl fullWidth>
         <InputLabel id="paymentInfo-select-label">Choose Package</InputLabel>
         <Select

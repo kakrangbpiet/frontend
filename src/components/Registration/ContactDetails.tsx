@@ -82,7 +82,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <div className="p-6 backdrop-blur-md bg-white/20 rounded-lg shadow-lg mb-6">
+    <div className="backdrop-blur-md bg-white/20 rounded-lg shadow-lg mb-2">
       
       <div className="space-y-4">
         <div className="relative">

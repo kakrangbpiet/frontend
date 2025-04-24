@@ -65,7 +65,7 @@ function LocationDetails({
   };
 
   return (
-    <Box sx={{ padding: 2, mt: 2 }}>
+    <Box sx={{  }}>
       <TextField
         fullWidth
         placeholder="Choose Current Location"

@@ -202,7 +202,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
         </div>
 
         {activeStep === inquirySteps.length ? (
-          <div className="text-center py-8 bg-gray-800/80 backdrop-blur-md p-6">
+          <div className="text-center py-2 bg-gray-800/80 backdrop-blur-md p-6">
             <h3 className="text-lg font-semibold mb-6 text-white">Thank you for your inquiry!</h3>
             <button 
               onClick={navigateToProfile}
@@ -224,7 +224,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
   )}
 </div>
             
-            <div className="px-5 py-4 flex justify-between">
+            <div className="px-2 py-4 flex justify-between">
               {activeStep > 0 && (
                 <button
                   onClick={handleBack}
