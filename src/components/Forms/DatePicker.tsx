@@ -43,14 +43,14 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
           <CustomDateField
-            label="Start Date"
+            placeholder="Start Date"
             value={startDate}
             onChange={onStartDateChange}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <CustomDateField
-            label="End Date"
+            placeholder="End Date"
             value={endDate}
             onChange={onEndDateChange}
           />
