@@ -1,17 +1,20 @@
 import Button from "@mui/material/Button";
 import { MoreVert as MoreIcon } from "@mui/icons-material";
 import { ITravelPackage } from "../../redux/slices/Travel/TravelSlice";
+import { UserCategory } from "../../Datatypes/Enums/UserEnums";
 
 interface TravelPackageColumnsProps {
   setOpenMenu: (element: HTMLElement) => void;
   setSelectedRowId: (id: string) => void;
   handleViewDetails?: (packageData: ITravelPackage) => void;
+  userType?:UserCategory
 }
 
 const TravelPackageColumns = ({
   setOpenMenu,
   setSelectedRowId,
   handleViewDetails,
+  userType
 }: TravelPackageColumnsProps) => {
   const columns = [
     { field: "id", headerName: "ID", width: 120, editable: false },
@@ -67,20 +70,22 @@ const TravelPackageColumns = ({
               View
             </Button>
           )}
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={(event) => {
-              setOpenMenu(event.currentTarget);
-              setSelectedRowId(params.row.id);
-            }}
-          >
-            <MoreIcon />
-          </Button>
+          {userType === UserCategory.KAKRAN_SUPER_ADMIN && (
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={(event) => {
+                setOpenMenu(event.currentTarget);
+                setSelectedRowId(params.row.id);
+              }}
+            >
+              <MoreIcon />
+            </Button>
+          )}
         </div>
       ),
-    },
+    }
   ];
 
   return columns;

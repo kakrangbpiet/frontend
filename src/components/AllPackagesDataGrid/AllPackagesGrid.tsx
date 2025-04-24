@@ -1,118 +1,119 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Paper, Typography,  Switch,  } from "@mui/material";
-import UserColumns from "./PackageColumn";
-
-
+import { Box, Paper, Typography, Switch, Skeleton } from "@mui/material";
 import { fetchTravelPackagesApi, updateTravelPackageStatus } from "../../redux/slices/Travel/travelApiSlice";
 import { AppDispatch } from "../../redux/store";
 import { selectedTravelPackages, selectedTravelPackagesLoading } from "../../redux/slices/Travel/TravelSlice";
-import LoadingOverlay from "../LoadingOverlay";
-import Datagrid from "../DataGrid/NewDataGrid";
 import SearchBar from "../Searchbar";
 import OptionsMenu from "../OptionMenu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { selectUserType } from "../../redux/slices/login/authSlice";
+import { UserCategory } from "../../Datatypes/Enums/UserEnums";
+import TravelPackages from "../Card/TravelPackageItems.tsx";
 
-export default function PackagesVerification() {
+interface PackagesVerificationProps {
+  currentCategory?: string;
+  currentLocation?: string;
+  currentStatus?: string;
+}
+
+export default function PackagesVerification({
+  currentCategory,
+  currentLocation,
+  currentStatus
+}: PackagesVerificationProps) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [openMenu, setOpenMenu] = useState(null);
   const [selectedRowId, setSelectedRowId] = useState(null);
-  const [toggleCategoryType, setToggleUerType] = useState("active")
+  const [toggleCategoryType, setToggleUerType] = useState(currentStatus || "active");
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
 
-const travelPackages = useSelector(selectedTravelPackages);
+  const userType = useSelector(selectUserType);
+  const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
+
   useEffect(() => {
-    if (toggleCategoryType == "active") {
-      dispatch(fetchTravelPackagesApi({status:"active"}))
-    }
-    else{
-        dispatch(fetchTravelPackagesApi({}))
-    }
-  }, [dispatch, toggleCategoryType]);
+    const params = {
+      status: toggleCategoryType === "active" ? "active" : undefined,
+      category: currentCategory,
+      location: currentLocation,
+      page: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
+    };
+    dispatch(fetchTravelPackagesApi(params));
+  }, [dispatch, toggleCategoryType, paginationModel, currentCategory, currentLocation]);
 
-  // user hospital
-  // let _users = users.map(row => {
-  //   row.currentHospital = row.currentHospital.hospitalName + ", " + row.currentHospital.location
-  //   row.registeredHospital = row.registeredHospital.hospitalName + ", " + row.registeredHospital.location
-  //   return row
-  // })
+  // const handlePaginationModelChange = (newModel) => {
+  //   setPaginationModel(newModel);
+  // };
 
-
-  // Apply filtering only if rows have data
-  const filteredRows = travelPackages.travelPackages.filter(
-    (row) =>
-      row.id &&
-      row.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredPackages = travelPackages.travelPackages.filter(
+    (pkg) =>
+      pkg.id &&
+      pkg.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-
-
   const updateUserStatus = (itemId, status) => {
-      dispatch(updateTravelPackageStatus({itemId, status}));
+    dispatch(updateTravelPackageStatus({ itemId, status }));
   };
 
-
   const toggleStatus = () => {
-    setToggleUerType((prevType) => (prevType === "active" ? "paused" : "active"));
+    const newStatus = toggleCategoryType === "active" ? "paused" : "active";
+    setToggleUerType(newStatus);
+    searchParams.set("status", newStatus);
+    setSearchParams(searchParams);
   }
 
-  const handleViewDetails = (row) => {
-    // Set the dependent information and open the modal
-    navigate(`/package/${row.id}/${row.title}`);
-  }
-
-  const columns = UserColumns({setOpenMenu, setSelectedRowId, handleViewDetails});
+  // const handleViewDetails = (row) => {
+  //   navigate(`/package/${row.id}/${row.title}`);
+  // }
 
   return (
     <>
       <Box>
-        {" "}
-        {/* Apply blur when updating */}
         <Typography variant="h4" fontWeight="bold">
-          My packages
+          {currentCategory ? `${currentCategory} Packages` :
+            currentLocation ? `Packages in ${currentLocation}` :
+              'All Packages'}
         </Typography>
         <Box sx={{ width: "100%" }}>
-          <Paper
-            sx={{
-              mb: 2,
-              overflow: "hidden",
-              borderRadius: 4,
-            }}
-          >
             <Box sx={{ width: "100%", margin: "8px", position: "relative" }}>
-              <Paper sx={{ overflow: "hidden", borderRadius: 4, padding: 2 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
-                  <SearchBar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                  />
-                  <div>
-                    Active
-                    <Switch onClick={toggleStatus} />
-                    All
-                  </div>
-                </Box>
-
-                <LoadingOverlay loading={travelPackagesLoading} />
-                <Datagrid
-                  getRowId={(row) => row.id}
-                  columns={columns}
-                  rows={filteredRows}
+                {userType === UserCategory.KAKRAN_SUPER_ADMIN && (
+                  <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
+                    <SearchBar
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                    />
+                    <div>
+                      Active
+                      <Switch
+                        checked={toggleCategoryType === "active"}
+                        onClick={toggleStatus}
+                      />
+                      All
+                    </div>
+                  </Box>
+                )}
+                
+                <TravelPackages
+                  travelPackages={filteredPackages}
+                  loading={travelPackagesLoading}
                 />
-             
+                
                 <OptionsMenu
-                className={""}
+                  className={""}
                   openMenu={openMenu}
                   setOpenMenu={setOpenMenu}
                   selectedRowId={selectedRowId}
                   updateUserStatus={updateUserStatus}
                 />
-            
-              </Paper>
             </Box>
-          </Paper>
         </Box>
       </Box>
     </>

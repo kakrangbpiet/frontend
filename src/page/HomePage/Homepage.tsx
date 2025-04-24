@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchAllCategories, fetchAllTitles, fetchTravelPackagesApi, fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchAllCategories, fetchAllTitles, fetchTravelPackagesApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
-import { selectCategories, selectedTravelPackages, selectedTravelPackagesLoading, selectTitles, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
+import { selectCategories, selectedTravelPackages, selectedTravelPackagesLoading, selectTitles } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import locationsData from '../../components/Forms/Location.json';
@@ -175,11 +175,6 @@ const HomePage: React.FC = () => {
   const categories = useSelector(selectCategories);
 
   const titles = useSelector(selectTitles);
-
-
-  const loadingByCategory = useSelector(selectedTravelPackagesLoading);
-  const categoryItemsHotDeals = useSelector(selectTravelPackagesByCategory("hotdeals"));
-
   const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
   
@@ -197,34 +192,30 @@ const HomePage: React.FC = () => {
     dispatch(fetchTravelPackagesApi({ status: "active" }))
   }, [dispatch]);
 
-  const handleLoadCategories = async () => {
-    try {
-      dispatch(
-        fetchTravelPackagesByCategoryApi({
-          pageSize: 10,
-          page: 1,
-          category: "hotdeals",
-          status: "active"
-        })
-      );
-      dispatch(
-        fetchTravelPackagesByCategoryApi({
-          pageSize: 10,
-          page: 1,
-          category: "pre-planned-trips",
-          status: "active"
-        })
-      );
-    } catch (error) {
-      console.error("Failed to fetch travel packages:", error);
-    }
-  };
+  // const handleLoadCategories = async () => {
+  //   try {
+  //     dispatch(
+  //       fetchTravelPackagesApi({
+  //         pageSize: 10,
+  //         page: 1,
+  //         category: "hotdeals",
+  //         status: "active"
+  //       })
+  //     );
+  //     dispatch(
+  //       fetchTravelPackagesApi({
+  //         pageSize: 10,
+  //         page: 1,
+  //         category: "pre-planned-trips",
+  //         status: "active"
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to fetch travel packages:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (categoryItemsHotDeals.length === 0) {
-      handleLoadCategories();
-    }
-  }, [dispatch]);
+
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -248,7 +239,7 @@ const HomePage: React.FC = () => {
           results.push({
             type: 'location',
             value: location,
-            label: `Search in ${location.label}`
+            label: `Search in ${location.value}`
           });
         }
       });
@@ -275,16 +266,16 @@ const HomePage: React.FC = () => {
   const handleResultClick = (result: any) => {
     setSearchQuery('');
     setSearchResults([]);
-    console.log(result);
     
     if (result.type === 'category') {
-      navigate(`/type/${result.value}`);
+      navigate(`/packages?category=${encodeURIComponent(result.value)}`);
     } else if (result.type === 'location') {
-      navigate(`/type/location/${result?.value?.label}`);
+      navigate(`/packages?location=${encodeURIComponent(result.value.label)}`);
     } else if (result.type === 'title') {
       navigate(`/package/${result.value.id}/${result.value.title}`);
     }
   };
+  
 
   const handleCustomizedTripClick = () => {
     navigate("/travel-form");
@@ -346,9 +337,9 @@ const HomePage: React.FC = () => {
       </div>
 
       <TravelPackages
-            travelPackages={categoryItemsHotDeals}
-            categoryType="hotdeals"
-            loading={loadingByCategory["hotdeals"] || false}
+            travelPackages={travelPackages.travelPackages}
+            categoryType="new"
+            loading={travelPackagesLoading}
           />
 
 

@@ -24,6 +24,9 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
   const handleNavigate = (id: string, title: string) => {
     navigate(`/package/${id}/${title}`);
   };
+  const handleNavigateAllPackages = () => {
+    navigate(`/packages`);
+  };
 
   const renderStatusChip = (status: ITravelPackage['status']) => {
     const statusColors: Record<ITravelPackage['status'], 'success' | 'default' | 'error' | 'warning'> = {
@@ -129,12 +132,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
           )}
           
           <div className="text-center mt-8">
-            <Link
-              to="/travel-packages"
+            <button
+            onClick={handleNavigateAllPackages}
               className="inline-block px-6 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/20 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             >
               VIEW ALL PACKAGES
-            </Link>
+            </button>
           </div>
         </div>
       </section>

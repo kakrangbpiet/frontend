@@ -10,6 +10,7 @@ import SingleTravelPackageDetails from "./page/SinglePackage";
 import AllUsers from "./page/Dashboard/AllUsers";
 import ProfilePage from "./page/ProfilePage";
 import UserInquiries from "./page/ProfilePage/UserInquiries";
+import AllTarvelpackagesPage from "./page/AllPackagesPage";
 
 const Router: React.FC = () => {
 
@@ -35,6 +36,7 @@ const Router: React.FC = () => {
           path: "/dashboard",
           element: <Dashboard />,
         },
+
         {
           path: "/addTravelPackage",
           element: <AddPackagePage />,
@@ -51,6 +53,20 @@ const Router: React.FC = () => {
           path: "/inquiries/:userId",
           element: <UserInquiries />,
         },
+        {
+          path: "/packages",
+          element: <AllTarvelpackagesPage />,
+        },
+        {
+          path:"/type/category/:category",
+          element:<AllTarvelpackagesPage />
+
+          },
+        {
+          path:"/type/location/:location",
+          element:<AllTarvelpackagesPage />
+
+          },
         {
           path: "*", element: <NotFoundPage/> 
       }

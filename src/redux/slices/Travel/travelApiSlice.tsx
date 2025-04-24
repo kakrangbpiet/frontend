@@ -1,89 +1,64 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
 
 export const fetchTravelPackagesApi = createAsyncThunk(
   'travelCollection/setLoadedItems',
-  async ({ pageSize, page, setItemPage, status }: { pageSize?: number, page?: number, setItemPage?: (page: number) => void, status?: string }, { rejectWithValue, dispatch }) => {
-    dispatch(setLoadedItems({
-      loading: true,
-    }));
+  async (
+    params: {
+      pageSize?: number;
+      page?: number;
+      status?: string;
+      location?: string;
+      category?: string;
+    },
+    { rejectWithValue, dispatch }
+  ) => {
+    dispatch(setLoadedItems({ loading: true }));
+
     try {
+      const queryParams = new URLSearchParams();
+      if (params?.status) queryParams.append('status', params.status);
+      if (params?.location) queryParams.append('location', params.location);
+      if (params?.category) queryParams.append('category', params.category);
+      if (params?.pageSize) queryParams.append('pageSize', String(params.pageSize));
+      if (params?.page) queryParams.append('page', String(params.page));
+
+      const slug = queryParams.toString() ? `?${queryParams.toString()}` : '';
+
       const response = await Request({
         endpointId: "GET_TRAVEL_ITEMS",
-        slug: `?status=${status}&pagesize=${pageSize}&page=${page}`,
+        slug,
       });
 
-      const items: any[] = response.data;
-      
-      dispatch(setLoadedItems({ itemData: items, loading: false }));
+      const { data, total, page, pageSize, totalPages } = response;
+
+      dispatch(setLoadedItems({
+        itemData: data,
+        loading: true,
+        pagination: {
+          currentPage: page || 1,
+          pageSize: pageSize || 10,
+          totalItems: total || 0,
+          totalPages: totalPages || 1,
+        }
+      }));
 
       const apiSuccess: ApiSuccess = {
         statusCode: response.status,
         message: 'Items fetched successfully',
-        data: response,
+        data: response.data,
       };
-      if (page && setItemPage) {
-        setItemPage(page + 1);
-      }
+      dispatch(setLoadedItems({ loading: false }));
 
       return apiSuccess;
-
     } catch (error) {
-      dispatch(setLoadedItems({
-        loading: false,
-      }));
-      const castedError = error as ApiError;
-      return rejectWithValue(castedError?.error === "string" ? castedError?.error : 'Unknown Error');
-    }
-  }
-);
-
-export const fetchTravelPackagesByCategoryApi = createAsyncThunk(
-  'travelCollection/setTravelPackagesByCategory',
-  async (
-    { category,status, pageSize, page }: { category: string;status?:string, pageSize?: number; page?: number; setItemPage?: (page: number) => void },
-    { rejectWithValue, dispatch }
-  ) => {
-    // Set loading to true before fetching
-    dispatch(setTravelPackagesByCategory({
-      category,
-      loading: true,
-    }));
-
-    try {
-      const response = await Request({
-        endpointId: "GET_TRAVEL_ITEMS_BY_CATEGORY",
-        slug: `?category=${category}&status=${status}&pageSize=${pageSize || 10}&page=${page || 1}`,
-      });
-
-      const items: ITravelPackage[] = response.data;
-
-      // Dispatch items with loading set to false
-      dispatch(setTravelPackagesByCategory({
-        category,
-        itemData: items,
-        loading: false,
-      }));
-
-      return {
-        statusCode: response.status,
-        message: 'Items fetched successfully',
-        data: response,
-      };
-
-    } catch (error) {
-      // Handle error and set loading to false
-      dispatch(setTravelPackagesByCategory({
-        category,
-        loading: false,
-      }));
-
+      dispatch(setLoadedItems({ loading: false }));
       const castedError = error as ApiError;
       return rejectWithValue(
-        castedError?.error === "string" ? castedError?.error : 'Unknown Error'
+        typeof castedError?.error === 'string' ? castedError?.error : 'Unknown Error'
       );
     }
   }
@@ -193,7 +168,6 @@ export const updateTravelPackageStatus = createAsyncThunk(
 );
 
 // Async Thunks
-
 export const addToCartApi = createAsyncThunk(
   'cart/addToCartApi',
   async (
@@ -380,8 +354,6 @@ export const removeItemQuantityApi = createAsyncThunk(
   }
 );
 
-
-
 export const fetchTravelItemVideosApi = createAsyncThunk(
   'travelCollection/setTravelItemVideos',
   async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
@@ -432,7 +404,6 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
   }
 );
 
-
 export const fetchAllCategories = createAsyncThunk(
   'travelCollection/fetchAllCategories',
   async (_, { rejectWithValue,dispatch }) => {
@@ -481,7 +452,6 @@ export const fetchAllLocations = createAsyncThunk(
     }
   }
 );
-
 
 export const fetchAllTitles = createAsyncThunk(
   'travelCollection/fetchAllTitles',

@@ -2,7 +2,7 @@ import  { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
-import { fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchTravelPackagesApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
 
 const DashboardCard = styled.div`
@@ -19,11 +19,11 @@ const TravelPackagesList = ({ category }: { category: string }) => {
 
   useEffect(() => {
     // Fetch items when component mounts or category changes
-    dispatch(fetchTravelPackagesByCategoryApi({ 
+    dispatch(fetchTravelPackagesApi({ 
       category, 
       status:"active",
-      pageSize: 10, // Adjust as needed
-      page: 1       // Start with page 1
+      pageSize: 10,
+      page: 1
     }));
   }, [dispatch, category]);
 

@@ -36,15 +36,21 @@ export interface ITravelPackage {
     maxTravelers: number;
     availableSpots: number;
   }
-interface TravelState {
-  travelPackages: ITravelPackage[];
-  travelPackagesByCategory: { [category: string]: ITravelPackage[] };
-  loading: boolean;
-  loadingByCategory: { [category: string]: boolean };
-  categories?: string[];
-  locations?: Array<{ value: string; label: string }>;
-  titles?: Array<{ id: string; title: string }>;
-}
+  interface TravelState {
+    travelPackages: ITravelPackage[];
+    travelPackagesByCategory: { [category: string]: ITravelPackage[] };
+    loading: boolean;
+    loadingByCategory: { [category: string]: boolean };
+    categories?: string[];
+    locations?: Array<{ value: string; label: string }>;
+    titles?: Array<{ id: string; title: string }>;
+    pagination: {
+      currentPage: number;
+      pageSize: number;
+      totalItems: number;
+      totalPages: number;
+    };
+  }
 
 
 const initialState: TravelState = {
@@ -55,21 +61,37 @@ const initialState: TravelState = {
   categories: [],
   locations: [],
   titles: [],
+  pagination: {
+    currentPage: 1,
+    pageSize: 10,
+    totalItems: 0,
+    totalPages: 1,
+  },
 };
 
 const travelSlice = createSlice({
   name: 'travelCollection',
   initialState,
   reducers: {
-    setLoadedItems: (state, action: PayloadAction<{ itemData?: ITravelPackage[]; loading: boolean }>) => {
-      const loadedItems = action.payload.itemData;
-      loadedItems &&
-        loadedItems.forEach((item) => {
-          if (!state.travelPackages.some((existingItem) => existingItem.id === item.id)) {
-            state.travelPackages.push(item);
-          }
-        });
-      state.loading = action.payload.loading;
+    setLoadedItems: (state, action: PayloadAction<{ itemData?: ITravelPackage[]; loading: boolean,
+      pagination?: {
+        currentPage: number;
+        pageSize: number;
+        totalItems: number;
+        totalPages: number;
+      };
+     }>) => {
+      const { itemData, loading, pagination } = action.payload;
+      if (itemData) {
+        // For pagination, we replace the items rather than appending
+        state.travelPackages = itemData;
+      }
+      
+      if (pagination) {
+        state.pagination = pagination;
+      }
+      
+      state.loading = loading;
     },
     setTravelPackagesByCategory: (
       state,
