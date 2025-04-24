@@ -70,61 +70,93 @@ function DateSelectionTabs({
 
   return (
     <div className="w-full mt-6">
-      {/* Accessibility-enhanced Tabs */}
+      {/* Radio Button Tabs */}
       <div 
-        role="tablist" 
+        role="radiogroup" 
         aria-label="Trip date selection options"
-        className="flex rounded-xl overflow-hidden bg-white/5 backdrop-blur-md shadow-lg border border-white/10 mb-4"
+        className="flex flex-col gap-3 mb-4"
       >
-        <button
-          role="tab"
-          id="tab-pre-planned"
-          aria-selected={activeTab === 'pre-planned'}
-          aria-controls="panel-pre-planned"
-          onClick={() => handleTabChange('pre-planned')}
-          className={`flex-1 p-3 text-center cursor-pointer relative transition-all duration-300 ${
-            activeTab === 'pre-planned' ? 'bg-blue-500/20 font-medium' : 'hover:bg-white/5'
-          } focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-opacity-50`}
+        <label 
+          className={`flex items-center rounded-xl p-4 cursor-pointer transition-all duration-300 ${
+            activeTab === 'pre-planned' 
+              ? 'bg-gray-800 border border-blue-500/50' 
+              : 'bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10'
+          }`}
         >
-          <span className={activeTab === 'pre-planned' ? 'text-blue-500' : 'text-gray-200'}>
+          <div 
+            className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
+              activeTab === 'pre-planned' ? 'border-blue-500' : 'border-gray-400'
+            }`}
+          >
+            {activeTab === 'pre-planned' && (
+              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+            )}
+          </div>
+          <input
+            type="radio"
+            id="pre-planned-radio"
+            name="trip-type"
+            value="pre-planned"
+            checked={activeTab === 'pre-planned'}
+            onChange={() => handleTabChange('pre-planned')}
+            className="sr-only"
+            aria-labelledby="pre-planned-label"
+          />
+          <span 
+            id="pre-planned-label"
+            className={`font-medium ${activeTab === 'pre-planned' ? 'text-blue-500' : 'text-gray-200'}`}
+          >
             Pre-Planned Dates
           </span>
-          {activeTab === 'pre-planned' && (
-            <div className="absolute bottom-0 left-[10%] w-[80%] h-0.5 bg-blue-500 rounded-sm"></div>
-          )}
-        </button>
+        </label>
         
-        <button
-          role="tab"
-          id="tab-custom"
-          aria-selected={activeTab === 'custom'}
-          aria-controls="panel-custom"
-          onClick={() => handleTabChange('custom')}
-          className={`flex-1 p-3 text-center cursor-pointer relative transition-all duration-300 ${
-            activeTab === 'custom' ? 'bg-blue-500/20 font-medium' : 'hover:bg-white/5'
-          } focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-opacity-50`}
+        <label 
+          className={`flex items-center rounded-xl p-4 cursor-pointer transition-all duration-300 ${
+            activeTab === 'custom' 
+              ? 'bg-gray-800 border border-blue-500/50' 
+              : 'bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10'
+          }`}
         >
-          <span className={activeTab === 'custom' ? 'text-blue-500' : 'text-gray-200'}>
+          <div 
+            className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
+              activeTab === 'custom' ? 'border-blue-500' : 'border-gray-400'
+            }`}
+          >
+            {activeTab === 'custom' && (
+              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+            )}
+          </div>
+          <input
+            type="radio"
+            id="custom-radio"
+            name="trip-type"
+            value="custom"
+            checked={activeTab === 'custom'}
+            onChange={() => handleTabChange('custom')}
+            className="sr-only"
+            aria-labelledby="custom-label"
+          />
+          <span 
+            id="custom-label"
+            className={`font-medium ${activeTab === 'custom' ? 'text-blue-500' : 'text-gray-200'}`}
+          >
             Custom Dates
           </span>
-          {activeTab === 'custom' && (
-            <div className="absolute bottom-0 left-[10%] w-[80%] h-0.5 bg-blue-500 rounded-sm"></div>
-          )}
-        </button>
+        </label>
       </div>
 
       {/* Pre-planned dates panel */}
       <div 
         role="tabpanel"
         id="panel-pre-planned"
-        aria-labelledby="tab-pre-planned"
+        aria-labelledby="pre-planned-label"
         className={`transition-all duration-500 ${
           activeTab === 'pre-planned' 
             ? 'opacity-100 max-h-[30rem] transform translate-y-0' 
             : 'opacity-0 max-h-0 overflow-hidden transform -translate-y-4'
         }`}
       >
-        <div className="mt-2 rounded-xl bg-white/5 backdrop-blur-md shadow-lg border border-white/10 p-4">
+        <div className="mt-2 rounded-xl bg-white/20 backdrop-blur-md shadow-lg border border-white/10 p-4">
           <div className="flex items-center justify-between">
             <div className="font-medium text-blue-400 ml-1 mb-3 flex items-center">
               <span>Available Dates</span>
@@ -199,7 +231,7 @@ function DateSelectionTabs({
       <div 
         role="tabpanel"
         id="panel-custom"
-        aria-labelledby="tab-custom"
+        aria-labelledby="custom-label"
         className={`transition-all duration-500 ${
           activeTab === 'custom' 
             ? 'opacity-100 max-h-[30rem] transform translate-y-0' 
@@ -209,7 +241,7 @@ function DateSelectionTabs({
         <div className="mt-2 rounded-xl bg-white/5 backdrop-blur-md shadow-lg border border-white/10 p-4">
           <div className="mb-4">
             <CustomDateField
-              label="Start Date"
+              placeholder="Start Date"
               value={startDate || null}
               onChange={(date) => setStartDate(date || undefined)}
               fullWidth
@@ -220,7 +252,7 @@ function DateSelectionTabs({
 
           <div className="mb-2">
             <CustomDateField
-              label="End Date"
+              placeholder="End Date"
               value={endDate || null}
               onChange={(date) => setEndDate(date || undefined)}
               fullWidth

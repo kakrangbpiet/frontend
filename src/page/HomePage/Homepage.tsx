@@ -281,10 +281,10 @@ const HomePage: React.FC = () => {
 
       {/*test */}
 
-      <div className=" bg-transparent flex items-center justify-center p-5">
-  <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
+      <div className=" bg-transparent flex items-center">
+  <div className="w-[450px] h-[80px] bg-transparent  rounded-2xl   ">
     <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center drop-shadow-lg">
-      Explore With Us
+  Start with a Feeling, End with a Journey
     </h1>
   </div>
 </div>

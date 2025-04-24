@@ -39,11 +39,32 @@ function LocationDetails({
     handleChange('address', address);
   };
 
+  // Custom MUI styles
+  const textFieldStyle = {
+    '& .MuiOutlinedInput-root': {
+      backgroundColor: 'white',
+      borderRadius: '0.5rem',
+      '& fieldset': {
+        borderColor: 'rgba(209, 213, 219, 1)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(59, 130, 246, 0.8)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#3b82f6',
+      },
+    },
+    '& input': {
+      fontWeight: '500',
+      color: '#1f2937',
+    },
+  };
+
   return (
     <Box sx={{ padding: 2, mt: 2 }}>
       <TextField
         fullWidth
-        label="Choose Current Location"
+        placeholder="Choose Current Location"
         value={inquiryData.address}
         onClick={() => setOpenAddressDialog(true)}
         InputProps={{
@@ -57,6 +78,7 @@ function LocationDetails({
         margin="normal"
         required
         disabled={!shouldShowRegister && isRegister}
+        sx={textFieldStyle}
       />
 
       {!isRegister && (
@@ -64,7 +86,7 @@ function LocationDetails({
           {('destination' in inquiryData) && (
             <TextField
               fullWidth
-              label="Destination"
+              placeholder="Destination"
               disabled={true}
               value={inquiryData.destination}
               onChange={(e) => handleChange('destination', e.target.value)}
@@ -77,6 +99,7 @@ function LocationDetails({
               }}
               margin="normal"
               required
+              sx={textFieldStyle}
             />
           )}
 
