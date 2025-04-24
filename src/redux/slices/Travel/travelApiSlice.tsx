@@ -431,3 +431,73 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
     }
   }
 );
+
+
+export const fetchAllCategories = createAsyncThunk(
+  'travelCollection/fetchAllCategories',
+  async (_, { rejectWithValue }) => {
+    try {
+      // Replace with your actual API endpoint for categories
+      const response = await Request({
+        endpointId: "GET_ALL_CATEGORIES",
+      });
+      
+      return {
+        statusCode: response.status,
+        message: 'Categories fetched successfully',
+        data: response.data,
+      };
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Failed to fetch categories');
+    }
+  }
+);
+
+export const fetchAllLocations = createAsyncThunk(
+  'travelCollection/fetchAllLocations',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await Request({
+        endpointId: "GET_ALL_LOCATIONS",
+      });
+
+      // Normalize to { value, label } format
+      const data = (response.data as string[]).map((loc) => ({
+        value: loc.toLowerCase().replace(/\s+/g, ''),
+        label: loc.charAt(0).toUpperCase() + loc.slice(1),
+      }));
+
+      return {
+        statusCode: response.status,
+        message: 'Locations fetched successfully',
+        data,
+      };
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Failed to fetch locations');
+    }
+  }
+);
+
+
+export const fetchAllTitles = createAsyncThunk(
+  'travelCollection/fetchAllTitles',
+  async (_, { rejectWithValue }) => {
+    try {
+      // Replace with your actual API endpoint for titles
+      const response = await Request({
+        endpointId: "GET_ALL_TITLES",
+      });
+      
+      return {
+        statusCode: response.status,
+        message: 'Titles fetched successfully',
+        data: response.data,
+      };
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Failed to fetch titles');
+    }
+  }
+);

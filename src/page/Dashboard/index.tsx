@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <Container>
+      <Container className='mt-36'>
         <MiddleRow>
          Dashboard
           <Button variant="contained" color="primary" onClick={addTravelPackage}>

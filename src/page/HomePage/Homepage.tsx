@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchTravelPackagesApi, fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchAllCategories, fetchAllTitles, fetchTravelPackagesApi, fetchTravelPackagesByCategoryApi } from '../../redux/slices/Travel/travelApiSlice';
 import { AppDispatch } from '../../redux/store';
-import { selectedTravelPackages, selectedTravelPackagesLoading, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
+import { selectCategories, selectedTravelPackages, selectedTravelPackagesLoading, selectTitles, selectTravelPackagesByCategory } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
-// import { Typography } from '@mui/material';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import locationsData from '../../components/Forms/Location.json';
 
@@ -25,7 +24,6 @@ const PackagesSection = styled.div`
   }
 `;
 
-// change height if packge appear in main page
 const ContentOverlay = styled.div`
   position: relative;
   width: 100%;
@@ -74,35 +72,35 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const DestinationSelectButton = styled.button`
+const SearchContainer = styled.div`
   width: 100%;
-  max-width: 20rem;
-  padding: 0.75rem 7rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 0.75rem 1.5rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
   color: white;
   font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.3s;
-  margin: 0 auto 1.5rem;
   
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
   }
 `;
 
-const DropdownMenu = styled.div`
+const SearchResults = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   margin-top: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(8px);
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -111,17 +109,23 @@ const DropdownMenu = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-const DropdownItem = styled.a`
-  display: block;
-  padding: 0.5rem 1rem;
+const SearchResultItem = styled.div`
+  padding: 0.75rem 1rem;
   color: white;
-  text-decoration: none;
+  cursor: pointer;
   transition: background-color 0.2s;
   
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 `;
+
+const ResultType = styled.span`
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-right: 0.5rem;
+`;
+
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -159,35 +163,39 @@ const Button = styled.button`
   }
 `;
 
-const SelectWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 20rem;
-  margin: 0 auto 1.5rem;
-`;
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const auth = useSelector(isAuthenticated);
   const selectedUserType = useSelector(selectUserType);
   const dispatch = useDispatch<AppDispatch>();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const { title } = useOutletContext<{ title: string }>();
+  const categories = useSelector(selectCategories);
 
-  useEffect(() => {
-    if (auth && selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
-      navigate("/dashboard");
-    }
-  }, [auth, navigate, selectedUserType]);
+  const titles = useSelector(selectTitles);
+
 
   const loadingByCategory = useSelector(selectedTravelPackagesLoading);
   const categoryItemsHotDeals = useSelector(selectTravelPackagesByCategory("hotdeals"));
 
   const travelPackages = useSelector(selectedTravelPackages);
-    const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
-    useEffect(() => {
-        dispatch(fetchTravelPackagesApi({status:"active"}))
-    }, [dispatch]);
+  const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
+  
+  useEffect(() => {
+    // Fetch all categories, and titles when component mounts
+    dispatch(fetchAllCategories());
+    dispatch(fetchAllTitles());
+    
+    if (auth && selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
+      navigate("/dashboard");
+    }
+  }, [auth, navigate, selectedUserType, dispatch]);
+  
+  useEffect(() => {
+    dispatch(fetchTravelPackagesApi({ status: "active" }))
+  }, [dispatch]);
 
   const handleLoadCategories = async () => {
     try {
@@ -213,29 +221,80 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (categoryItemsHotDeals.length === 0 ) {
+    if (categoryItemsHotDeals.length === 0) {
       handleLoadCategories();
     }
-    
-    // Debug logs to verify data
   }, [dispatch]);
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.length > 0) {
+      const results: any[] = [];
+  
+      // Match categories
+      categories.forEach(category => {
+        if (category.toLowerCase().includes(query.toLowerCase())) {
+          results.push({
+            type: 'category',
+            value: category,
+            label: `Category: ${category}`
+          });
+        }
+      });
+  
+      // Match locations
+      locationsData.locations.forEach(location => {
+        if (location.label.toLowerCase().includes(query.toLowerCase())) {
+          results.push({
+            type: 'location',
+            value: location,
+            label: `Search in ${location.label}`
+          });
+        }
+      });
+      
+  
+      // Match titles
+      titles.forEach(item => {
+        if (item.title.toLowerCase().includes(query.toLowerCase())) {
+          results.push({
+            type: 'title',
+            value: item,
+            label: `Tour: ${item.title}`
+          });
+        }
+      });
+  
+      setSearchResults(results.slice(0, 5)); // Limit to 5 results
+    } else {
+      setSearchResults([]);
+    }
+  };
+  
+
+  const handleResultClick = (result: any) => {
+    setSearchQuery('');
+    setSearchResults([]);
+    console.log(result);
+    
+    if (result.type === 'category') {
+      navigate(`/type/${result.value}`);
+    } else if (result.type === 'location') {
+      navigate(`/type/location/${result?.value?.label}`);
+    } else if (result.type === 'title') {
+      navigate(`/single/${result.value.id}/${result.value.title}`);
+    }
+  };
 
   const handleCustomizedTripClick = () => {
     navigate("/travel-form");
   };
-  
+
   const handlePrePlannedTripsClick = () => {
     navigate("/pre-planned-trips");
   };
-  
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-  
-  // const handleDestinationSelect = (_value: string) => {
-  //   setIsDropdownOpen(false);
-  // };
+
+
 
   return (
     <div>
@@ -243,31 +302,27 @@ const HomePage: React.FC = () => {
         <HeroText>
           <HeroTitle>{title || "Discover Amazing Destinations"}</HeroTitle>
         </HeroText>
-        
+
         <ButtonContainer>
-          <SelectWrapper>
-            <DestinationSelectButton onClick={toggleDropdown}>
-              <span>Destination</span>
-            </DestinationSelectButton>
-            
-            {isDropdownOpen && (
-  <DropdownMenu>
-    {locationsData.locations.map((location) => (
-      <DropdownItem 
-        key={location.value} 
-        href="#" 
-        onClick={() => {
-          // Handle location selection
-          setIsDropdownOpen(false);
-        }}
-      >
-        {location.label}
-      </DropdownItem>
-    ))}
-  </DropdownMenu>
-)}
-          </SelectWrapper>
-          
+          <SearchContainer>
+            <SearchInput
+              type="text"
+              placeholder="Search for destinations, categories, or tours..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+            {searchResults.length > 0 && (
+              <SearchResults>
+                {searchResults.map((result, index) => (
+                  <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
+                    <ResultType>{result.type}</ResultType>
+                    {result.label}
+                  </SearchResultItem>
+                ))}
+              </SearchResults>
+            )}
+          </SearchContainer>
+
           <ButtonGroup>
             <Button onClick={handleCustomizedTripClick}>
               Plan Your Own Trip
@@ -281,10 +336,10 @@ const HomePage: React.FC = () => {
 
       {/*test */}
 
-      <div className=" bg-transparent flex items-center">
-  <div className="w-[450px] h-[80px] bg-transparent  rounded-2xl   ">
+      <div className=" bg-transparent flex items-center justify-center p-5">
+  <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
     <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center drop-shadow-lg">
-  Start with a Feeling, End with a Journey
+      Explore With Us
     </h1>
   </div>
 </div>
@@ -303,45 +358,36 @@ const HomePage: React.FC = () => {
       
       <DashboardGrid>
         <PackagesSection>
-        <div className="text-center mt-12">
-  <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-    Hot Deals Packages
-  </div>
-  
-  <div className="relative mt-4 flex justify-center">
-    <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
-  </div>
-</div>
+          <div className="text-center mt-12">
+            <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              Hot Deals Packages
+            </div>
 
-{/*needed to be set*/}
+            <div className="relative mt-4 flex justify-center">
+              <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
+            </div>
+          </div>
 
-                    <TravelPackages 
-            travelPackages={categoryItemsHotDeals} 
-            categoryType="hotdeals" 
-            loading={loadingByCategory["hotdeals"] || false} 
+          <TravelPackages
+            travelPackages={categoryItemsHotDeals}
+            categoryType="hotdeals"
+            loading={loadingByCategory["hotdeals"] || false}
           />
-          
-          {/* <div className="text-center mt-8">
-  <div className="inline-block px-6 py-2 text-white text-2xl font-semibold bg-white/10 border border-white/20 rounded-lg backdrop-blur-sm hover:bg-white/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-  </div>
-</div> */}
 
-<div className="text-center mt-12">
-  <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-  Pre-Planned Trips
-  </div>
-  
-  <div className="relative mt-4 flex justify-center">
-    <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
-  </div>
-</div>
+          <div className="text-center mt-12">
+            <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              Pre-Planned Trips
+            </div>
 
+            <div className="relative mt-4 flex justify-center">
+              <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
+            </div>
+          </div>
 
-          
-          <TravelPackages 
-            travelPackages={travelPackages.travelPackages} 
-            categoryType="new" 
-            loading={travelPackagesLoading} 
+          <TravelPackages
+            travelPackages={travelPackages.travelPackages}
+            categoryType="new"
+            loading={travelPackagesLoading}
           />
         </PackagesSection>
       </DashboardGrid>
