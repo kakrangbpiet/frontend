@@ -13,7 +13,7 @@ import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlic
 import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { formatDate } from '../../page/SinglePackage/DateAvailability';
 
-// Import Components
+// Import sprted to view
 import LocationDetails from './LocationDetails';
 import PersonalDetails from './PersonalDetails';
 import ContactDetails from './ContactDetails';
