@@ -125,7 +125,7 @@ export const ApiEndpoint: Record<string, any> = {
     errorMessage: "Error updating travel item"
   },
   GET_TRAVEL_ITEM_VIDEOS: { 
-    apiId: 25, 
+    apiId: 26, 
     withAuth: true, 
     url: `${backendUrl}/Travel/videos`, 
     method: 'GET', 
@@ -134,7 +134,36 @@ export const ApiEndpoint: Record<string, any> = {
     successMessage: "Package Videos Fetched successfully",
     errorMessage: "Error Getting Package Videos"
   },
-
+  GET_ALL_CATEGORIES: {
+    apiId: 27,
+    withAuth: false,
+    url: `${backendUrl}/Travel/categories`,
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Fetching categories",
+    successMessage: "Categories fetched",
+    errorMessage: "Error fetching categories"
+  },
+  GET_ALL_LOCATIONS: {
+    apiId: 28,
+    withAuth: false,
+    url: `${backendUrl}/Travel/locations`,
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Fetching locations",
+    successMessage: "Locations fetched",
+    errorMessage: "Error fetching locations"
+  },
+  GET_ALL_TITLES: {
+    apiId: 29,
+    withAuth: false,
+    url: `${backendUrl}/Travel/titles`,
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Fetching titles",
+    successMessage: "Titles fetched",
+    errorMessage: "Error fetching titles"
+  },
   // TRAVEL INQUIRY ENDPOINTS
   CREATE_TRAVEL_INQUIRY: {
     apiId: 30,

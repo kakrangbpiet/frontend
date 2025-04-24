@@ -1,11 +1,10 @@
-import { Box, TextField, Button, Typography } from '@mui/material';
-import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
 import { SelectConactVerified, SelectContact, selectTrxId, setContactVerified } from '../../redux/slices/login/authSlice';
 import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
-import { InputAdornment, IconButton } from '@mui/material';
+
 interface ContactDetailsProps {
   inquiryData: any;
   setInquiryData: any;
@@ -68,7 +67,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   const handleEditNumber = () => {
-    if (shouldShowRegister) { // Only allow editing if shouldShowRegister is true
+    if (shouldShowRegister) {
       setShowOtpField(false);
       setOtpInput('');
       dispatch(setContactVerified({ isContactVerified: false }));
@@ -83,108 +82,131 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <Box sx={{ px: 2 }}>
-      <TextField
-        fullWidth
-        label="Email Address"
-        type="email"
-        value={inquiryData.email}
-        onChange={(e) => handleChange('email', e.target.value)}
-        margin="normal"
-        required
-        disabled={!shouldShowRegister && isRegister}
-      />
+    <div className="p-6 backdrop-blur-md bg-white/20 rounded-lg shadow-lg mb-6">
       
-      {!isContactVerified ? (
-        <>
-         <TextField
-  fullWidth
-  label="Phone Number"
-  type="tel"
-  value={phoneInput}
-  onChange={handlePhoneChange}
-  margin="normal"
-  required
-  disabled={showOtpField || (!shouldShowRegister && isRegister)}
-  InputProps={{
-    endAdornment: showOtpField && (
-      <InputAdornment position="end">
-        <IconButton
-          onClick={handleSendOtp}
-          edge="end"
-          disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-        >
-          Resend
-        </IconButton>
-      </InputAdornment>
-    )
-  }}
-/>
-
-          
-          {!showOtpField ? (
-            <Button 
-              variant="contained" 
-              onClick={handleSendOtp}
-              disabled={!phoneInput || !shouldShowRegister  && isRegister} // Disable if shouldShowRegister is false
-              sx={{ mt: 2 }}
-            >
-              Send Verification Code
-            </Button>
-          ) : (
-            <>
-              <TextField
-                fullWidth
-                label="Verification Code"
-                type="text"
-                value={otpInput}
-                onChange={handleOtpChange}
-                margin="normal"
+      <div className="space-y-4">
+        <div className="relative">
+          <input
+            type="email"
+            id="email"
+            value={inquiryData.email}
+            onChange={(e) => handleChange('email', e.target.value)}
+            disabled={!shouldShowRegister && isRegister}
+            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 
+                      text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
+                      focus:ring-blue-200 transition-all duration-200 outline-none"
+            placeholder="Email Address"
+            required
+          />
+        </div>
+        
+        {!isContactVerified ? (
+          <>
+            <div className="relative">
+              <input
+                type="tel"
+                id="phone"
+                value={phoneInput}
+                onChange={handlePhoneChange}
+                disabled={showOtpField || (!shouldShowRegister && isRegister)}
+                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 
+                          text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
+                          focus:ring-blue-200 transition-all duration-200 outline-none"
+                placeholder="Phone Number"
                 required
-                sx={{ mt: 2 }}
-                disabled={!shouldShowRegister && isRegister} // Disable if shouldShowRegister is false
               />
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button 
-                  variant="contained" 
-                  onClick={handleVerifyOtp}
-                  disabled={!otpInput || isContactVerified || !shouldShowRegister  && isRegister} // Disable if shouldShowRegister is false
-                  sx={{ mt: 2 }}
+                        
+              {showOtpField && (
+                <button 
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={!phoneInput || (!shouldShowRegister && isRegister)}
+                  className="absolute right-2 top-2.5 text-sm text-blue-600 hover:text-blue-800 font-medium"
                 >
-                  Verify Phone Number
-                </Button>
-                {!isRegister && (
-                  <Button 
-                    variant="outlined" 
-                    onClick={handleEditNumber}
-                    sx={{ mt: 2 }}
-                    disabled={!shouldShowRegister  && isRegister} // Disable if shouldShowRegister is false
+                  Resend
+                </button>
+              )}
+            </div>
+            
+            {!showOtpField ? (
+              <button 
+                type="button"
+                onClick={handleSendOtp}
+                disabled={!phoneInput || (!shouldShowRegister && isRegister)}
+                className="w-full md:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r bg-blue-600 to-blue-600  text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                Send Verification Code
+              </button>
+            ) : (
+              <>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="otp"
+                    value={otpInput}
+                    onChange={handleOtpChange}
+                    disabled={!shouldShowRegister && isRegister}
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 
+                              text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
+                              focus:ring-blue-200 transition-all duration-200 outline-none"
+                    placeholder="Verification Code"
+                    required
+                  />
+                </div>
+                
+                <div className="flex flex-col md:flex-row gap-4">
+                  <button 
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    disabled={!otpInput || isContactVerified || (!shouldShowRegister && isRegister)}
+                    className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-600 text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   >
-                    Edit Number
-                  </Button>
-                )}
-              </Box>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            Verified Phone: {verifiedPhoneNumber}
-          </Typography>
-          {shouldShowRegister && ( // Only show change button if shouldShowRegister is true
-            <Button 
-              variant="outlined" 
-              onClick={handleEditNumber}
-              sx={{ mt: 2 }}
-            >
-              Change Phone Number
-            </Button>
-          )}
-          <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
-        </>
-      )}
-    </Box>
+                    Verify Phone Number
+                  </button>
+                  
+                  {!isRegister && (
+                    <button 
+                      type="button"
+                      onClick={handleEditNumber}
+                      disabled={!shouldShowRegister && isRegister}
+                      className="px-6 py-2.5 rounded-lg bg-white border border-gray-300 text-gray-700 font-medium shadow-sm hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    >
+                      Edit Number
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          <div className="bg-white rounded-lg p-4 border border-green-200">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-blue-800">
+                  Verified Phone: {verifiedPhoneNumber}
+                </p>
+              </div>
+            </div>
+            
+            {shouldShowRegister && (
+              <button 
+                type="button"
+                onClick={handleEditNumber}
+                className="mt-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+              >
+                Change Phone Number
+              </button>
+            )}
+            <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

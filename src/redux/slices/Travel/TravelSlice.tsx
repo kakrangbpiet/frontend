@@ -41,6 +41,9 @@ interface TravelState {
   travelPackagesByCategory: { [category: string]: ITravelPackage[] };
   loading: boolean;
   loadingByCategory: { [category: string]: boolean };
+  categories?: string[];
+  locations?: Array<{ value: string; label: string }>;
+  titles?: Array<{ id: string; title: string }>;
 }
 
 
@@ -49,6 +52,9 @@ const initialState: TravelState = {
   travelPackagesByCategory: {} as { [category: string]: ITravelPackage[] },
   loading: false,
   loadingByCategory: {},
+  categories: [],
+  locations: [],
+  titles: [],
 };
 
 const travelSlice = createSlice({
@@ -114,10 +120,29 @@ const travelSlice = createSlice({
         state.travelPackages[itemIndex] = updatedItem;
       }
     },
+    setCategories: (state, action) => {
+      state.categories = action.payload;
+    },
+    setLocations: (state, action: PayloadAction<Array<{ value: string; label: string }>>) => {
+      state.locations = action.payload;
+    },
+    setTitles: (state, action) => {
+      state.titles = action.payload;
+    },
   },
 });
 
-export const { setLoadedItems, setCategoryLoading, setTravelPackagesByCategory, addItem, updateItem,setTravelItemVideos } = travelSlice.actions;
+export const {
+  setLoadedItems,
+  setCategoryLoading,
+  setTravelPackagesByCategory,
+  addItem,
+  updateItem,
+  setTravelItemVideos,
+  setCategories,
+  setLocations,
+  setTitles,
+} = travelSlice.actions;
 
 export default travelSlice.reducer;
 
@@ -133,6 +158,14 @@ export const selectTravelPackagesByCategory = (category: string) =>(state: { tra
   state.travelCollection.travelPackagesByCategory[category] || [];
 
 
+export const selectCategories = (state: { travelCollection: TravelState }) =>
+  state.travelCollection.categories || [];
+
+export const selectLocations = (state: { travelCollection: TravelState }) =>
+  state.travelCollection.locations || [];
+
+export const selectTitles = (state: { travelCollection: TravelState }) =>
+  state.travelCollection.titles || [];
 
 // export interface ITravelPackage {
 //     id: string;

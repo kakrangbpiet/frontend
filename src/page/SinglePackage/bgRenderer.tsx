@@ -1,4 +1,3 @@
-import { VideoHeroContainer } from "../../Layout";
 import VideoHero from "../HomePage/VideoHero";
 
 // bgRenderer.tsx
@@ -9,13 +8,9 @@ export const MediaBackground = ({ video }: { video: { base64Data: any } }) => {
   const videoSrc = `data:video/mp4;base64,${video.base64Data.randomVideo.base64Data}`;
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <VideoHeroContainer>
           <VideoHero
             videoSrc={videoSrc}
             title={"video"}
-            />
-            </VideoHeroContainer>
-    </div>
+    />
   );
 };

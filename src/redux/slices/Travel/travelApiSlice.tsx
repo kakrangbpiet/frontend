@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage, setTravelItemVideos, IVideosResponse } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, setTravelPackagesByCategory, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
@@ -428,6 +428,81 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
       dispatch(setLoadedItems({ loading: false }));
       const castedError = error as ApiError;
       return rejectWithValue(castedError?.error === "string" ? castedError?.error : 'Unknown Error');
+    }
+  }
+);
+
+
+export const fetchAllCategories = createAsyncThunk(
+  'travelCollection/fetchAllCategories',
+  async (_, { rejectWithValue,dispatch }) => {
+    try {
+      // Replace with your actual API endpoint for categories
+      const response = await Request({
+        endpointId: "GET_ALL_CATEGORIES",
+      });
+      dispatch(setCategories(response.data))
+      
+      return {
+        statusCode: response.status,
+        message: 'Categories fetched successfully',
+        data: response.data,
+      };
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Failed to fetch categories');
+    }
+  }
+);
+
+export const fetchAllLocations = createAsyncThunk(
+  'travelCollection/fetchAllLocations',
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await Request({
+        endpointId: "GET_ALL_LOCATIONS",
+      });
+
+      // Normalize to { value, label } format
+      const data = (response.data as string[]).map((loc) => ({
+        value: loc.toLowerCase().replace(/\s+/g, ''),
+        label: loc.charAt(0).toUpperCase() + loc.slice(1),
+      }));
+      dispatch(setLocations(response.data))
+
+      return {
+        statusCode: response.status,
+        message: 'Locations fetched successfully',
+        data,
+      };
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Failed to fetch locations');
+    }
+  }
+);
+
+
+export const fetchAllTitles = createAsyncThunk(
+  'travelCollection/fetchAllTitles',
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await Request({
+        endpointId: "GET_ALL_TITLES",
+      });
+
+      const titles = response.data as Array<{ id: string; title: string }>;
+
+      dispatch(setTitles(titles));
+
+      return {
+        statusCode: response.status,
+        message: 'Titles fetched successfully',
+        data: titles,
+      };
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Failed to fetch titles');
     }
   }
 );

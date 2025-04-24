@@ -3,10 +3,12 @@ import styled from 'styled-components';
 
 // Styled components
 const VideoContainer = styled.div`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  z-index: -1;
 `;
 
 const StyledVideo = styled.video`
@@ -16,6 +18,7 @@ const StyledVideo = styled.video`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: -1; 
 `;
 
 
