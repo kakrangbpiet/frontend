@@ -270,7 +270,7 @@ const HomePage: React.FC = () => {
     if (result.type === 'category') {
       navigate(`/packages?category=${encodeURIComponent(result.value)}`);
     } else if (result.type === 'location') {
-      navigate(`/packages?location=${encodeURIComponent(result.value.label)}`);
+      navigate(`/packages?location=${encodeURIComponent(result.value.value)}`);
     } else if (result.type === 'title') {
       navigate(`/package/${result.value.id}/${result.value.title}`);
     }
