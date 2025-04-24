@@ -342,13 +342,21 @@ const HomePage: React.FC = () => {
             Explore With Us
           </h1>
         </div>
+        
       </div>
 
-      <div className=" bg-transparent flex items-center justify-center p-5">
+      <TravelPackages
+            travelPackages={categoryItemsHotDeals}
+            categoryType="hotdeals"
+            loading={loadingByCategory["hotdeals"] || false}
+          />
+
+
+      {/* <div className=" bg-transparent flex items-center justify-center p-5">
         <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
 
         </div>
-      </div>
+      </div> */}
       {/*todo //UI*/}
 
 
@@ -358,21 +366,6 @@ const HomePage: React.FC = () => {
       
       <DashboardGrid>
         <PackagesSection>
-          <div className="text-center mt-12">
-            <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-              Hot Deals Packages
-            </div>
-
-            <div className="relative mt-4 flex justify-center">
-              <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
-            </div>
-          </div>
-
-          <TravelPackages
-            travelPackages={categoryItemsHotDeals}
-            categoryType="hotdeals"
-            loading={loadingByCategory["hotdeals"] || false}
-          />
 
           <div className="text-center mt-12">
             <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
