@@ -12,6 +12,8 @@ import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx
 import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay, formatDate } from './DateAvailability';
+import FullScreenGallery from './FullScreenGallery';
+
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -19,6 +21,10 @@ const SingleTravelPackageDetails = () => {
   const [mockPackage, setMockPackage] = useState<ITravelPackage | undefined>(undefined);
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
+
+const [galleryOpen, setGalleryOpen] = useState(false);
+const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -231,27 +237,36 @@ const SingleTravelPackageDetails = () => {
                 </div>
               )}
 
-              {activeTab === 'photos' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
-                    {images.map((img, index) => (
-                      <div
-                        key={index}
-                        className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
-                      >
-                        <img
-                          src={`data:image/jpeg;base64,${img}`}
-                          alt={`${title} - image ${index + 1}`}
-                          className="w-full h-48 md:h-64 object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+{activeTab === 'photos' && (
+  <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+    <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
+      {images.map((img, index) => (
+        <div
+          key={index}
+          className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
+          onClick={() => {
+            setSelectedImageIndex(index);
+            setGalleryOpen(true);
+          }}
+        >
+          <img
+            src={`data:image/jpeg;base64,${img}`}
+            alt={`${title} - image ${index + 1}`}
+            className="w-full h-48 md:h-64 object-cover"
+          />
+          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
               {activeTab === 'highlights' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
@@ -421,6 +436,12 @@ const SingleTravelPackageDetails = () => {
           </button>
         </div>
       )}
+<FullScreenGallery 
+  images={images}
+  isOpen={galleryOpen}
+  initialIndex={selectedImageIndex}
+  onClose={() => setGalleryOpen(false)}
+/>
     </div>
   );
 };
