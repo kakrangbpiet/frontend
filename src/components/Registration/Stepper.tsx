@@ -8,7 +8,7 @@ import { AppDispatch } from '../../redux/store';
 import { registerUserDispatcher } from '../../redux/slices/login/authApiSlice';
 import { createTravelInquiry } from '../../redux/slices/Travel/Booking/BookTravelApiSlice';
 import { isAuthenticated, JwtPayload, selectToken } from '../../redux/slices/login/authSlice';
-import { DateAvailability, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { DateAvailability, selectTitles, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
 import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { formatDate } from '../../page/SinglePackage/DateAvailability';
@@ -24,10 +24,26 @@ const inquirySteps = [
   'Contact Details'
 ];
 
-function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>, dateAvailabilities: DateAvailability[]) {
+// Update the getStepContent function
+function getStepContent(
+  step: number, 
+  inquiryData: TravelInquiry, 
+  setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>, 
+  dateAvailabilities: DateAvailability[],
+  titles: {id: string, title: string}[],
+  isCustomForm?:boolean,
+) {
   switch (step) {
     case 0:
-      return <LocationDetails inquiryData={inquiryData} setInquiryData={setInquiryData} dateAvailabilities={dateAvailabilities} />;
+      return (
+        <LocationDetails 
+          isCustomForm={isCustomForm}
+          inquiryData={inquiryData} 
+          setInquiryData={setInquiryData} 
+          dateAvailabilities={dateAvailabilities}
+          titles={titles} // Pass titles to LocationDetails
+        />
+      );
     case 1:
       return <PersonalDetails inquiryData={inquiryData} setInquiryData={setInquiryData} />;
     case 2:
@@ -37,14 +53,17 @@ function getStepContent(step: number, inquiryData: TravelInquiry, setInquiryData
   }
 }
 
-function TravelInquiryForm({ packageId, packageTitle }: { packageId: string, packageTitle: string }) {
+// In the TravelInquiryForm component, update the render section:
+
+
+function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId?: string, packageTitle?: string,isCustomForm?:boolean }) {
   const dispatch = useDispatch<AppDispatch>();
   const [activeStep, setActiveStep] = useState(0);
   const auth = useSelector(isAuthenticated);
   const token = useSelector(selectToken);
   const selectedPackage = useSelector(useSelectedTravelPackage(packageId));
   const navigate = useNavigate();
-
+  const titles = useSelector(selectTitles);
   const getUserDetailsFromToken = (token: string | null): {name?: string, email?: string, phoneNumber?: string} => {
     if (!token) return {};
     try {
@@ -159,7 +178,7 @@ function TravelInquiryForm({ packageId, packageTitle }: { packageId: string, pac
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="">
       <div className="bg-transparent-900/90 backdrop-blur-md rounded-xl overflow-hidden border border-white/20 shadow-2xl">
         <div className="bg-transparent-800/80 p-4 border-b border-gray-700">
           <h2 className="text-xl font-semibold text-white text-center mb-4">Travel Inquiry Form</h2>
@@ -195,8 +214,15 @@ function TravelInquiryForm({ packageId, packageTitle }: { packageId: string, pac
         ) : (
           <>
             <div className="p-5 bg-transaprent backdrop-blur-md min-h-[300px]">
-              {getStepContent(activeStep, inquiryData, setInquiryData, selectedPackage?.dateAvailabilities || [])}
-            </div>
+  {getStepContent(
+    activeStep, 
+    inquiryData, 
+    setInquiryData, 
+    selectedPackage?.dateAvailabilities || [],
+    titles,
+    isCustomForm
+  )}
+</div>
             
             <div className="px-5 py-4 flex justify-between">
               {activeStep > 0 && (

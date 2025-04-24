@@ -9,6 +9,8 @@ import { selectCategories, selectedTravelPackages, selectedTravelPackagesLoading
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import locationsData from '../../components/Forms/Location.json';
+import { Dialog } from '@mui/material';
+import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -173,6 +175,7 @@ const HomePage: React.FC = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const { title } = useOutletContext<{ title: string }>();
   const categories = useSelector(selectCategories);
+  const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
 
   const titles = useSelector(selectTitles);
   const travelPackages = useSelector(selectedTravelPackages);
@@ -278,11 +281,17 @@ const HomePage: React.FC = () => {
   
 
   const handleCustomizedTripClick = () => {
-    navigate("/travel-form");
+    setOpenInquiryDialog(true); 
   };
 
+  const handleCloseInquiryDialog = () => {
+    setOpenInquiryDialog(false);
+  };
+
+
   const handlePrePlannedTripsClick = () => {
-    navigate("/pre-planned-trips");
+    navigate(`/packages?category=${encodeURIComponent("pre-planned-trips")}`);
+
   };
 
 
@@ -323,7 +332,25 @@ const HomePage: React.FC = () => {
             </Button>
           </ButtonGroup>
         </ButtonContainer>
+      <Dialog
+        open={openInquiryDialog}
+        onClose={handleCloseInquiryDialog}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          style: {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            overflow: 'visible',
+          }
+        }}
+      >
+        <TravelInquiryForm
+          isCustomForm={true}
+        />
+      </Dialog>
       </ContentOverlay>
+
 
       {/*test */}
 

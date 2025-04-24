@@ -1,4 +1,4 @@
-import { Box, TextField, InputAdornment } from '@mui/material';
+import { Box, TextField, InputAdornment, Autocomplete } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
 import { useState } from 'react';
@@ -13,6 +13,8 @@ interface LocationDetailsProps {
   isRegister?: boolean;
   shouldShowRegister?: boolean;
   dateAvailabilities?: DateAvailability[];
+  titles?: { id: string; title: string }[]; 
+  isCustomForm?:boolean
 }
 
 function LocationDetails({
@@ -20,7 +22,9 @@ function LocationDetails({
   setInquiryData,
   isRegister,
   shouldShowRegister,
-  dateAvailabilities = []
+  dateAvailabilities = [],
+  titles = [],
+  isCustomForm
 }: LocationDetailsProps) {
   const [openDepartureDialog, setOpenAddressDialog] = useState(false);
 
@@ -84,22 +88,34 @@ function LocationDetails({
       {!isRegister && (
         <>
           {('destination' in inquiryData) && (
-            <TextField
-              fullWidth
-              placeholder="Destination"
-              disabled={true}
-              value={inquiryData.destination}
-              onChange={(e) => handleChange('destination', e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PlaceIcon />
-                  </InputAdornment>
-                ),
+            <Autocomplete
+              options={titles}
+              getOptionLabel={(option) => option.title}
+              value={titles.find(title => title.title === inquiryData.destination) || null}
+              onChange={(_, newValue) => {
+                handleChange('destination', newValue?.title || '');
+                handleChange('packageTitle', newValue?.title || '');
+                handleChange('packageId', newValue?.id || '');
               }}
-              margin="normal"
-              required
-              sx={textFieldStyle}
+              disabled={!isCustomForm}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  placeholder="Select Destination"
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PlaceIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  margin="normal"
+                  required
+                  sx={textFieldStyle}
+                />
+              )}
             />
           )}
 

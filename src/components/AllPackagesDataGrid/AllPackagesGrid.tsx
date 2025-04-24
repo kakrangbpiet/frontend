@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Typography, Switch } from "@mui/material";
+import { Box, Switch } from "@mui/material";
 import { fetchTravelPackagesApi, updateTravelPackageStatus } from "../../redux/slices/Travel/travelApiSlice";
 import { AppDispatch } from "../../redux/store";
 import { selectedTravelPackages, selectedTravelPackagesLoading } from "../../redux/slices/Travel/TravelSlice";
@@ -75,13 +75,7 @@ export default function PackagesVerification({
   // }
 
   return (
-    <>
       <Box>
-        <Typography variant="h4" fontWeight="bold">
-          {currentCategory ? `${currentCategory} Packages` :
-            currentLocation ? `Packages in ${currentLocation}` :
-              'All Packages'}
-        </Typography>
         <Box sx={{ width: "100%" }}>
             <Box sx={{ width: "100%", margin: "8px", position: "relative" }}>
                 {userType === UserCategory.KAKRAN_SUPER_ADMIN && (
@@ -116,6 +110,5 @@ export default function PackagesVerification({
             </Box>
         </Box>
       </Box>
-    </>
   );
 }
