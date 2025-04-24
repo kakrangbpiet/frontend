@@ -282,7 +282,7 @@ const HomePage: React.FC = () => {
     } else if (result.type === 'location') {
       navigate(`/type/location/${result?.value?.label}`);
     } else if (result.type === 'title') {
-      navigate(`/single/${result.value.id}/${result.value.title}`);
+      navigate(`/package/${result.value.id}/${result.value.title}`);
     }
   };
 
@@ -337,19 +337,19 @@ const HomePage: React.FC = () => {
       {/*test */}
 
       <div className=" bg-transparent flex items-center justify-center p-5">
-  <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
-    <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center drop-shadow-lg">
-      Explore With Us
-    </h1>
-  </div>
-</div>
+        <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center drop-shadow-lg">
+            Explore With Us
+          </h1>
+        </div>
+      </div>
 
-<div className=" bg-transparent flex items-center justify-center p-5">
-  <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
+      <div className=" bg-transparent flex items-center justify-center p-5">
+        <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
 
-  </div>
-</div>
-{/*todo //UI*/}
+        </div>
+      </div>
+      {/*todo //UI*/}
 
 
 
