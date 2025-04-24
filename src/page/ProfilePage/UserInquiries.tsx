@@ -70,10 +70,9 @@ export default function UserInquiries({}) {
               <LoadingOverlay loading={loading} />
               
                 <Datagrid
-                  getRowId={(row) => row.id}
-                  columns={columns}
-                  rows={verifiedRows}
-                />
+                getRowId={(row) => row.id}
+                columns={columns}
+                rows={verifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined}                />
             </Paper>
           </Box>
         </Paper>

@@ -89,14 +89,12 @@ export default function AllUsers() {
                 <Datagrid
                   getRowId={(row) => row.id}
                   columns={columns}
-                  rows={verifiedRows}
-                />
+                  rows={verifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined}                />
               ) : (
                 <Datagrid
-                  getRowId={(row) => row.id}
-                  columns={columns}
-                  rows={unverifiedRows}
-                />
+                    getRowId={(row) => row.id}
+                    columns={columns}
+                    rows={unverifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined}                />
               )}
             </Paper>
           </Box>

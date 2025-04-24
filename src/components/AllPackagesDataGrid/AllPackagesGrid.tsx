@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Paper, Typography, Switch, Skeleton } from "@mui/material";
+import { Box, Typography, Switch } from "@mui/material";
 import { fetchTravelPackagesApi, updateTravelPackageStatus } from "../../redux/slices/Travel/travelApiSlice";
 import { AppDispatch } from "../../redux/store";
 import { selectedTravelPackages, selectedTravelPackagesLoading } from "../../redux/slices/Travel/TravelSlice";
 import SearchBar from "../Searchbar";
 import OptionsMenu from "../OptionMenu";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 import { selectUserType } from "../../redux/slices/login/authSlice";
 import { UserCategory } from "../../Datatypes/Enums/UserEnums";
 import TravelPackages from "../Card/TravelPackageItems.tsx";
@@ -23,13 +23,13 @@ export default function PackagesVerification({
   currentStatus
 }: PackagesVerificationProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [openMenu, setOpenMenu] = useState(null);
-  const [selectedRowId, setSelectedRowId] = useState(null);
+  const [selectedRowId, /*setSelectedRowId*/] = useState(null);
   const [toggleCategoryType, setToggleUerType] = useState(currentStatus || "active");
-  const [paginationModel, setPaginationModel] = useState({
+  const [paginationModel, /*setPaginationModel*/] = useState({
     page: 0,
     pageSize: 10,
   });
