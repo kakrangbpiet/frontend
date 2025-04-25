@@ -78,11 +78,9 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                     </div>
                     
                     <div className="h-56 overflow-hidden">
-                      {pkg.images && pkg.images.length > 0 ? (
+                      {pkg.image ? (
                         <CustomSwiper 
-                          images={pkg.images.map(img => 
-                             `data:image/jpeg;base64,${img}` 
-                          )} 
+                          images={[`data:image/jpeg;base64,${pkg.image}`]} 
                         />
                       ) : (
                         <img

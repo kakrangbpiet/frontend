@@ -73,26 +73,37 @@ const travelSlice = createSlice({
   name: 'travelCollection',
   initialState,
   reducers: {
-    setLoadedItems: (state, action: PayloadAction<{ itemData?: ITravelPackage[]; loading: boolean,
+    setLoadedItems: (state, action: PayloadAction<{
+      itemData?: ITravelPackage[];
+      loading: boolean;
       pagination?: {
         currentPage: number;
         pageSize: number;
         totalItems: number;
         totalPages: number;
       };
-     }>) => {
+    }>) => {
       const { itemData, loading, pagination } = action.payload;
+    
       if (itemData) {
-        // For pagination, we replace the items rather than appending
-        state.travelPackages = itemData;
+        itemData.forEach((newItem) => {
+          const index = state.travelPackages.findIndex((item) => item.id === newItem.id);
+          if (index !== -1) {
+            // Update existing item
+            state.travelPackages[index] = newItem;
+          } else {
+            // Add new item
+            state.travelPackages.push(newItem);
+          }
+        });
       }
-      
+    
       if (pagination) {
         state.pagination = pagination;
       }
-      
+    
       state.loading = loading;
-    },
+    },    
     setTravelPackagesByCategory: (
       state,
       action: PayloadAction<{ category: string; itemData?: ITravelPackage[]; loading: boolean }>

@@ -192,7 +192,10 @@ const HomePage: React.FC = () => {
   }, [auth, navigate, selectedUserType, dispatch]);
   
   useEffect(() => {
-    dispatch(fetchTravelPackagesApi({ status: "active" }))
+    dispatch(fetchTravelPackagesApi({ 
+      status: "active",
+      select: "title,image,price,status"
+    }));
   }, [dispatch]);
 
   // const handleLoadCategories = async () => {

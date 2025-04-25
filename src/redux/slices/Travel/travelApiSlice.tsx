@@ -13,6 +13,7 @@ export const fetchTravelPackagesApi = createAsyncThunk(
       status?: string;
       location?: string;
       category?: string;
+      select?: string
     },
     { rejectWithValue, dispatch }
   ) => {
@@ -25,6 +26,8 @@ export const fetchTravelPackagesApi = createAsyncThunk(
       if (params?.category) queryParams.append('category', params.category);
       if (params?.pageSize) queryParams.append('pageSize', String(params.pageSize));
       if (params?.page) queryParams.append('page', String(params.page));
+      
+      if (params?.select) queryParams.append('select',params.select);
 
       const slug = queryParams.toString() ? `?${queryParams.toString()}` : '';
 
