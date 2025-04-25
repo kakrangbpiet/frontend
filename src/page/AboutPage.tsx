@@ -2,11 +2,10 @@ import { Container, Typography, Card, CardContent } from "@mui/material";
 import { styled } from "@mui/system";
 
 const AboutContainer = styled(Container)({
-  //comment for full transparent blur test 
   padding: "24px",
   textAlign: "center",
   maxWidth: "800px",
-  margin: "auto",
+  margin: "100px auto",
   background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%)",
   backdropFilter: "blur(10px)",
   WebkitBackdropFilter: "blur(10px)",

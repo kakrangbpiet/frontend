@@ -47,7 +47,8 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
   };
 
   return (
-    <div className="travel-packages bg-gradient-to-br from-white/10 to-white/20 backdrop-blur-md py-8" style={{ position: 'relative', zIndex: 5 }}>
+    <div className="w-full bg-gradient-to-br from-white/10 to-white/20 backdrop-blur-md py-8" style={{ position: 'relative', zIndex: 5, width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+      {/*full width*/}
       <section className="container mx-auto px-4">
         <div className="hover-sw-nav hover-sw-2">
           {loading ? (

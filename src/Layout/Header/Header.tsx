@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
   
       <div className="flex items-center">
-        <nav className="hidden md:flex space-x-8 lg:space-x-12 text-white font-calluna tracking-calluna-wide">
+        <nav className="hidden md:flex space-x-8 lg:space-x-12 text-white  tracking-wide">
           {links.map((link, index) => (
             <div
               className={`hover:text-gray-400 text-[#A0A0A0] text-sm px-3 py-2 rounded 
