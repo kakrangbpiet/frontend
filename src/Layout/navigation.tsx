@@ -7,9 +7,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 // Header Links
 export const HEADER_LINKS = [
-  { to: '/', label: 'Dashboard',icon:<HomeIcon sx={{color:"white"}}/> },
-  { to: '/about-us', label: 'About',icon:<InfoIcon sx={{color:"white"}}/> },
-  { to: '/settings', label: 'Settings',icon:<SettingsIcon sx={{color:"white"}}/> },
+  { to: '/', label: 'DASHBOARD',icon:<HomeIcon sx={{color:"white"}}/> },
+  { to: '/about-us', label: 'ABOUT',icon:<InfoIcon sx={{color:"white"}}/> },
+  { to: '/settings', label: 'SETTINGS',icon:<SettingsIcon sx={{color:"white"}}/> },
 ];
 
 // Sidebar Items

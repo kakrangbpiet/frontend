@@ -213,7 +213,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
           </div>
         ) : (
           <>
-            <div className="p-5 bg-transaprent backdrop-blur-md min-h-[300px]">
+            <div className="p-5 bg-transaprent-100/10 backdrop-blur-md min-h-[300px]">
   {getStepContent(
     activeStep, 
     inquiryData, 
@@ -236,7 +236,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
               
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
-                className={`px-5 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${
+                className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${
                   activeStep === 0 ? 'w-full ml-auto' : ''
                 }`}
               >

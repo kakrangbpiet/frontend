@@ -102,7 +102,7 @@ const SearchResults = styled.div`
   left: 0;
   right: 0;
   margin-top: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.3);

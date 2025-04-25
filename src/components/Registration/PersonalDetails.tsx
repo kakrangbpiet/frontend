@@ -22,21 +22,24 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
   // Custom MUI styles
   const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
-      backgroundColor: 'white',
-      borderRadius: '0.5rem',
+      backgroundColor: 'rgba(255, 255, 255, 0.4)', 
+      borderRadius: '0.75rem',
+      backdropFilter: 'blur(20px)', 
+      WebkitBackdropFilter: 'blur(20px)', 
+      border: '1px solid rgba(255, 255, 255, 0.3)',
       '& fieldset': {
-        borderColor: 'rgba(209, 213, 219, 1)',
+        borderColor: 'rgba(255, 255, 255, 0.5)',
       },
       '&:hover fieldset': {
-        borderColor: 'rgba(59, 130, 246, 0.8)',
+        borderColor: 'rgba(255, 255, 255, 0.5)',
       },
       '&.Mui-focused fieldset': {
         borderColor: '#3b82f6',
       },
     },
-    '& input, & textarea': {
+    '& input': {
       fontWeight: '500',
-      color: '#1f2937',
+      color: '#fffff',
     },
   };
 

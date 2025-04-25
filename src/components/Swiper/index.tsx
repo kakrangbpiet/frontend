@@ -26,40 +26,36 @@ const CustomSwiper: React.FC<CustomSwiperProps> = ({ images, autoplayDelay = 250
   };
 
   return (
-    <>
-      <Swiper
-        centeredSlides={true}
-        autoplay={{
-          delay: autoplayDelay,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        navigation={false}
-        modules={[Autoplay, Pagination]}
-        onAutoplayTimeLeft={onAutoplayTimeLeft}
-        className="mySwiper"
-      >
-
-        {images && images.map((src, index) => (
-         <SwiperSlide key={index} className='w-full h-[350px]'>
-         <img
-           className="lazyload img-product"
-           src={src}
-           alt={`Slide ${index + 1}`}
-           style={{
-             width: '100%',
-             height: '100%',
-             objectFit: 'cover',
-             transition: 'transform 0.3s ease'
-           }}
-         />
-       </SwiperSlide>
-        ))}
-       
-      </Swiper>
-    </>
+    <Swiper
+      centeredSlides={true}
+      autoplay={{
+        delay: autoplayDelay,
+        disableOnInteraction: false,
+      }}
+      pagination={{
+        clickable: true,
+      }}
+      navigation={false}
+      modules={[Autoplay, Pagination]}
+      onAutoplayTimeLeft={onAutoplayTimeLeft}
+      className="mySwiper h-full"
+    >
+      {images && images.map((src, index) => (
+        <SwiperSlide key={index} className='w-full h-full'>
+          <img
+            className="lazyload img-product"
+            src={src}
+            alt={`Slide ${index + 1}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.3s ease'
+            }}
+          />
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 };
 

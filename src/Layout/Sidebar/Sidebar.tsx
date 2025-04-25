@@ -2,94 +2,140 @@ import React from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SidebarProps } from '../../Datatypes/interface';
-import { Box } from '@mui/material';
-import {  Twitter, Instagram, Facebook } from 'lucide-react';
+import { Twitter, Instagram, Facebook } from 'lucide-react';
 
 const SidebarContainer = styled.div<{ $isOpen: boolean }>`
-  width: ${props => props.$isOpen ? '100%' : '0'};
-  height: 100vh;
-  background-color: #1E1E1E;
-  position: fixed;
-  left: 0;
-  top: 0;
+width: ${props => props.$isOpen ? '100%' : '0'};
+height: 100vh;
+background-color: rgba(0, 0, 0, 0.64); 
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px); 
+position: fixed;
+left: 0;
+top: 0;
+display: flex;
+flex-direction: column;
+transition: width 0.3s ease;
+overflow: hidden;
+z-index: 10;
+`;
+
+
+const MenuContainer = styled.nav`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s ease;
-  overflow: hidden;
-  z-index: 10;
-  border-right: 1px solid #2C2C2C;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 `;
 
-
-const NavItem = styled(Box)<{ $isOpen: boolean, $active?: boolean }>`
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
+const NavItem = styled.div<{ $active?: boolean }>`
+  color: white;
+  font-size: 16px;
+  margin: 12px 0;
   cursor: pointer;
   text-decoration: none;
-
+  text-align: center;
+  width: 100%;
+  padding: 10px 0;
+  font-weight: ${props => props.$active ? 'bold' : 'normal'};
+  
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
-const NavIcon = styled.div`
-  width: 26px;
-  height: 26px;
-  background-color: #4A4A4A;
+const BottomSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 250px;
+`;
+
+const Button = styled.button`
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 12px 0;
+  width: 100%;
+  margin: 8px 0;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const ProfileButton = styled(Button)`
+  background-color: rgba(128, 128, 128, 0.4);
   border-radius: 4px;
-  margin-right: 10px;
 `;
 
-const NavLabel = styled.span<{ $isOpen: boolean }>`
-  color: #A0A0A0;
-  font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+const SocialLinks = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 20px;
 `;
 
+const SocialIcon = styled.a`
+  color: white;
+  
+  &:hover {
+    opacity: 0.7;
+  }
+`;
 
 const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   const location = useLocation();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  
   return (
     <SidebarContainer $isOpen={isOpen}>
-   
-   <nav className="relative z-10 flex-grow flex flex-col items-center justify-center p-4 space-y-6">
+      
+      <MenuContainer>
         {items.map((item) => (
           <NavItem 
-          className="text-white text-xl py-3 px-4 hover:bg-white hover:bg-opacity-10 rounded-lg w-64 text-center"
             key={item.to}
-            onClick={()=>{navigate(item.to);onToggle()}}
-            $isOpen={isOpen}
+            onClick={() => {
+              navigate(item.to);
+              onToggle();
+            }}
             $active={location.pathname === item.to}
           >
-            <NavIcon >
-           { item.icon}
-            </NavIcon>
-            <NavLabel $isOpen={isOpen}>{item.label}</NavLabel>
+            {item.label}
           </NavItem>
         ))}
-         <div className="flex flex-col items-center pt-6 w-64 space-y-4">
-          <button className="text-white py-3 px-4 w-full text-center hover:bg-white hover:bg-opacity-10 hover:text-black rounded-lg text-xl">Switch to App</button>
-          <button 
-            onClick={() => {navigate('/profile');onToggle()}}
-            className="bg-black bg-opacity-20 text-white py-3 px-4 w-full rounded-lg hover:bg-white hover:text-black hover:bg-opacity-30 text-xl"
+        
+        <BottomSection>
+          <Button onClick={() => {}}>Switch to App</Button>
+          <ProfileButton 
+            onClick={() => {
+              navigate('/profile');
+              onToggle();
+            }}
           >
             Profile
-          </button>
-        </div>
-        
-        <div className="flex justify-center space-x-8 mt-8">
-          <a href="tw" className="text-white hover:text-gray-300">
-            <Twitter size={24} />
-          </a>
-          <a href="i" className="text-white hover:text-gray-300">
-            <Instagram size={24} />
-          </a>
-          <a href="f" className="text-white hover:text-gray-300">
-            <Facebook size={24} />
-          </a>
-        </div>
-      </nav>
+          </ProfileButton>
+          
+          <SocialLinks>
+            <SocialIcon href="tw">
+              <Twitter size={20} />
+            </SocialIcon>
+            <SocialIcon href="i">
+              <Instagram size={20} />
+            </SocialIcon>
+            <SocialIcon href="f">
+              <Facebook size={20} />
+            </SocialIcon>
+          </SocialLinks>
+        </BottomSection>
+      </MenuContainer>
     </SidebarContainer>
   );
 };

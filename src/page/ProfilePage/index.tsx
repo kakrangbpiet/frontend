@@ -87,8 +87,8 @@ const ProfilePage = () => {
   };
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-white/10 via-gray-800/20 to-black/30 py-12 px-4 sm:px-6 lg:px-8 backdrop-blur-sm">
-      <div className="max-w-3xl mx-auto">
+<div className="min-h-screen bg-gradient-to-br from-white/10 via-gray-800/20 to-black/30 pt-32 pb-12 px-4 sm:px-6 lg:px-8 backdrop-blur-sm">
+<div className="max-w-3xl mx-auto">
         <div className="text-center mb-10 backdrop-blur-lg bg-white/20 p-6 rounded-xl shadow-lg mb-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-100/30 to-purple-100/30 opacity-40"></div>
           <div className="relative z-10">
