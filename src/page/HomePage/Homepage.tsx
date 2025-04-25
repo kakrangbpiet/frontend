@@ -194,7 +194,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({ 
       status: "active",
-      select: "title,image,price,status"
+      select: "title,price,status"
+    }));
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchTravelPackagesApi({ 
+      status: "active",
+      select: "title,price,status,image"
     }));
   }, [dispatch]);
 
