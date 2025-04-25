@@ -109,7 +109,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 value={phoneInput}
                 onChange={handlePhoneChange}
                 disabled={showOtpField || (!shouldShowRegister && isRegister)}
-                className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 
+                className=" px-4 py-3 rounded-lg bg-white border border-gray-300 
                           text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
                           focus:ring-blue-200 transition-all duration-200 outline-none"
                 placeholder="Phone Number"
@@ -133,7 +133,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 type="button"
                 onClick={handleSendOtp}
                 disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-                className="w-full md:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r bg-blue-600 to-blue-600  text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                className=" md:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r bg-blue-600 to-blue-600  text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 Send Verification Code
               </button>
@@ -146,7 +146,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     value={otpInput}
                     onChange={handleOtpChange}
                     disabled={!shouldShowRegister && isRegister}
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 
+                    className=" px-4 py-3 rounded-lg bg-white border border-gray-300 
                               text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
                               focus:ring-blue-200 transition-all duration-200 outline-none"
                     placeholder="Verification Code"

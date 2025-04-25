@@ -128,6 +128,7 @@ function LocationDetails({
               endDate={inquiryData.endDate}
               setStartDate={(date) => handleChange('startDate', date)}
               setEndDate={(date) => handleChange('endDate', date)}
+              isCustomForm={isCustomForm}
             />
           )}
         </>

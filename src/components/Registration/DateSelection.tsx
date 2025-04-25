@@ -13,6 +13,7 @@ interface DateSelectionTabsProps {
   setStartDate: (date?: number) => void;
   setEndDate: (date?: number) => void;
   onValidationError?: (message: string) => void;
+  isCustomForm?:boolean;
 }
 
 function DateSelectionTabs({
@@ -23,7 +24,8 @@ function DateSelectionTabs({
   endDate,
   setStartDate,
   setEndDate,
-  onValidationError
+  onValidationError,
+  isCustomForm
 }: DateSelectionTabsProps) {
   const [activeTab, setActiveTab] = useState<'pre-planned' | 'custom'>(tripType);
   const [dateError, setDateError] = useState<string | null>(null);
@@ -76,6 +78,7 @@ function DateSelectionTabs({
         aria-label="Trip date selection options"
         className="flex flex-col gap-3 mb-4"
       >
+        {!isCustomForm &&
         <label 
           className={`flex items-center rounded-xl p-4 cursor-pointer transition-all duration-300 ${
             activeTab === 'pre-planned' 
@@ -109,7 +112,7 @@ function DateSelectionTabs({
             Pre-Planned Dates
           </span>
         </label>
-        
+}
         <label 
           className={`flex items-center rounded-xl p-4 cursor-pointer transition-all duration-300 ${
             activeTab === 'custom' 
