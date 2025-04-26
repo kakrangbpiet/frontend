@@ -11,6 +11,6 @@ export const MediaBackground = ({ video }: { video: { base64Data: any } }) => {
           <VideoHero
             videoSrc={videoSrc}
             title={"video"}
-    />
+            />
   );
 };

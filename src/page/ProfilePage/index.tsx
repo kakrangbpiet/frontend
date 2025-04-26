@@ -87,35 +87,22 @@ const ProfilePage = () => {
   };
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-white/10 via-gray-800/20 to-black/30 py-12 px-4 sm:px-6 lg:px-8 backdrop-blur-sm">
-      <div className="max-w-3xl mx-auto">
+<div className="min-h-screen bg-gradient-to-br from-white/10 via-gray-800/20 to-black/30 pt-32 pb-12 px-4 sm:px-6 lg:px-8 backdrop-blur-sm">
+<div className="max-w-3xl mx-auto">
         <div className="text-center mb-10 backdrop-blur-lg bg-white/20 p-6 rounded-xl shadow-lg mb-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-100/30 to-purple-100/30 opacity-40"></div>
           <div className="relative z-10">
-            <h2 className="text-4xl font-extrabold text-gray-800 sm:text-5xl mb-4 bg-gradient-to-r from-white/80 via-white/60 to-white/80 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-extrabold text-gray-800 md:text-2xl mb-4 bg-gradient-to-r from-white/80 via-white/60 to-white/80 bg-clip-text text-transparent">
               My Profile
             </h2>
-            <p className="text-xl  text-gray-800 ">
+            <p className="text-lg  text-gray-800 ">
               Manage your account and travel inquiries
             </p>
           </div>
         </div>
         
-        <div className="backdrop-blur-lg bg-white/20 p-6 rounded-xl shadow-lg mb-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/20 to-purple-50/20 opacity-30"></div>
-          <div className="relative z-10">
-            <UserDetails
-              shouldShowRegister={shouldShowRegister}
-              userData={userData}
-              setUserData={setUserData}
-              isRegister={true}
-              handleRegister={handleRegister}
-            />
-          </div>
-        </div>
-        
         {!shouldShowRegister && (
-          <div className="backdrop-blur-lg bg-white/20 shadow-lg rounded-xl p-6 relative overflow-hidden transition-all duration-300 hover:shadow-xl">
+          <div className="backdrop-blur-lg bg-white/20 shadow-lg rounded-xl p-6 my-4 relative overflow-hidden transition-all duration-300 hover:shadow-xl">
             <div className="absolute inset-0 bg-gradient-to-r from-green-50/20 to-emerald-50/20 opacity-30"></div>
             <div className="relative z-10">
               <div className="flex flex-col sm:flex-row justify-between items-center">
@@ -139,6 +126,21 @@ const ProfilePage = () => {
             </div>
           </div>
         )}
+        
+        <div className="backdrop-blur-lg bg-white/20 p-6 rounded-xl shadow-lg mb-8 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/20 to-purple-50/20 opacity-30"></div>
+          <div className="relative z-10">
+            <UserDetails
+              shouldShowRegister={shouldShowRegister}
+              userData={userData}
+              setUserData={setUserData}
+              isRegister={true}
+              handleRegister={handleRegister}
+            />
+          </div>
+        </div>
+        
+     
       </div>
     </div>
   );

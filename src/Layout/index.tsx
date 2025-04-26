@@ -61,6 +61,10 @@ const Layout = () => {
   const selectedUserType = useSelector(selectUserType);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [randomHero, setRandomHero] = useState<{video: string, title: string} | null>(null);
+  // Add state to control mobile icons visibility
+  
+  const [showMobileIcons,] = useState(false);
+  
   useEffect(() => {
     // Select a random hero content when component mounts
     const randomIndex = Math.floor(Math.random() * heroContent.length);
@@ -116,7 +120,8 @@ const Layout = () => {
           </a>
         </div>
         
-        {!mobileMenuOpen && (
+        {/* Mobile social icons - now conditional on showMobileIcons state */}
+        {!mobileMenuOpen && showMobileIcons && (
           <div className="z-50 md:hidden flex justify-center space-x-8 mt-6">
             <a href="http://instagram.com/" className="text-white hover:text-gray-300">
               <Twitter size={20} />
@@ -138,9 +143,9 @@ const Layout = () => {
         $auth={auth}
       >
           <Outlet context={{ title: randomHero?.title }} />
+      <Footer />
       </MainContent>
   
-      <Footer />
     </div>
   );
 };

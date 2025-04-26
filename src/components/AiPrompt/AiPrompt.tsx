@@ -1,5 +1,5 @@
 import { Key, useState } from 'react';
-import { TextField, Button, Box, Paper, InputAdornment, Alert, Typography, Avatar } from '@mui/material';
+import { TextField, Button, Box, InputAdornment, Alert, Typography, Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { MarkdownBlock } from '../Markdown';
@@ -36,14 +36,9 @@ const AiPromptGenerator = () => {
 
   return (
     <Box sx={{ margin: 'auto', paddingTop:"20px" }}>
-      <Paper elevation={3} sx={{ overflowY: 'auto', padding: '12px', borderRadius: '8px' }}>
-        <Typography variant="h6" sx={{ marginBottom: '6px', textAlign: 'center' }}>
-          ASK AI
-        </Typography>
-
-        <Box>
+     
           <Box>
-            {messages.map((message: { image?: string, role: string; content: any; }, index: Key | null | undefined) => (
+            {messages.length>0 && messages.map((message: { image?: string, role: string; content: any; }, index: Key | null | undefined) => (
               <Box key={index} sx={{ display: 'flex', alignItems: 'flex-start', margin: '1px 0', textAlign: message.role === 'user' ? 'right' : 'left' }}>
                 {message.role === 'user' ? (
                   <Avatar sx={{ marginLeft: 'auto', marginRight: '8px',width:"26px",height:"30px"}}>ME</Avatar>
@@ -74,8 +69,6 @@ const AiPromptGenerator = () => {
               Loading response...
             </Typography>
           )}
-        </Box>
-      </Paper>
 
       <Box sx={{ mt: 2, display: 'flex' }}>
         <TextField

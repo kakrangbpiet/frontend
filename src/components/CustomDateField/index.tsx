@@ -46,24 +46,26 @@ const CustomDateField: React.FC<CustomDateFieldProps> = ({
     ? new Date(minDate * 1000).toISOString().split('T')[0]
     : localToday.toISOString().split('T')[0];
 
-  // Custom MUI styles for white background
+  // Custom MUI styles for translucent background and blur effect
   const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
-      backgroundColor: 'white',
+      backgroundColor: 'rgba(245, 243, 255, 0.4)',  // Semi-transparent background
+      backdropFilter: 'blur(10px)',  // Background blur effect
+      WebkitBackdropFilter: 'blur(10px)',  // For Safari
       borderRadius: '0.5rem',
       '& fieldset': {
-        borderColor: 'rgba(209, 213, 219, 1)',
+        borderColor: 'rgba(209, 213, 219, 1)',  // Default border color
       },
       '&:hover fieldset': {
-        borderColor: 'rgba(59, 130, 246, 0.8)',
+        borderColor: 'rgba(59, 130, 246, 0.8)',  // Hover border color
       },
       '&.Mui-focused fieldset': {
-        borderColor: '#3b82f6',
+        borderColor: '#3b82f6',  // Focused border color
       },
     },
     '& input': {
       fontWeight: '500',
-      color: '#1f2937',
+      color: '#1e1b4b',  // Dark text color
     },
   };
 

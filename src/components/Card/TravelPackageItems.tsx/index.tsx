@@ -52,10 +52,10 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
       <section className="container mx-auto px-4">
         <div className="hover-sw-nav hover-sw-2">
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {[...Array(4)].map((_, index) => (
                 <div key={index} className="w-full">
-                  <Skeleton variant="rectangular" height={350} />
+                  <Skeleton variant="rectangular" height={200} />
                   <Skeleton variant="text" width="80%" />
                   <Skeleton variant="text" width="60%" />
                 </div>
@@ -66,7 +66,8 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
               No packages found for this category.
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {travelPackages.map((pkg: ITravelPackage) => (
                 <div key={pkg.id} className="w-full">
                   <div 
@@ -77,50 +78,87 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                       {renderStatusChip(pkg.status)}
                     </div>
                     
-                    <div className="h-56 overflow-hidden">
+                    <div className="h-40 md:h-56 overflow-hidden">
                       {pkg.image ? (
                         <CustomSwiper 
                           images={[`data:image/jpeg;base64,${pkg.image}`]} 
                         />
                       ) : (
-                        <img
-                          src={pkg.image}
-                          alt={pkg.title}
-                          className="w-full h-full object-cover"
+                        // Show skeleton when no image
+                        <Skeleton 
+                          variant="rectangular" 
+                          width="100%" 
+                          height="100%"
+                          sx={{ 
+                            bgcolor: 'rgba(255, 255, 255, 0.1)',
+                            borderRadius: 0 // Remove rounded corners to match parent container
+                          }}
                         />
                       )}
                     </div>
-
-                    <div className="p-4 bg-black/40 backdrop-blur-md text-white border-t border-white/10">
-                      <Link 
-                        to={`/package/${pkg.id}/${pkg.title}`}
-                        className="block mb-2 text-lg font-semibold text-white hover:text-blue-300 no-underline"
-                      >
-                        {pkg.title}
-                      </Link>
-                      
-                      {pkg.location && (
-                        <div className="mb-2 text-sm text-white/80">
-                          <span>📍 {pkg.location}</span>
-                        </div>
+            
+                    <div className="p-3 md:p-4 bg-black/40 backdrop-blur-md text-white border-t border-white/10">
+                      {/* Skeleton for title */}
+                      {pkg.title ? (
+                        <Link 
+                          to={`/package/${pkg.id}/${pkg.title}`}
+                          className="block mb-1 md:mb-2 text-sm md:text-lg font-semibold text-white hover:text-blue-300 no-underline truncate"
+                        >
+                          {pkg.title}
+                        </Link>
+                      ) : (
+                        <Skeleton 
+                          width="80%" 
+                          height={24}
+                          sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
+                        />
                       )}
                       
-                      <div className="flex justify-between items-center mt-2">
+                      
+                      <div className="flex justify-between items-center mt-1 md:mt-2">
                         <div>
-                          <div className="font-bold text-white">
-                            ₹{pkg.price.toLocaleString()}
-                          </div>
-                          {pkg.originalPrice && (
-                            <div className="text-sm text-white/70 line-through">
-                              ₹{pkg.originalPrice.toLocaleString()}
-                            </div>
+                          {/* Skeleton for price */}
+                          {pkg.price ? (
+                            <>
+                              <div className="font-bold text-sm md:text-base text-white">
+                                ₹{pkg.price.toLocaleString()}
+                              </div>
+                              {pkg.originalPrice && (
+                                <div className="text-xs md:text-sm text-white/70 line-through">
+                                  ₹{pkg.originalPrice.toLocaleString()}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <Skeleton 
+                                width="60%" 
+                                height={20}
+                                sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
+                              />
+                              <Skeleton 
+                                width="40%" 
+                                height={16}
+                                sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
+                              />
+                            </>
                           )}
                         </div>
                         
-                        {pkg.category && (
-                          <span className="px-2 py-1 text-xs rounded-full bg-white/20 text-white border border-white/10 backdrop-blur-sm">
+                        {/* Skeleton for category */}
+                        {pkg.category ? (
+                          <span className="px-1.5 py-0.5 md:px-2 md:py-1 text-xs rounded-full bg-white/20 text-white border border-white/10 backdrop-blur-sm truncate max-w-[80px] md:max-w-none">
                             {pkg.category}
                           </span>
+                        ) : (
+                          <Skeleton 
+                            width={60} 
+                            height={24}
+                            sx={{ 
+                              bgcolor: 'rgba(255, 255, 255, 0.1)',
+                              borderRadius: '12px'
+                            }}
+                          />
                         )}
                       </div>
                     </div>
@@ -132,7 +170,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
           
           <div className="text-center mt-8">
             <button
-            onClick={handleNavigateAllPackages}
+              onClick={handleNavigateAllPackages}
               className="inline-block px-6 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/20 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             >
               VIEW ALL PACKAGES

@@ -82,9 +82,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <div className="backdrop-blur-md bg-white/20 rounded-lg shadow-lg mb-2">
+    <div >
       
-      <div className="space-y-4">
+      <div className="space-y-7">
         <div className="relative">
           <input
             type="email"
@@ -92,12 +92,14 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             value={inquiryData.email}
             onChange={(e) => handleChange('email', e.target.value)}
             disabled={!shouldShowRegister && isRegister}
-            className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 
-                      text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-                      focus:ring-blue-200 transition-all duration-200 outline-none"
+            className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+             text-black font-medium focus:border-blue-500 focus:ring-2 
+             focus:ring-blue-200 transition-all duration-200 outline-none"
             placeholder="Email Address"
             required
           />
+
+          
         </div>
         
         {!isContactVerified ? (
@@ -109,9 +111,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 value={phoneInput}
                 onChange={handlePhoneChange}
                 disabled={showOtpField || (!shouldShowRegister && isRegister)}
-                className=" px-4 py-3 rounded-lg bg-white border border-gray-300 
-                          text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-                          focus:ring-blue-200 transition-all duration-200 outline-none"
+                className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+                text-black font-medium focus:border-blue-500 focus:ring-2 
+                focus:ring-blue-200 transition-all duration-200 outline-none"
                 placeholder="Phone Number"
                 required
               />
@@ -129,14 +131,19 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             </div>
             
             {!showOtpField ? (
-              <button 
-                type="button"
-                onClick={handleSendOtp}
-                disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-                className=" md:w-auto px-6 py-2.5 rounded-lg bg-gradient-to-r bg-blue-600 to-blue-600  text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-              >
-                Send Verification Code
-              </button>
+ <div className="flex justify-center mt-4">
+ <button 
+   type="button"
+   onClick={handleSendOtp}
+   disabled={!phoneInput || (!shouldShowRegister && isRegister)}
+   className="px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-600 
+   text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
+   disabled:cursor-not-allowed transition-all duration-200 w-[200px]"
+ >
+   Send Verification Code
+ </button>
+</div>
+
             ) : (
               <>
                 <div className="relative">
@@ -146,9 +153,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     value={otpInput}
                     onChange={handleOtpChange}
                     disabled={!shouldShowRegister && isRegister}
-                    className=" px-4 py-3 rounded-lg bg-white border border-gray-300 
-                              text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-                              focus:ring-blue-200 transition-all duration-200 outline-none"
+                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+                    text-black font-medium focus:border-blue-500 focus:ring-2 
+                    focus:ring-blue-200 transition-all duration-200 outline-none"
                     placeholder="Verification Code"
                     required
                   />
@@ -169,8 +176,10 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                       type="button"
                       onClick={handleEditNumber}
                       disabled={!shouldShowRegister && isRegister}
-                      className="px-6 py-2.5 rounded-lg bg-white border border-gray-300 text-gray-700 font-medium shadow-sm hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                    >
+                      className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+                      text-black font-medium focus:border-blue-500 focus:ring-2 
+                      focus:ring-blue-200 transition-all duration-200 outline-none"
+                   >
                       Edit Number
                     </button>
                   )}
@@ -179,8 +188,10 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             )}
           </>
         ) : (
-          <div className="bg-white rounded-lg p-4 border border-green-200">
-            <div className="flex items-center">
+          <div className ="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+          text-black font-medium focus:border-blue-500 focus:ring-2 
+          focus:ring-blue-200 transition-all duration-200 outline-none">
+                      <div className="flex items-center">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />

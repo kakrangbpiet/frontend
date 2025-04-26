@@ -31,7 +31,7 @@ const AllTravelPackagesPage = () => {
         <>
         <div className="flex justify-center pt-28">
             <div className="w-[450px] p-4   bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
-                <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center drop-shadow-lg">
+                <h1 className="text-3xl sm:text-3xl font-extrabold text-white text-center drop-shadow-lg">
                     {category ? `${category} Packages` : 
                      location ? `Packages in ${location}` : 
                      'Explore With Us'}

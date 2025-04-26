@@ -46,7 +46,9 @@ function LocationDetails({
   // Custom MUI styles
   const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
-      backgroundColor: 'white',
+      backgroundColor: 'rgba(245, 243, 255, 0.4)', 
+      backdropFilter: 'blur(10px)', 
+      WebkitBackdropFilter: 'blur(10px)', 
       borderRadius: '0.5rem',
       '& fieldset': {
         borderColor: 'rgba(209, 213, 219, 1)',
@@ -59,10 +61,11 @@ function LocationDetails({
       },
     },
     '& input': {
-      fontWeight: '500',
-      color: '#1f2937',
+      fontWeight: '400',
+      color: '#000000',
     },
   };
+  
 
   return (
     <Box sx={{  }}>
