@@ -1,13 +1,14 @@
 import { Key, useState } from 'react';
-import { TextField, Button, Box, InputAdornment, Alert, Typography, Avatar } from '@mui/material';
+import { TextField, Button, Box, InputAdornment, Alert, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { MarkdownBlock } from '../Markdown';
 import { AppDispatch } from '../../redux/store';
 import { selectActiveHistoryId, selectChatMessages, selectLoading } from '../../redux/slices/AI/AiSlice';
 import { fetchChatResponse } from '../../redux/slices/AI/AiApiSlice';
-
-const AiPromptGenerator = () => {
+import FaceRetouchingNaturalIcon from '@mui/icons-material/FaceRetouchingNatural';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+const AiPromptGenerator = (data) => {
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
 
@@ -22,7 +23,7 @@ const AiPromptGenerator = () => {
       return;
     }
     setError('');
-    dispatch(fetchChatResponse({ newMessageId: uuidv4(), userMessage: input, aiType: "CHATGPT", historyId: activeHistoryId || "" ,promptType:"TEXT"}));
+    dispatch(fetchChatResponse({ newMessageId: uuidv4(), userMessage: input, historyId: activeHistoryId || "" ,promptType:"TEXT", data}));
     setInput('');
 
   };
@@ -41,11 +42,11 @@ const AiPromptGenerator = () => {
             {messages.length>0 && messages.map((message: { image?: string, role: string; content: any; }, index: Key | null | undefined) => (
               <Box key={index} sx={{ display: 'flex', alignItems: 'flex-start', margin: '1px 0', textAlign: message.role === 'user' ? 'right' : 'left' }}>
                 {message.role === 'user' ? (
-                  <Avatar sx={{ marginLeft: 'auto', marginRight: '8px',width:"26px",height:"30px"}}>ME</Avatar>
+                  <AccountCircleIcon sx={{ marginLeft: 'auto', marginRight: '12px',width:"26px",height:"30px"}}/>
                 ) : (
-                  <Avatar sx={{ marginRight: '8px',width:"26px",height:"30px"}}>AI</Avatar>
+                  <FaceRetouchingNaturalIcon sx={{ marginRight: '2px',width:"26px",height:"30px"}}/>
                 )}
-                <Box sx={{ wordWrap: 'break-word', padding: '2px', borderRadius: '20px', boxShadow: message.role === 'user' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none' }}>
+                <Box sx={{ wordWrap: 'break-word', padding: '8px', borderRadius: '20px', boxShadow: message.role === 'user' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none' }}>
                   <MarkdownBlock code={message.content} />
                   {message.image &&
                     <>

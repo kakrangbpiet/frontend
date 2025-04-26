@@ -21,7 +21,6 @@ export const MarkdownBlock: FC<Props> = ({ code }) => {
     <Box
       sx={{
         p: "1px 16px",
-        bgcolor: '#1A1B26',
         color: 'white',
         overflow: 'auto',
         borderRadius: '8px',

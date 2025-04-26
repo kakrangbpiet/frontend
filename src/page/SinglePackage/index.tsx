@@ -13,7 +13,7 @@ import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay } from './DateAvailability';
 import FullScreenGallery from './FullScreenGallery';
-
+import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -25,7 +25,6 @@ const SingleTravelPackageDetails = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -35,6 +34,7 @@ const SingleTravelPackageDetails = () => {
   const selectedTravelPackage = useSelector(useSelectedTravelPackage(travelPackageId)) as ITravelPackage | undefined;
   useEffect(() => {
     dispatch(fetchTravelItemVideosApi({ itemId: travelPackageId }));
+    dispatch(setActiveHistory(travelPackageId))
   }, [dispatch]);
 
   useEffect(() => {
@@ -269,30 +269,39 @@ const SingleTravelPackageDetails = () => {
               )}
 
               {activeTab === 'Ask Ai' && (
-                  <div className="mb-8 md:mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="w-full  mb-4 md:mb-0 md:pr-6 lg:pr-8">
-                <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-white">Need Help Planning Your Trip?</h2>
-              </div>
-              <div className="w-full  bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
-                <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-emerald-300">Ask Our AI Assistant</h3>
-                <AiPromptGenerator />
-              </div>
-           
-            </div>
-            <p className="text-gray-200 mb-3 md:mb-4 text-sm md:text-base pt-6">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
-                <div className="flex items-center space-x-2 mb-2 md:mb-6">
-                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white text-sm md:text-base">Get instant answers</p>
-                </div>
-                <div className="flex items-center space-x-2 mb-2 md:mb-6">
-                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white text-sm md:text-base">Personalized suggestions</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white text-sm md:text-base">24/7 virtual assistance</p>
-                </div>
+                <div className="mb-8 md:mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+                  <div className="md:flex-row items-center">
+                    <div className="w-full  mb-4 md:mb-0 md:pr-6 lg:pr-8">
+                      <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-white">Need Help Planning Your Trip?</h2>
+                    </div>
+                    <div className="w-full  bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
+                      <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-emerald-300">Ask Our AI Assistant</h3>
+                      <AiPromptGenerator data={{
+                        title:selectedTravelPackage.title,
+                        description:selectedTravelPackage.description,
+                        location:selectedTravelPackage.location,
+                        category:selectedTravelPackage.category,
+                        travelType:selectedTravelPackage.travelType,
+                        availableSpots:selectedTravelPackage.availableSpots,
+                        maxTravelers:selectedTravelPackage.maxTravelers,
+                        availableDates:selectedTravelPackage.dateAvailabilities,
+                      }} />
+                    </div>
+
+                  </div>
+                  <p className="text-gray-200 mb-3 md:mb-4 text-sm md:text-base pt-6">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
+                  <div className="flex items-center space-x-2 mb-2 md:mb-6">
+                    <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                    <p className="text-white text-sm md:text-base">Get instant answers</p>
+                  </div>
+                  <div className="flex items-center space-x-2 mb-2 md:mb-6">
+                    <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                    <p className="text-white text-sm md:text-base">Personalized suggestions</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                    <p className="text-white text-sm md:text-base">24/7 virtual assistance</p>
+                  </div>
                 </div>
               )}
               {/* {activeTab === 'highlights' && (
@@ -370,7 +379,7 @@ const SingleTravelPackageDetails = () => {
               <Registration packageId={travelPackageId || ''} packageTitle={title} />
             </div>
           </div>
-        
+
         </div>
       </div>
 
