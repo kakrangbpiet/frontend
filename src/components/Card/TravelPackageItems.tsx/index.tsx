@@ -116,7 +116,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                       <div className="flex justify-between items-center mt-1 md:mt-2">
                         <div>
                           {/* Skeleton for price */}
-                          {pkg.price ? (
+                          {/* {pkg.price ? (
                             <>
                               <div className="font-bold text-sm md:text-base text-white">
                                 ₹{pkg.price.toLocaleString()}
@@ -140,7 +140,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                                 sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
                               />
                             </>
-                          )}
+                          )} */}
                         </div>
 
                         {/* Skeleton for category */}

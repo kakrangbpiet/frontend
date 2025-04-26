@@ -8,10 +8,14 @@ interface UnixDateInputProps {
   endDate: number | null;
   maxTravelers: number;
   availableSpots: number;
+  price: number;
+  originalPrice?: number;
   onStartDateChange: (unixTimestamp: number | null) => void;
   onEndDateChange: (unixTimestamp: number | null) => void;
   onMaxTravelersChange: (maxTravelers: number) => void;
   onAvailableSpotsChange: (availableSpots: number) => void;
+  onPriceChange: (price: number) => void;
+  onOriginalPriceChange: (originalPrice: number | undefined) => void;
   onRemove?: () => void;
   showRemove?: boolean;
 }
@@ -21,10 +25,14 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
   endDate,
   maxTravelers,
   availableSpots,
+  price,
+  originalPrice,
   onStartDateChange,
   onEndDateChange,
   onMaxTravelersChange,
   onAvailableSpotsChange,
+  onPriceChange,
+  onOriginalPriceChange,
   onRemove,
   showRemove = false,
 }) => {
@@ -41,14 +49,14 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
       )}
       
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <CustomDateField
             placeholder="Start Date"
             value={startDate}
             onChange={onStartDateChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <CustomDateField
             placeholder="End Date"
             value={endDate}
@@ -58,7 +66,7 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
       </Grid>
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <TextField
             fullWidth
             type="number"
@@ -67,13 +75,36 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
             onChange={(e) => onMaxTravelersChange(parseInt(e.target.value) || 0)}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <TextField
             fullWidth
             type="number"
             label="Available Spots"
             value={availableSpots}
             onChange={(e) => onAvailableSpotsChange(parseInt(e.target.value) || 0)}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid size={{ xs: 12, md: 12 }}>
+          <TextField
+            fullWidth
+            type="number"
+            label="Price"
+            value={price}
+            onChange={(e) => onPriceChange(parseFloat(e.target.value) || 0)}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 12 }}>
+          <TextField
+            fullWidth
+            type="number"
+            label="Original Price (optional)"
+            value={originalPrice || ''}
+            onChange={(e) => onOriginalPriceChange(
+              e.target.value ? parseFloat(e.target.value) : undefined
+            )}
           />
         </Grid>
       </Grid>

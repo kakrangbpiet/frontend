@@ -26,7 +26,6 @@ interface ErrorMessages {
 const newErrors: ErrorMessages = {
   title: '',
   description: '',
-  price: '',
   location: '',
   category: '',
   status: '',
@@ -45,8 +44,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         id: '',
         title: '',
         description: '',
-        price: 0,
-        originalPrice: undefined,
         image: '',
         images: [],
         videos: [],
@@ -72,8 +69,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       id: '',
       title: '',
       description: '',
-      price: 0,
-      originalPrice: undefined,
       image: '',
       images: [],
       videos: [],
@@ -95,7 +90,9 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         startDate: null,
         endDate: null,
         maxTravelers: 10,
-        availableSpots: 10
+        availableSpots: 10,
+        price: 0,
+        originalPrice: undefined,
       }
     ]);
   };
@@ -121,7 +118,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     event.preventDefault();
 
     // Validate required fields
-    const requiredFields: Array<keyof ITravelPackage> = ['title', 'description', 'price', 'location', 'category', 'status', 'image'];
+    const requiredFields: Array<keyof ITravelPackage> = ['title', 'description', 'location', 'category', 'status', 'image'];
     let hasErrors = false;
 
     requiredFields.forEach((field) => {
@@ -182,7 +179,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     return (
       formData.title.trim() &&
       formData.description.trim() &&
-      formData.price > 0 &&
       formData.location.trim() &&
       formData.category.trim() &&
       formData.image.trim()
@@ -223,33 +219,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
             />
           </Grid>
 
-          {/* Price and Original Price in one row */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Typography variant="h6">Price</Typography>
-            <CustomTextField
-              id="price"
-              type="number"
-              label="Price"
-              value={formData.price}
-              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleNumberChange(e, 'price')}
-              placeholder="Enter price"
-              error={errors.price}
-              isError={!!errors.price}
-              fullWidth
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Typography variant="h6">Original Price (for discount display)</Typography>
-            <CustomTextField
-              id="originalPrice"
-              type="number"
-              label="Original Price"
-              value={formData.originalPrice || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleNumberChange(e, 'originalPrice')}
-              placeholder="Enter original price"
-              fullWidth
-            />
-          </Grid>
+   
           <Grid size={{ xs: 12, md: 12 }}>
             <Typography variant="h6" gutterBottom>
               Date Availabilities
@@ -262,10 +232,14 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
                 endDate={dateAvailability.endDate}
                 maxTravelers={dateAvailability.maxTravelers}
                 availableSpots={dateAvailability.availableSpots}
+                price={dateAvailability.price}
+                originalPrice={dateAvailability.originalPrice}
                 onStartDateChange={(value) => handleDateAvailabilityChange(index, 'startDate', value)}
                 onEndDateChange={(value) => handleDateAvailabilityChange(index, 'endDate', value)}
                 onMaxTravelersChange={(value) => handleDateAvailabilityChange(index, 'maxTravelers', value)}
                 onAvailableSpotsChange={(value) => handleDateAvailabilityChange(index, 'availableSpots', value)}
+                onPriceChange={(value) => handleDateAvailabilityChange(index, 'price', value)}
+                onOriginalPriceChange={(value) => handleDateAvailabilityChange(index, 'originalPrice', value)}
                 onRemove={() => handleRemoveDateAvailability(index)}
                 showRemove={dateAvailabilities.length > 1}
               />

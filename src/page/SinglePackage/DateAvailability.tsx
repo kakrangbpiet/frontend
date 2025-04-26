@@ -1,53 +1,183 @@
+import { useState } from "react";
 import { DateAvailability } from "../../redux/slices/Travel/TravelSlice";
+import { Info } from 'lucide-react';
 
-// Add this utility function at the top of your file (or in a separate utils file)
 export const formatDate = (timestamp: number): string => {
-    const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleDateString('en-IN', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
     });
 };
 
-// Add this component inside your SingleTravelPackageDetails file
-export const DateAvailabilityDisplay = ({ dateAvailabilities }: { dateAvailabilities: DateAvailability[] }) => {
+const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount);
+};
+
+export const DateAvailabilityDisplay = ({ 
+    dateAvailabilities,
+    startDate,
+    setStartDate,
+    setEndDate,
+}: { 
+    dateAvailabilities: DateAvailability[],
+    startDate?: number,
+    setStartDate?: (date: number) => void,
+    setEndDate?: (date: number) => void,
+}) => {
+    const currentDate = new Date();
+    const currentTimestamp = Math.floor(currentDate.getTime() / 1000);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+
+    const getAvailabilityStatus = (spots: number) => {
+        if (spots > 5) {
+            return {
+                color: 'bg-green-500',
+                text: `${spots} spots available`,
+                textColor: 'text-green-300'
+            };
+        } else if (spots > 0) {
+            return {
+                color: 'bg-yellow-500',
+                text: `Only ${spots} spots left!`,
+                textColor: 'text-yellow-300'
+            };
+        } else {
+            return {
+                color: 'bg-red-500',
+                text: 'Fully booked',
+                textColor: 'text-red-300'
+            };
+        }
+    };
+
+    const upcomingAvailabilities = dateAvailabilities
+        .filter(avail => avail.endDate > currentTimestamp)
+        .sort((a, b) => a.startDate - b.startDate);
+
+    const calculateDiscount = (price: number, originalPrice?: number) => {
+        if (!originalPrice || originalPrice <= price) return 0;
+        return Math.round(((originalPrice - price) / originalPrice) * 100);
+    };
+
     return (
-        <div className=" p-4 mb-8 ">
-
-            {dateAvailabilities.length === 0 ? (
-                <p className="text-white">No available dates currently scheduled.</p>
+        <div className="p-4 mb-8">
+               <div className="flex items-center justify-between">
+      <div className="font-medium text-white ml-1 mb-3 flex items-center">
+        <span>Available Dates</span>
+        <div className="relative ml-2">
+          <Info 
+            size={16} 
+            className="text-white cursor-help"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            aria-label="Information about availability"
+          />
+          {showTooltip && (
+            <div className="absolute top-full left-0 mt-2 p-2 bg-gray-800 text-xs text-white rounded shadow-lg z-10 w-48">
+              Green indicates plenty of spots available, yellow means limited spots, and red means fully booked.
+            </div>
+          )}
+        </div>
+      </div>
+      {dateAvailabilities.length > 0 && (
+        <span className="text-xs text-white">
+          {dateAvailabilities.length} options available
+        </span>
+      )}
+    </div>
+            {upcomingAvailabilities.length === 0 ? (
+                <p className="text-white/70">No upcoming dates available. Check back later for new schedules.</p>
             ) : (
-                <div className="">
-                    {dateAvailabilities.map((availability, index) => (
-                        <div key={index} className=" bg-opacity-10 rounded-lg p-4 border border-white-600 hover:bg-opacity-20 transition">
-                            <div className="flex justify-between items-start mb-2">
-                                <div>
-                                    <p className="text-md font-medium text-white">
-                                        {formatDate(availability.startDate)} - {formatDate(availability.endDate)}
-                                    </p>
-                                    <p className="text-sm text-gray-300">
-                                        {availability.availableSpots} of {availability.maxTravelers} spots available
+                <div className="space-y-3">
+                    {upcomingAvailabilities.map((availability, index) => {
+                        const status = getAvailabilityStatus(availability.availableSpots);
+                        const durationDays = Math.ceil((availability.endDate - availability.startDate) / (60 * 60 * 24));
+                        const discount = calculateDiscount(availability.price, availability.originalPrice);
+                        const hasPrice = availability.price !== undefined && availability.price !== null;
+                        
+                        return (
+                            <div
+                                key={index}
+                                className={`p-4 rounded-lg cursor-pointer transition-all duration-300 ${
+                                    startDate === availability.startDate 
+                                        ? 'bg-blue-500/30 border-2 border-blue-500 shadow-lg shadow-blue-500/20' 
+                                        : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-md hover:-translate-y-0.5'
+                                }`}
+                                onClick={() => {
+                                    setStartDate(availability.startDate);
+                                    setEndDate(availability.endDate);
+                                }}
+                                aria-selected={startDate === availability.startDate}
+                                role="option"
+                            >
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <p className="font-medium text-white">
+                                            {formatDate(availability.startDate)} - {formatDate(availability.endDate)}
+                                        </p>
+                                        <p className="text-sm text-white/70 mt-1">
+                                            {durationDays} {durationDays === 1 ? 'day' : 'days'}
+                                        </p>
+                                    </div>
+                                    
+                                    <div className="text-right">
+                                        {hasPrice ? (
+                                            <>
+                                                {discount > 0 && (
+                                                    <span className="text-xs line-through text-white/50 mr-2">
+                                                        {formatCurrency(availability.originalPrice!)}
+                                                    </span>
+                                                )}
+                                                <span className={`font-bold ${discount > 0 ? 'text-green-400' : 'text-white'}`}>
+                                                    {formatCurrency(availability.price)}
+                                                </span>
+                                                {discount > 0 && (
+                                                    <span className="ml-2 bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full">
+                                                        {discount}% OFF
+                                                    </span>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <div className="flex flex-col items-end">
+                                                <span className="text-white/70 italic">Price coming soon</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                
+                                <div className="flex items-center mt-3">
+                                    <div className={`w-2 h-2 rounded-full mr-2 ${status.color}`}></div>
+                                    <p className={`text-sm ${status.textColor}`}>
+                                        {status.text}
                                     </p>
                                 </div>
-                                <span className={`px-2 py-1 text-xs rounded-full ${availability.availableSpots > 0
-                                        ? 'bg-green-900 text-green-300'
-                                        : 'bg-red-900 text-red-300'
-                                    }`}>
-                                    {availability.availableSpots > 0 ? 'Available' : 'Sold Out'}
-                                </span>
+                                
+                                {availability.availableSpots > 0 && (
+                                    <div className="mt-2">
+                                        <div className="w-full bg-gray-700 rounded-full h-2">
+                                            <div 
+                                                className="bg-blue-500 h-2 rounded-full" 
+                                                style={{ 
+                                                    width: `${Math.min(100, (availability.availableSpots / availability.maxTravelers) * 100)}%` 
+                                                }}
+                                            ></div>
+                                        </div>
+                                        <p className="text-xs text-white/50 mt-1">
+                                            {availability.maxTravelers - availability.availableSpots} of {availability.maxTravelers} spots booked
+                                        </p>
+                                    </div>
+                                )}
                             </div>
-
-                            <div className="mt-4 pt-4 border-t border-gray-700">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-gray-300">Duration:</span>
-                                    <span className="text-white">
-                                        {Math.ceil((availability.endDate - availability.startDate) / (60 * 60 * 24))} days
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>
