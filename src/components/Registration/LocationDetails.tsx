@@ -14,7 +14,7 @@ interface LocationDetailsProps {
   shouldShowRegister?: boolean;
   dateAvailabilities?: DateAvailability[];
   titles?: { id: string; title: string }[]; 
-  isCustomForm?:boolean
+  isCustomForm?: boolean;
 }
 
 function LocationDetails({
@@ -65,10 +65,9 @@ function LocationDetails({
       color: '#000000',
     },
   };
-  
 
   return (
-    <Box sx={{  }}>
+    <Box sx={{}}>
       <TextField
         fullWidth
         placeholder="Choose Current Location"
@@ -91,35 +90,55 @@ function LocationDetails({
       {!isRegister && (
         <>
           {('destination' in inquiryData) && (
-            <Autocomplete
-              options={titles}
-              getOptionLabel={(option) => option.title}
-              value={titles.find(title => title.title === inquiryData.destination) || null}
-              onChange={(_, newValue) => {
-                handleChange('destination', newValue?.title || '');
-                handleChange('packageTitle', newValue?.title || '');
-                handleChange('packageId', newValue?.id || '');
-              }}
-              disabled={!isCustomForm}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  placeholder="Select Destination"
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PlaceIcon />
-                      </InputAdornment>
-                    ),
+            inquiryData.destination ? (
+              <TextField
+                fullWidth
+                value={inquiryData.destination}
+                placeholder="Destination"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PlaceIcon />
+                    </InputAdornment>
+                  ),
+                  readOnly: true,
+                }}
+                margin="normal"
+                sx={textFieldStyle}
+                disabled={true}
+              />
+            ) : (
+              isCustomForm && titles.length > 0 && (
+                <Autocomplete
+                  options={titles}
+                  getOptionLabel={(option) => option.title}
+                  value={null}
+                  onChange={(_, newValue) => {
+                    handleChange('destination', newValue?.title || '');
+                    handleChange('packageTitle', newValue?.title || '');
+                    handleChange('packageId', newValue?.id || '');
                   }}
-                  margin="normal"
-                  required
-                  sx={textFieldStyle}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      placeholder="Select Destination"
+                      InputProps={{
+                        ...params.InputProps,
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PlaceIcon />
+                          </InputAdornment>
+                        ),
+                      }}
+                      margin="normal"
+                      required
+                      sx={textFieldStyle}
+                    />
+                  )}
                 />
-              )}
-            />
+              )
+            )
           )}
 
           {'startDate' in inquiryData && 'endDate' in inquiryData && (

@@ -49,14 +49,14 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
       )}
       
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 6, md: 6 }}>
           <CustomDateField
             placeholder="Start Date"
             value={startDate}
             onChange={onStartDateChange}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 6, md: 6 }}>
           <CustomDateField
             placeholder="End Date"
             value={endDate}
@@ -66,7 +66,7 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
       </Grid>
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 6, md: 6 }}>
           <TextField
             fullWidth
             type="number"
@@ -75,7 +75,7 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
             onChange={(e) => onMaxTravelersChange(parseInt(e.target.value) || 0)}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 6, md: 6 }}>
           <TextField
             fullWidth
             type="number"
@@ -87,7 +87,7 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
       </Grid>
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 6, md: 6 }}>
           <TextField
             fullWidth
             type="number"
@@ -96,7 +96,7 @@ const UnixDateInput: React.FC<UnixDateInputProps> = ({
             onChange={(e) => onPriceChange(parseFloat(e.target.value) || 0)}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 6, md: 6 }}>
           <TextField
             fullWidth
             type="number"

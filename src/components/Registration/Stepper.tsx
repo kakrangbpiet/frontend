@@ -58,6 +58,8 @@ function getStepContent(
 
 function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId?: string, packageTitle?: string,isCustomForm?:boolean }) {
   const dispatch = useDispatch<AppDispatch>();
+  console.log(packageId,packageTitle);
+  
   const [activeStep, setActiveStep] = useState(0);
   const auth = useSelector(isAuthenticated);
   const token = useSelector(selectToken);

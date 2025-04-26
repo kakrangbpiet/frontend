@@ -372,7 +372,7 @@ const SingleTravelPackageDetails = () => {
 
             {/* Hide travel inquiry form on mobile - only show in desktop */}
             <div className="hidden lg:block lg:w-1/3">
-              <Registration packageId={travelPackageId || ''} packageTitle={title} />
+              <Registration packageId={travelPackageId || ''} packageTitle={travelPackageTitle} />
             </div>
           </div>
 
