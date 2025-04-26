@@ -65,8 +65,6 @@ const SingleTravelPackageDetails = () => {
   const status = packageData?.status ?? 'inactive';
   const availableSpots = packageData?.availableSpots ?? 0;
   const travelType = packageData?.travelType ?? 'group';
-  const price = packageData?.price ?? 0;
-  const originalPrice = packageData?.originalPrice;
   const maxTravelers = packageData?.maxTravelers ?? 0;
 
   const navigateToHome = () => {
@@ -125,8 +123,6 @@ const SingleTravelPackageDetails = () => {
               id: travelPackageId,
               title,
               description,
-              price,
-              originalPrice,
               image,
               images,
               location,
