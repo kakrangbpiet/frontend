@@ -46,6 +46,30 @@ export const DateAvailabilityDisplay = ({ dateAvailabilities }: { dateAvailabili
                                     </span>
                                 </div>
                             </div>
+                            <div className="flex justify-between text-sm mt-2">
+                                    <span className="text-gray-300">Price:</span>
+                                    <div className="flex items-center">
+                                        {availability?.originalPrice && (
+                                            <span className="line-through text-gray-400 mr-2">
+                                                ${availability?.originalPrice.toFixed(2)}
+                                            </span>
+                                        )}
+                                        {availability?.price ?(                                        <span className="text-white font-medium">
+                                            ${availability?.price?.toFixed(2)}
+                                        </span>
+                                        ):(
+                                            <>
+                                                Price Launching Soon
+                                            </>
+                                        )}
+
+                                        {availability?.originalPrice && availability?.price && (
+                                            <span className="ml-2 text-xs bg-red-900 text-red-300 px-1 rounded">
+                                                {Math.round(((availability?.originalPrice - availability?.price) / availability?.originalPrice * 100))}% off
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                         </div>
                     ))}
                 </div>
