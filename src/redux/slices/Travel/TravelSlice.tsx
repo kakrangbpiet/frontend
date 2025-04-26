@@ -5,8 +5,6 @@ export interface ITravelPackage {
     id: string;
     title: string;
     description: string;
-    price: number;
-    originalPrice?: number; // For showing discounts
     image: string;
     images?: string[]; // Additional images for gallery
     videos?: IVideosResponse[] | string[]; 
@@ -35,6 +33,8 @@ export interface ITravelPackage {
     endDate: number;
     maxTravelers: number;
     availableSpots: number;
+    price: number;
+    originalPrice?: number; // For showing discounts
   }
   interface TravelState {
     travelPackages: ITravelPackage[];
