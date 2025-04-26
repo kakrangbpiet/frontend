@@ -66,6 +66,8 @@ const SingleTravelPackageDetails = () => {
   const availableSpots = packageData?.availableSpots ?? 0;
   const travelType = packageData?.travelType ?? 'group';
   const maxTravelers = packageData?.maxTravelers ?? 0;
+  const activities = packageData?.activities ?? null;
+console.log(packageData);
 
   const navigateToHome = () => {
     navigate("/");
@@ -216,20 +218,24 @@ const SingleTravelPackageDetails = () => {
                       </div>
                     </div>
                   </div>
-
-                  <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-4">
-                    Activities to Enjoy
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-                    {['River rafting', 'Paragliding', 'Skiing', 'Trekking', 'Mountain biking'].map((activity, index) => (
-                      <div
-                        key={index}
-                        className="bg-white/10 backdrop-blur-md rounded-lg p-2 md:p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300 text-sm md:text-base"
-                      >
-                        <span className="block font-medium">{activity}</span>
+                  {activities &&
+                    <>
+                      <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-4">
+                        Activities to Enjoy
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+                        {activities?.map((activity, index) => (
+                          <div
+                            key={index}
+                            className="bg-white/10 backdrop-blur-md rounded-lg p-2 md:p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300 text-sm md:text-base"
+                          >
+                            <span className="block font-medium">{activity}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </>
+                  }
+
                 </div>
               )}
 
@@ -273,14 +279,14 @@ const SingleTravelPackageDetails = () => {
                     <div className="w-full  bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
                       <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-emerald-300">Ask Our AI Assistant</h3>
                       <AiPromptGenerator data={{
-                        title:selectedTravelPackage.title,
-                        description:selectedTravelPackage.description,
-                        location:selectedTravelPackage.location,
-                        category:selectedTravelPackage.category,
-                        travelType:selectedTravelPackage.travelType,
-                        availableSpots:selectedTravelPackage.availableSpots,
-                        maxTravelers:selectedTravelPackage.maxTravelers,
-                        availableDates:selectedTravelPackage.dateAvailabilities,
+                        title: selectedTravelPackage.title,
+                        description: selectedTravelPackage.description,
+                        location: selectedTravelPackage.location,
+                        category: selectedTravelPackage.category,
+                        travelType: selectedTravelPackage.travelType,
+                        availableSpots: selectedTravelPackage.availableSpots,
+                        maxTravelers: selectedTravelPackage.maxTravelers,
+                        availableDates: selectedTravelPackage.dateAvailabilities,
                       }} />
                     </div>
 

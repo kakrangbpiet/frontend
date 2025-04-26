@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box } from '@mui/material';
+import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, TextField } from '@mui/material';
 // import 'react-quill/dist/quill.snow.css';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
@@ -53,13 +53,18 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         maxTravelers: undefined,
         availableSpots: undefined,
         travelType: undefined,
-        dateAvailabilities: []
+        dateAvailabilities: [],
+        activities:[]
       }
   );
 
   const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
     itemInfo?.dateAvailabilities || []
   );
+
+  const [activities, setActivities] = useState<string[]>(itemInfo?.activities || []);
+  const [newActivity, setNewActivity] = useState('');
+
 
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>(newErrors);
@@ -78,8 +83,10 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       maxTravelers: undefined,
       availableSpots: undefined,
       travelType: undefined,
-      dateAvailabilities: []
+      dateAvailabilities: [],
+      activities:[]
     });
+    setActivities([]);
     setErrors(newErrors);
   };
 
@@ -101,6 +108,19 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     const updated = [...dateAvailabilities];
     updated.splice(index, 1);
     setDateAvailabilities(updated);
+  };
+
+  const handleAddActivity = () => {
+    if (newActivity.trim()) {
+      setActivities([...activities, newActivity.trim()]);
+      setNewActivity('');
+    }
+  };
+
+  const handleRemoveActivity = (index: number) => {
+    const updated = [...activities];
+    updated.splice(index, 1);
+    setActivities(updated);
   };
 
   const handleDateAvailabilityChange = (index: number, field: keyof DateAvailability, value: any) => {
@@ -132,11 +152,11 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     });
 
     if (!hasErrors) {
-
       (dispatch as AppDispatch)(
         addTravelPackageApi({
           newTravelPackageData: {
             ...formData,
+            activities: activities,
             dateAvailabilities: dateAvailabilities.length > 0 ? dateAvailabilities : undefined,
             id: itemInfo?.id || '',
           },
@@ -476,6 +496,48 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
               ))}
             </Box>
           </Grid>
+
+          <Grid size={{xs:12}}>
+            <Typography variant="h6">Activities</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+              <TextField
+                value={newActivity}
+                onChange={(e) => setNewActivity(e.target.value)}
+                label="New Activity"
+                variant="outlined"
+                fullWidth
+              />
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={handleAddActivity}
+                disabled={!newActivity.trim()}
+              >
+                Add
+              </Button>
+            </Box>
+            
+            {activities.map((activity, index) => (
+              <Box key={index} sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1, 
+                mb: 1,
+                p: 1,
+                backgroundColor: '#f5f5f5',
+                borderRadius: 1
+              }}>
+                <Typography sx={{ flexGrow: 1 }}>{activity}</Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => handleRemoveActivity(index)}
+                >
+                  <RemoveIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            ))}
+          </Grid>
+
 
           {/* Submit Button - full width */}
           <Grid size={{ xs: 12, md: 12 }}>

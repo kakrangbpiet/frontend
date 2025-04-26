@@ -14,7 +14,8 @@ export interface ITravelPackage {
     maxTravelers?: number;
     availableSpots?: number;
     travelType?: 'group' | 'private' | 'self-guided';
-    dateAvailabilities:DateAvailability[]
+    dateAvailabilities:DateAvailability[],
+    activities?:string[]
   }
 
   export interface IVideoItem {
