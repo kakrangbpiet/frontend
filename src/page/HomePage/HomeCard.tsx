@@ -38,7 +38,7 @@ const TravelPackagesList = ({ category }: { category: string }) => {
             <li key={item.id}>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
-              <p>Price: ${item.price}</p>
+              {/* <p>Price: ${item.price}</p> */}
               {/* Add more item details as needed */}
             </li>
           ))}
