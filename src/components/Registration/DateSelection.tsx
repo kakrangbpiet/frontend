@@ -1,8 +1,7 @@
 import { DateAvailability } from '../../redux/slices/Travel/TravelSlice';
 import { useState, useEffect } from 'react';
-import { formatDate } from '../../page/SinglePackage/DateAvailability';
+import { DateAvailabilityDisplay } from '../../page/SinglePackage/DateAvailability';
 import CustomDateField from '../CustomDateField';
-import { Info } from 'lucide-react';
 
 interface DateSelectionTabsProps {
   tripType: 'pre-planned' | 'custom';
@@ -29,7 +28,6 @@ function DateSelectionTabs({
 }: DateSelectionTabsProps) {
   const [activeTab, setActiveTab] = useState<'pre-planned' | 'custom'>(tripType);
   const [dateError, setDateError] = useState<string | null>(null);
-  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   // Validate date selections
   useEffect(() => {
@@ -48,27 +46,6 @@ function DateSelectionTabs({
     setDateError(null);
   };
 
-  const getAvailabilityStatus = (spots: number) => {
-    if (spots > 5) {
-      return {
-        color: 'bg-green-500',
-        text: `${spots} spots available`,
-        textColor: 'text-black-300'
-      };
-    } else if (spots > 0) {
-      return {
-        color: 'bg-yellow-500',
-        text: `Only ${spots} spots left!`,
-        textColor: 'text-yellow-300'
-      };
-    } else {
-      return {
-        color: 'bg-red-500',
-        text: 'Fully booked',
-        textColor: 'text-red-300'
-      };
-    }
-  };
 
   return (
     <div className="w-full mt-6">
@@ -162,30 +139,6 @@ function DateSelectionTabs({
   }`}
 >
   <div className="mt-2 rounded-xl bg-white/20 backdrop-blur-md shadow-lg border border-white/10 p-4">
-    <div className="flex items-center justify-between">
-      <div className="font-medium text-white ml-1 mb-3 flex items-center">
-        <span>Available Dates</span>
-        <div className="relative ml-2">
-          <Info 
-            size={16} 
-            className="text-white cursor-help"
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-            aria-label="Information about availability"
-          />
-          {showTooltip && (
-            <div className="absolute top-full left-0 mt-2 p-2 bg-gray-800 text-xs text-white rounded shadow-lg z-10 w-48">
-              Green indicates plenty of spots available, yellow means limited spots, and red means fully booked.
-            </div>
-          )}
-        </div>
-      </div>
-      {dateAvailabilities.length > 0 && (
-        <span className="text-xs text-white">
-          {dateAvailabilities.length} options available
-        </span>
-      )}
-    </div>
     
     {dateAvailabilities.length === 0 ? (
       <div className="text-center py-12 text-gray-400 flex flex-col items-center">
@@ -195,38 +148,7 @@ function DateSelectionTabs({
       </div>
     ) : (
       <div className="max-h-64 overflow-auto pr-1 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-transparent">
-        {dateAvailabilities.map((availability, index) => {
-          const status = getAvailabilityStatus(availability.availableSpots);
-          return (
-            <div
-              key={index}
-              className={`p-4 my-3 rounded-lg cursor-pointer transition-all duration-300 ${
-                startDate === availability.startDate 
-                  ? 'bg-blue-500/30 border border-blue-500 shadow-md shadow-blue-500/10' 
-                  : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-md hover:-translate-y-0.5'
-              }`}
-              onClick={() => {
-                setStartDate(availability.startDate);
-                setEndDate(availability.endDate);
-              }}
-              aria-selected={startDate === availability.startDate}
-              role="option"
-            >
-              <p className="font-medium flex justify-between">
-                <span>{formatDate(availability.startDate)} - {formatDate(availability.endDate)}</span>
-                <span className="text-sm text-white">
-                  {Math.ceil((availability.endDate - availability.startDate) / (1000 * 60 * 60 * 24))} days
-                </span>
-              </p>
-              <div className="flex items-center mt-2">
-                <div className={`w-2 h-2 rounded-full mr-2 ${status.color}`}></div>
-                <p className={`text-sm ${status.textColor}`}>
-                  {status.text}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+          <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} startDate={startDate} setStartDate={setStartDate} setEndDate={setEndDate} />
       </div>
     )}
   </div>
