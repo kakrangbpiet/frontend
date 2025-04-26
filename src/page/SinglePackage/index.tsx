@@ -11,7 +11,7 @@ import Registration from '../../components/Registration';
 import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData';
 import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
-import { DateAvailabilityDisplay, formatDate } from './DateAvailability';
+import { DateAvailabilityDisplay } from './DateAvailability';
 import FullScreenGallery from './FullScreenGallery';
 
 
@@ -22,9 +22,9 @@ const SingleTravelPackageDetails = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
 
-const [galleryOpen, setGalleryOpen] = useState(false);
-const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -144,13 +144,13 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   }
 
   return (
-    <div className="relative z-10">
+    <div className="">
+      <div className="">
+        {videos.length > 0 &&
+          <MediaBackground video={{ base64Data: videos[0] }} />
+        }
+      </div>
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          {videos.length > 0 &&
-            <MediaBackground video={{ base64Data: videos[0] }} /> 
-          }
-        </div>
       </div>
       <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-16 md:pt-24">
         <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
@@ -180,13 +180,13 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
           {/* Tabs Navigation - Scrollable on mobile */}
           <div className="flex mb-6 md:mb-8 overflow-x-auto bg-white/10 backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg">
-            {['overview', 'photos', 'highlights', 'dates'].map((tab) => (
+            {['overview', 'photos', 'Ask Ai', 'dates'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 md:px-6 md:py-3 text-white font-medium rounded-lg transition flex-none text-sm md:text-base whitespace-nowrap ${activeTab === tab
-                    ? 'bg-white/20 shadow-md border border-white/30'
-                    : 'hover:bg-white/10 border border-transparent'
+                  ? 'bg-white/20 shadow-md border border-white/30'
+                  : 'hover:bg-white/10 border border-transparent'
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -195,7 +195,7 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
           </div>
 
           <div className="mb-8 md:mb-12 flex flex-col lg:flex-row">
-          <div className="w-full lg:w-3/4 lg:pr-8">
+            <div className="w-full lg:w-3/4 lg:pr-8">
               {activeTab === 'overview' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
@@ -237,38 +237,65 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
                 </div>
               )}
 
-{activeTab === 'photos' && (
-  <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
-    <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
-      {images.map((img, index) => (
-        <div
-          key={index}
-          className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
-          onClick={() => {
-            setSelectedImageIndex(index);
-            setGalleryOpen(true);
-          }}
-        >
-          <img
-            src={`data:image/jpeg;base64,${img}`}
-            alt={`${title} - image ${index + 1}`}
-            className="w-full h-48 md:h-64 object-cover"
-          />
-          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+              {activeTab === 'photos' && (
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
+                    {images.map((img, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
+                        onClick={() => {
+                          setSelectedImageIndex(index);
+                          setGalleryOpen(true);
+                        }}
+                      >
+                        <img
+                          src={`data:image/jpeg;base64,${img}`}
+                          alt={`${title} - image ${index + 1}`}
+                          className="w-full h-48 md:h-64 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-              {activeTab === 'highlights' && (
+              {activeTab === 'Ask Ai' && (
+                  <div className="mb-8 md:mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="flex flex-col md:flex-row items-center">
+              <div className="w-full  mb-4 md:mb-0 md:pr-6 lg:pr-8">
+                <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-white">Need Help Planning Your Trip?</h2>
+              </div>
+              <div className="w-full  bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
+                <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-emerald-300">Ask Our AI Assistant</h3>
+                <AiPromptGenerator />
+              </div>
+           
+            </div>
+            <p className="text-gray-200 mb-3 md:mb-4 text-sm md:text-base pt-6">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
+                <div className="flex items-center space-x-2 mb-2 md:mb-6">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white text-sm md:text-base">Get instant answers</p>
+                </div>
+                <div className="flex items-center space-x-2 mb-2 md:mb-6">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white text-sm md:text-base">Personalized suggestions</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
+                  <p className="text-white text-sm md:text-base">24/7 virtual assistance</p>
+                </div>
+                </div>
+              )}
+              {/* {activeTab === 'highlights' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Package Highlights</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-6 md:mb-8">
@@ -328,7 +355,7 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
                     </li>
                   </ul>
                 </div>
-              )}
+              )} */}
 
               {activeTab === 'dates' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
@@ -340,91 +367,31 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
             {/* Hide travel inquiry form on mobile - only show in desktop */}
             <div className="hidden lg:block lg:w-1/3">
-    <Registration packageId={travelPackageId || ''} packageTitle={title} />
-  </div>
-</div>
-
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 mb-4 md:mb-6 border border-white/20 shadow-xl">
-            <h3 className="text-lg md:text-xl font-semibold mb-2 md:mb-3 text-emerald-300">Package Details</h3>
-
-            <div className="flex items-end gap-2 md:gap-3 mb-3 md:mb-4">
-              {originalPrice && (
-                <span className="text-gray-300 line-through text-sm md:text-base">₹{originalPrice.toLocaleString()}</span>
-              )}
-              <span className="text-2xl md:text-3xl font-bold text-emerald-400">₹{price.toLocaleString()}</span>
-            </div>
-
-            {dateAvailabilities.length > 0 && (
-              <div className="mb-3 md:mb-4">
-                <p className="text-xs md:text-sm text-gray-300">Next available:</p>
-                <p className="text-white font-medium text-sm md:text-base">
-                  {formatDate(dateAvailabilities[0].startDate)} - {formatDate(dateAvailabilities[0].endDate)}
-                </p>
-              </div>
-            )}
-
-            <div className="flex items-center mb-4 md:mb-6">
-              <div className={`px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium ${status === 'active' ? 'bg-emerald-900/70 text-emerald-300 border border-emerald-700' :
-                  status === 'sold-out' ? 'bg-red-900/70 text-red-300 border border-red-700' :
-                    'bg-yellow-900/70 text-yellow-300 border border-yellow-700'
-                }`}>
-                {status === 'active' ? 'Available' :
-                  status === 'sold-out' ? 'Sold Out' :
-                    'Coming Soon'}
-              </div>
-              {availableSpots > 0 && (
-                <p className="text-xs md:text-sm ml-2 md:ml-3 text-white">
-                  {availableSpots} spots left out of {maxTravelers}
-                </p>
-              )}
+              <Registration packageId={travelPackageId || ''} packageTitle={title} />
             </div>
           </div>
-
-          <div className="mb-8 md:mb-12 bg-gradient-to-r from-blue-800/60 to-indigo-800/60 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="w-full md:w-1/2 mb-4 md:mb-0 md:pr-6 lg:pr-8">
-                <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-white">Need Help Planning Your Trip?</h2>
-                <p className="text-gray-200 mb-3 md:mb-4 text-sm md:text-base">Our AI travel assistant can help you customize your experience, answer questions about destinations, and provide personalized recommendations.</p>
-                <div className="flex items-center space-x-2 mb-2 md:mb-6">
-                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white text-sm md:text-base">Get instant answers</p>
-                </div>
-                <div className="flex items-center space-x-2 mb-2 md:mb-6">
-                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white text-sm md:text-base">Personalized suggestions</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 md:w-3 md:h-3 bg-emerald-500 rounded-full"></div>
-                  <p className="text-white text-sm md:text-base">24/7 virtual assistance</p>
-                </div>
-              </div>
-              <div className="w-full md:w-1/2 bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
-                <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-emerald-300">Ask Our AI Assistant</h3>
-                <AiPromptGenerator />
-              </div>
-            </div>
-          </div>
+        
         </div>
       </div>
 
       {/* Mobile Form Modal  */}
-     {showMobileForm && (
-  <div className="fixed inset-0 z-50 bg-transparent bg-opacity-100 flex items-center justify-center p-2 backdrop-blur-3xl">
-    {/* change 3xl for more blur for minimum use lg/xl  */}
-    <div className="relative w-full max-w-lg max-h-[90vh] overflow-auto rounded-xl">
-      <button
-        onClick={toggleMobileForm}
-        className="absolute top-2 right-2 z-10 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300"
-        aria-label="Close form"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-      <Registration packageId={travelPackageId || ''} packageTitle={title} />
-    </div>
-  </div>
-)}
+      {showMobileForm && (
+        <div className="fixed inset-0 z-50 bg-transparent bg-opacity-100 flex items-center justify-center p-2 backdrop-blur-3xl">
+          {/* change 3xl for more blur for minimum use lg/xl  */}
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-auto rounded-xl">
+            <button
+              onClick={toggleMobileForm}
+              className="absolute top-2 right-2 z-10 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300"
+              aria-label="Close form"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <Registration packageId={travelPackageId || ''} packageTitle={title} />
+          </div>
+        </div>
+      )}
       {/* Mobile Book Now Button - fixed at bottom */}
       {status === 'active' && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent z-30">
@@ -436,12 +403,12 @@ const [selectedImageIndex, setSelectedImageIndex] = useState(0);
           </button>
         </div>
       )}
-<FullScreenGallery 
-  images={images}
-  isOpen={galleryOpen}
-  initialIndex={selectedImageIndex}
-  onClose={() => setGalleryOpen(false)}
-/>
+      <FullScreenGallery
+        images={images}
+        isOpen={galleryOpen}
+        initialIndex={selectedImageIndex}
+        onClose={() => setGalleryOpen(false)}
+      />
     </div>
   );
 };

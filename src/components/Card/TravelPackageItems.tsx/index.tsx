@@ -66,6 +66,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
               No packages found for this category.
             </div>
           ) : (
+            
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {travelPackages.map((pkg: ITravelPackage) => (
                 <div key={pkg.id} className="w-full">
@@ -83,44 +84,81 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                           images={[`data:image/jpeg;base64,${pkg.image}`]} 
                         />
                       ) : (
-                        <img
-                          src={pkg.image}
-                          alt={pkg.title}
-                          className="w-full h-full object-cover"
+                        // Show skeleton when no image
+                        <Skeleton 
+                          variant="rectangular" 
+                          width="100%" 
+                          height="100%"
+                          sx={{ 
+                            bgcolor: 'rgba(255, 255, 255, 0.1)',
+                            borderRadius: 0 // Remove rounded corners to match parent container
+                          }}
                         />
                       )}
                     </div>
-
+            
                     <div className="p-3 md:p-4 bg-black/40 backdrop-blur-md text-white border-t border-white/10">
-                      <Link 
-                        to={`/package/${pkg.id}/${pkg.title}`}
-                        className="block mb-1 md:mb-2 text-sm md:text-lg font-semibold text-white hover:text-blue-300 no-underline truncate"
-                      >
-                        {pkg.title}
-                      </Link>
-                      
-                      {pkg.location && (
-                        <div className="mb-1 md:mb-2 text-xs md:text-sm text-white/80 truncate">
-                          <span>📍 {pkg.location}</span>
-                        </div>
+                      {/* Skeleton for title */}
+                      {pkg.title ? (
+                        <Link 
+                          to={`/package/${pkg.id}/${pkg.title}`}
+                          className="block mb-1 md:mb-2 text-sm md:text-lg font-semibold text-white hover:text-blue-300 no-underline truncate"
+                        >
+                          {pkg.title}
+                        </Link>
+                      ) : (
+                        <Skeleton 
+                          width="80%" 
+                          height={24}
+                          sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
+                        />
                       )}
+                      
                       
                       <div className="flex justify-between items-center mt-1 md:mt-2">
                         <div>
-                          <div className="font-bold text-sm md:text-base text-white">
-                            ₹{pkg.price.toLocaleString()}
-                          </div>
-                          {pkg.originalPrice && (
-                            <div className="text-xs md:text-sm text-white/70 line-through">
-                              ₹{pkg.originalPrice.toLocaleString()}
-                            </div>
+                          {/* Skeleton for price */}
+                          {pkg.price ? (
+                            <>
+                              <div className="font-bold text-sm md:text-base text-white">
+                                ₹{pkg.price.toLocaleString()}
+                              </div>
+                              {pkg.originalPrice && (
+                                <div className="text-xs md:text-sm text-white/70 line-through">
+                                  ₹{pkg.originalPrice.toLocaleString()}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <Skeleton 
+                                width="60%" 
+                                height={20}
+                                sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
+                              />
+                              <Skeleton 
+                                width="40%" 
+                                height={16}
+                                sx={{ bgcolor: 'rgba(255, 255, 255, 0.1)' }}
+                              />
+                            </>
                           )}
                         </div>
                         
-                        {pkg.category && (
+                        {/* Skeleton for category */}
+                        {pkg.category ? (
                           <span className="px-1.5 py-0.5 md:px-2 md:py-1 text-xs rounded-full bg-white/20 text-white border border-white/10 backdrop-blur-sm truncate max-w-[80px] md:max-w-none">
                             {pkg.category}
                           </span>
+                        ) : (
+                          <Skeleton 
+                            width={60} 
+                            height={24}
+                            sx={{ 
+                              bgcolor: 'rgba(255, 255, 255, 0.1)',
+                              borderRadius: '12px'
+                            }}
+                          />
                         )}
                       </div>
                     </div>

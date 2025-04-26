@@ -63,7 +63,7 @@ const Layout = () => {
   const [randomHero, setRandomHero] = useState<{video: string, title: string} | null>(null);
   // Add state to control mobile icons visibility
   
-  const [showMobileIcons, setShowMobileIcons] = useState(false);
+  const [showMobileIcons,] = useState(false);
   
   useEffect(() => {
     // Select a random hero content when component mounts
@@ -143,9 +143,9 @@ const Layout = () => {
         $auth={auth}
       >
           <Outlet context={{ title: randomHero?.title }} />
+      <Footer />
       </MainContent>
   
-      <Footer />
     </div>
   );
 };

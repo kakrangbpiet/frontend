@@ -62,7 +62,7 @@ const FullScreenGallery = ({ images, isOpen, initialIndex, onClose }: FullScreen
     <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center backdrop-blur-lg">
       <button
         onClick={onClose}
-        className="absolute top-20 right-8 z-10 text-white hover:text-gray-300 transition-colors duration-300"
+        className="absolute top-40 right-8 z-10 text-white hover:text-gray-300 transition-colors duration-300"
         aria-label="Close gallery"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,7 +70,7 @@ const FullScreenGallery = ({ images, isOpen, initialIndex, onClose }: FullScreen
         </svg>
       </button>
       
-      <div className="absolute top-4 left-4 text-white text-lg md:text-xl">
+      <div className="absolute top-40 left-4 text-white text-lg md:text-xl">
         {currentIndex + 1} / {images.length}
       </div>
       

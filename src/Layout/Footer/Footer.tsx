@@ -171,6 +171,7 @@ const Footer: React.FC<FooterProps> = ({
     width: '100%',
     maxWidth: '100%',
     padding: 0,
+    zIndex:100000
   };
 
   return (
