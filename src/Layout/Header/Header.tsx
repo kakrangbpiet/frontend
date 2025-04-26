@@ -22,8 +22,8 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <header className="fixed z-100 pt-0 px-6 md:px-6 lg:px-12 flex justify-between items-center w-full">
-      <div className="flex items-center justify-center h-20 w-40 sm:h-20 sm:w-32 md:h-28 md:w-48" onClick={() => navigate('/')}>
+    <header className="fixed z-100 pt-0 px-3 sm:px-6 md:px-6 lg:px-12 flex justify-between items-center w-full">
+      <div className="flex items-center justify-center h-16 w-32 sm:h-20 sm:w-40 md:h-28 md:w-48" onClick={() => navigate('/')}>
         <img src={"/Smasara-Logo.png"} alt="Logo" className="object-contain" />
       </div>
 
@@ -42,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="flex items-center">
+        {/* Desktop buttons */}
         <div className="hidden md:flex space-x-4 ml-8">
           <button className="text-white hover:text-gray-300">Switch to App</button>
           <button
@@ -53,8 +54,15 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {isMobile && (
-          <button className="text-white p-2 ml-auto" onClick={toggleMobileMenu}>
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} style={{ color: 'black' }} />}
+          <button 
+            className="text-white p-2 relative z-20" 
+            onClick={toggleMobileMenu}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileMenuOpen ? 
+              <X size={24} /> : 
+              <Menu size={24} style={{ color: 'black' }} />
+            }
           </button>
         )}
       </div>

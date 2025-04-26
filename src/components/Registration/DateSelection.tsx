@@ -73,26 +73,26 @@ function DateSelectionTabs({
   return (
     <div className="w-full mt-6">
       {/* Radio Button Tabs */}
-      <div 
+<div 
   role="radiogroup" 
   aria-label="Trip date selection options"
-  className="flex flex-col gap-3 mb-4"
+  className="flex flex-row gap-2 mb-3"
 >
-  {!isCustomForm &&
+  {!isCustomForm && (
     <label 
-      className={`flex items-center rounded-xl p-4 cursor-pointer transition-all duration-300 ${
+      className={`flex-1 flex items-center rounded-lg p-2 cursor-pointer transition-all duration-300 text-sm ${
         activeTab === 'pre-planned' 
           ? 'bg-blue-700/50 border border-blue-500/50 hover:bg-transparent' 
           : 'bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10'
       }`}
     >
       <div 
-        className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
+        className={`w-4 h-4 rounded-full border-2 mr-2 flex items-center justify-center ${
           activeTab === 'pre-planned' ? 'border-blue-500' : 'border-gray-400'
         }`}
       >
         {activeTab === 'pre-planned' && (
-          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
         )}
       </div>
       <input
@@ -112,22 +112,22 @@ function DateSelectionTabs({
         Pre-Planned Dates
       </span>
     </label>
-  }
+  )}
 
   <label 
-    className={`flex items-center rounded-xl p-4 cursor-pointer transition-all duration-300 ${
+    className={`flex-1 flex items-center rounded-lg p-2 cursor-pointer transition-all duration-300 text-sm ${
       activeTab === 'custom' 
         ? 'bg-blue-700/50 border border-blue-500/50 hover:bg-transparent' 
         : 'bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10'
     }`}
   >
     <div 
-      className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
+      className={`w-4 h-4 rounded-full border-2 mr-2 flex items-center justify-center ${
         activeTab === 'custom' ? 'border-blue-500' : 'border-gray-400'
       }`}
     >
       {activeTab === 'custom' && (
-        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+        <div className="w-2 h-2 rounded-full bg-blue-500"></div>
       )}
     </div>
     <input

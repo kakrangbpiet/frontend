@@ -180,27 +180,27 @@ const HomePage: React.FC = () => {
   const titles = useSelector(selectTitles);
   const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
-  
+
   useEffect(() => {
     // Fetch all categories, and titles when component mounts
     dispatch(fetchAllCategories());
     dispatch(fetchAllTitles());
-    
+
     if (auth && selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
       navigate("/dashboard");
     }
   }, [auth, navigate, selectedUserType, dispatch]);
-  
+
   useEffect(() => {
-    dispatch(fetchTravelPackagesApi({ 
+    dispatch(fetchTravelPackagesApi({
       status: "active",
       select: "title,price,status"
     }));
   }, [dispatch]);
   useEffect(() => {
-    dispatch(fetchTravelPackagesApi({ 
+    dispatch(fetchTravelPackagesApi({
       status: "active",
-      select: "title,price,status,image"
+      select: "title,price,status,image,originalPrice,category"
     }));
   }, [dispatch]);
 
@@ -233,7 +233,7 @@ const HomePage: React.FC = () => {
     setSearchQuery(query);
     if (query.length > 0) {
       const results: any[] = [];
-  
+
       // Match categories
       categories.forEach(category => {
         if (category.toLowerCase().includes(query.toLowerCase())) {
@@ -244,7 +244,7 @@ const HomePage: React.FC = () => {
           });
         }
       });
-  
+
       // Match locations
       locationsData.locations.forEach(location => {
         if (location.label.toLowerCase().includes(query.toLowerCase())) {
@@ -255,8 +255,8 @@ const HomePage: React.FC = () => {
           });
         }
       });
-      
-  
+
+
       // Match titles
       titles.forEach(item => {
         if (item.title.toLowerCase().includes(query.toLowerCase())) {
@@ -267,18 +267,18 @@ const HomePage: React.FC = () => {
           });
         }
       });
-  
+
       setSearchResults(results.slice(0, 5)); // Limit to 5 results
     } else {
       setSearchResults([]);
     }
   };
-  
+
 
   const handleResultClick = (result: any) => {
     setSearchQuery('');
     setSearchResults([]);
-    
+
     if (result.type === 'category') {
       navigate(`/packages?category=${encodeURIComponent(result.value)}`);
     } else if (result.type === 'location') {
@@ -287,10 +287,10 @@ const HomePage: React.FC = () => {
       navigate(`/package/${result.value.id}/${result.value.title}`);
     }
   };
-  
+
 
   const handleCustomizedTripClick = () => {
-    setOpenInquiryDialog(true); 
+    setOpenInquiryDialog(true);
   };
 
   const handleCloseInquiryDialog = () => {
@@ -341,56 +341,56 @@ const HomePage: React.FC = () => {
             </Button>
           </ButtonGroup>
         </ButtonContainer>
-      <Dialog
-        open={openInquiryDialog}
-        onClose={handleCloseInquiryDialog}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          style: {
-            backgroundColor: 'transparent',
-            boxShadow: 'none',
-            overflow: 'visible',
-          }
-        }}
-      >
-        <TravelInquiryForm
-          isCustomForm={true}
-        />
-      </Dialog>
+        <Dialog
+          open={openInquiryDialog}
+          onClose={handleCloseInquiryDialog}
+          maxWidth="md"
+          fullWidth
+          PaperProps={{
+            style: {
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              overflow: 'visible',
+            }
+          }}
+        >
+          <TravelInquiryForm
+            isCustomForm={true}
+          />
+        </Dialog>
       </ContentOverlay>
 
 
       {/*test */}
 
       <div className="relative w-full min-h-[50vh] bg-transparent bg-opacity-50 flex flex-col items-center justify-center text-center p-4 pt-20 pb-40">
-  <h1 className="text-4xl font-bold text-white mt-6">
-    Start with a Feeling, End with a Journey
-  </h1>
-  <p className="text-white mt-8 max-w-4xl">
-  See the Himalayan peaks rising above lush valleys—where misty summits tower over green meadows,
-  quiet paths call your name, and every sunrise reveals nature’s magic
-  </p>
-</div>
+        <h1 className="text-4xl font-bold text-white mt-6">
+          Start with a Feeling, End with a Journey
+        </h1>
+        <p className="text-white mt-8 max-w-4xl">
+          See the Himalayan peaks rising above lush valleys—where misty summits tower over green meadows,
+          quiet paths call your name, and every sunrise reveals nature’s magic
+        </p>
+      </div>
 
 
-    {/*Content */}
-    <div className="text-center mt-12">
-            <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-            Explore With Us
+      {/*Content */}
+      <div className="text-center mt-12">
+        <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+          Explore With Us
         </div>
-        </div>
-                    <div className="relative mt-4 flex justify-center">
-              <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
-            </div>
-          
+      </div>
+      <div className="relative mt-4 flex justify-center">
+        <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
+      </div>
+
 
 
       <TravelPackages
-            travelPackages={travelPackages.travelPackages}
-            categoryType="new"
-            loading={travelPackagesLoading}
-          />
+        travelPackages={travelPackages.travelPackages}
+        categoryType="new"
+        loading={travelPackagesLoading}
+      />
 
 
       {/* <div className=" bg-transparent flex items-center justify-center p-5">
@@ -401,10 +401,6 @@ const HomePage: React.FC = () => {
       {/*todo //UI*/}
 
 
-
-
-
-      
       <DashboardGrid>
         <PackagesSection>
 
