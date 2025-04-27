@@ -136,14 +136,13 @@ const ButtonGroup = styled.div`
   width: 100%;
   
   @media (max-width: 640px) {
-    flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem; 
   }
 `;
 
 const Button = styled.button`
   padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
+  border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
@@ -159,11 +158,10 @@ const Button = styled.button`
   }
   
   @media (max-width: 640px) {
-    width: 100%;
-    font-size: 0.875rem;
-    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem; 
+    padding: 0.9rem 1rem;
   }
-`;
+    `;
 
 
 const HomePage: React.FC = () => {

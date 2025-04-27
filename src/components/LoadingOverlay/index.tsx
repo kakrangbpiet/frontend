@@ -1,19 +1,12 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+// import { Backdrop, CircularProgress } from "@mui/material";
 
 const LoadingOverlay = ({ loading }) => {
+  if (!loading) return null;
+
   return (
-    <Backdrop
-      sx={{
-        color: "#fff",
-        zIndex: 5,
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-      }}
-      open={loading}
-    >
-      <CircularProgress color="inherit" />
-    </Backdrop>
+    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-white"></div>
+    </div>
   );
 };
 
