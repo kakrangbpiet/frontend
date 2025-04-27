@@ -53,7 +53,7 @@ const HeroText = styled.div`
 
 const HeroTitle = styled.h1`
   font-size: 2.5rem;
-  font-weight: 300; 
+  font-weight: 600; 
   margin-bottom: 1rem;
   
   @media (max-width: 768px) {
@@ -148,7 +148,7 @@ const Button = styled.button`
   backdrop-filter: blur(4px);
   color: white;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 1000;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
