@@ -17,7 +17,6 @@ const DashboardGrid = styled.div`
 `;
 
 const PackagesSection = styled.div`
-  padding: 2rem;
   position: relative; 
   z-index: 5;
   
