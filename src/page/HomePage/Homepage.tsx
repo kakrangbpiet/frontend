@@ -162,7 +162,19 @@ const Button = styled.button`
     padding: 0.9rem 1rem;
   }
     `;
-
+const useClickOutside = (ref: React.RefObject<HTMLElement>, callback: () => void) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        callback();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref, callback]);
+};
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -174,10 +186,15 @@ const HomePage: React.FC = () => {
   const { title } = useOutletContext<{ title: string }>();
   const categories = useSelector(selectCategories);
   const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
-
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const titles = useSelector(selectTitles);
   const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
+  const searchContainerRef = React.useRef<HTMLDivElement>(null);
+  useClickOutside(searchContainerRef, () => {
+    setIsSearchFocused(false);
+    setSearchResults([]);
+  });
 
   useEffect(() => {
     // Fetch all categories, and titles when component mounts
@@ -238,7 +255,7 @@ const HomePage: React.FC = () => {
           results.push({
             type: 'category',
             value: category,
-            label: `Category: ${category}`
+            label: `${category}`
           });
         }
       });
@@ -254,7 +271,6 @@ const HomePage: React.FC = () => {
         }
       });
 
-
       // Match titles
       titles.forEach(item => {
         if (item.title.toLowerCase().includes(query.toLowerCase())) {
@@ -268,7 +284,43 @@ const HomePage: React.FC = () => {
 
       setSearchResults(results.slice(0, 5)); // Limit to 5 results
     } else {
-      setSearchResults([]);
+      // When query is empty but input is focused, show default suggestions
+      if (isSearchFocused) {
+        const defaultResults: any[] = [];
+
+        // Add some popular categories
+        ['hotdeals', 'pre-planned-trips'].forEach(category => {
+          if (categories.includes(category)) {
+            defaultResults.push({
+              type: 'category',
+              value: category,
+              label: `${category}`
+            });
+          }
+        });
+
+        // Add some popular locations
+        locationsData.locations.slice(0, 3).forEach(location => {
+          defaultResults.push({
+            type: 'location',
+            value: location,
+            label: `Search in ${location.label}`
+          });
+        });
+
+        // Add some popular titles (limit to 3)
+        titles.slice(0, 3).forEach(title => {
+          defaultResults.push({
+            type: 'title',
+            value: title,
+            label: `Tour: ${title.title}`
+          });
+        });
+
+        setSearchResults(defaultResults);
+      } else {
+        setSearchResults([]);
+      }
     }
   };
 
@@ -311,21 +363,52 @@ const HomePage: React.FC = () => {
         </HeroText>
 
         <ButtonContainer>
-          <SearchContainer>
+          <SearchContainer ref={searchContainerRef}>
             <SearchInput
               type="text"
               placeholder="Search for destinations, categories, or tours..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => {
+                setIsSearchFocused(true);
+                if (searchQuery.length === 0) {
+                  // Show some default suggestions or recent searches when empty
+                  handleSearch(''); // This will trigger showing all available options
+                }
+              }}
+              onBlur={() => {
+                // Add a small delay to allow click events on results to fire first
+                setTimeout(() => setIsSearchFocused(false), 200);
+              }}
             />
-            {searchResults.length > 0 && (
+            {(searchResults.length > 0 || (isSearchFocused && searchQuery.length === 0)) && (
               <SearchResults>
-                {searchResults.map((result, index) => (
-                  <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
-                    <ResultType>{result.type}</ResultType>
-                    {result.label}
-                  </SearchResultItem>
-                ))}
+                {searchResults.length > 0 ? (
+                  searchResults.map((result, index) => (
+                    <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
+                      <ResultType>{result.type}</ResultType>
+                      {result.label}
+                    </SearchResultItem>
+                  ))
+                ) : (
+                  // Show default suggestions when input is focused but empty
+                  <>
+                    <SearchResultItem onClick={() => navigate('/packages?category=hotdeals')}>
+                      <ResultType>category</ResultType>
+                      Hot Deals
+                    </SearchResultItem>
+                    <SearchResultItem onClick={() => navigate('/packages?category=pre-planned-trips')}>
+                      <ResultType>category</ResultType>
+                      Pre-planned Trips
+                    </SearchResultItem>
+                    {locationsData.locations.slice(0, 3).map((location, index) => (
+                      <SearchResultItem key={`loc-${index}`} onClick={() => navigate(`/packages?location=${encodeURIComponent(location.value)}`)}>
+                        <ResultType>location</ResultType>
+                        Search in {location.label}
+                      </SearchResultItem>
+                    ))}
+                  </>
+                )}
               </SearchResults>
             )}
           </SearchContainer>

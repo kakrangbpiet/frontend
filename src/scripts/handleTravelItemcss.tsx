@@ -27,7 +27,7 @@ export const renderCustomStyles = (node: any, index: number) => {
       case 'b':
       case 'strong':
         return (
-          <span key={index} className="font-bold underline text-md">
+          <span key={index} className="font-bold text-md">
             {Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}
           </span>
         );
@@ -71,19 +71,19 @@ export const renderCustomStyles = (node: any, index: number) => {
       case 'li':
         return <li key={index} className="ml-4 mb-2">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</li>;
       case 'p':
-        return <p key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</p>;
+        return <p key={index} className="mb-6 leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</p>;
       case 'h1':
-        return <h1 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h1>;
+        return <h1 key={index} className="mb-6 underline leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h1>;
       case 'h2':
-        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+        return <h2 key={index} className="mb-6 leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
       case 'h3':
-        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+        return <h3 key={index} className="mb-6 leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h3>;
       case 'h4':
-        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
-      case 'h4':
-        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
-      case 'h4':
-        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+        return <h4 key={index} className="mb-6 leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h4>;
+      case 'h5':
+        return <h5 key={index} className="mb-6 leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h5>;
+      case 'h6':
+        return <h6 key={index} className="mb-6 leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h6>;
 
       // Handle iframes
       case 'iframe':

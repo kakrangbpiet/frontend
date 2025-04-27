@@ -13,7 +13,8 @@ import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay } from './DateAvailability';
 import FullScreenGallery from './FullScreenGallery';
 import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
-import ReactMarkdown from 'react-markdown';
+import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
+
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -36,12 +37,12 @@ const SingleTravelPackageDetails = () => {
     dispatch(setActiveHistory(travelPackageId))
   }, [dispatch]);
 
+
   useEffect(() => {
-    // db
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId
       }));
-  }, [travelPackageId]);
+  }, [dispatch,travelPackageId]);
 
   // mock 
   const packageData = selectedTravelPackage;
@@ -189,7 +190,8 @@ const SingleTravelPackageDetails = () => {
                     About {title}
                   </h2>
 
-                  <ReactMarkdown>{description}</ReactMarkdown>
+                  {parseHTML(description).map((node, index) => renderCustomStyles(node, index))}
+           
                   <div className="relative mb-8 rounded-lg overflow-hidden shadow-md bg-black/50 transform hover:scale-[1.01] transition duration-500 cursor-pointer">
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200 relative">
                       <div className="absolute inset-0 flex items-center justify-center">
