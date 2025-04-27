@@ -1,5 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { CustomNoRowsOverlay } from "../LoadingOverlay/NoRowsOverlay";
+
 const Datagrid = ({ 
   getRowId, 
   columns, 
@@ -7,7 +8,8 @@ const Datagrid = ({
   paginationModel,
   onPaginationModelChange,
   rowCount,
-  loading
+  loading,
+  sx  
 }) => (
   <DataGrid
     autoHeight
@@ -19,20 +21,18 @@ const Datagrid = ({
     sx={{
       "--DataGrid-overlayHeight": "300px",
       mr: "20px",
+      ...sx  
     }}
     getRowId={getRowId}
     
-    // Pagination properties
     paginationMode="server"
     rowCount={rowCount}
     pageSizeOptions={[5, 10, 25, 50]}
     paginationModel={paginationModel}
     onPaginationModelChange={onPaginationModelChange}
     
-    // Loading state
     loading={loading}
     
-    // Other useful props
     disableRowSelectionOnClick
     disableColumnMenu
   />
