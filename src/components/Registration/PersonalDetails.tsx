@@ -46,9 +46,18 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
   return (
     <Box sx={{ px: 2, mt: 2 }}>
       {/* Name input */}
+      <div className="mb-1">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          Your Name
+        </label>
+        {inquiryData.name && (
+          <p className="text-xs text-gray-500 dark:text-gray-400">We'll use this name for your booking</p>
+        )}
+      </div>
       <TextField
         fullWidth
-        placeholder="Your Name"
+        id="name"
+        placeholder="Enter your full name"
         value={inquiryData.name}
         onChange={(e) => handleChange('name', e.target.value)}
         margin="normal"
@@ -59,31 +68,55 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
       
       {/* Passenger count input */}
       {!isRegister && (
-        <TextField
-          fullWidth
-          placeholder="Number of Passengers"
-          type="number"
-          inputProps={{ min: 1 }}
-          value={inquiryData.passengerCount}
-          onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 1)}
-          margin="normal"
-          required
-          sx={textFieldStyle}
-        />
+        <>
+          <div className="mb-1 mt-4">
+            <label htmlFor="passengers" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Number of Passengers
+            </label>
+            {inquiryData.passengerCount && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {inquiryData.passengerCount} {inquiryData.passengerCount === 1 ? 'person' : 'people'} will be traveling
+              </p>
+            )}
+          </div>
+          <TextField
+            fullWidth
+            id="passengers"
+            placeholder="Enter number of passengers"
+            type="number"
+            inputProps={{ min: 1 }}
+            value={inquiryData.passengerCount}
+            onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 1)}
+            margin="normal"
+            required
+            sx={textFieldStyle}
+          />
+        </>
       )}
       
       {/* Special requests input */}
       {!isRegister && (
-        <TextField
-          fullWidth
-          placeholder="Special Requests (Optional)"
-          value={inquiryData.specialRequests}
-          onChange={(e) => handleChange('specialRequests', e.target.value)}
-          margin="normal"
-          multiline
-          rows={4}
-          sx={textFieldStyle}
-        />
+        <>
+          <div className="mb-1 mt-4">
+            <label htmlFor="requests" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Special Requests
+            </label>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Let us know if you have any special requirements
+            </p>
+          </div>
+          <TextField
+            fullWidth
+            id="requests"
+            placeholder="E.g., dietary restrictions, accessibility needs, etc."
+            value={inquiryData.specialRequests}
+            onChange={(e) => handleChange('specialRequests', e.target.value)}
+            margin="normal"
+            multiline
+            rows={4}
+            sx={textFieldStyle}
+          />
+        </>
       )}
     </Box>
   );

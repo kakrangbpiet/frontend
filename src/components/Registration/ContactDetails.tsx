@@ -82,9 +82,12 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <div >
-      
-      <div className="space-y-7">
+    <div className="space-y-6">
+      {/* Email Input */}
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          Email Address
+        </label>
         <div className="relative">
           <input
             type="email"
@@ -92,18 +95,26 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             value={inquiryData.email}
             onChange={(e) => handleChange('email', e.target.value)}
             disabled={!shouldShowRegister && isRegister}
-            className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
-             text-black font-medium focus:border-blue-500 focus:ring-2 
+            className="w-full px-4 py-3 rounded-lg bg-white/40 border border-gray-300 
+             text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
              focus:ring-blue-200 transition-all duration-200 outline-none"
-            placeholder="Email Address"
+            placeholder="your.email@example.com"
             required
           />
-
-          
+          {inquiryData.email && (
+            <p className="mt-1 text-xs text-gray-500">We'll send booking confirmation to this email</p>
+          )}
         </div>
-        
-        {!isContactVerified ? (
-          <>
+      </div>
+      
+      {/* Phone Verification Flow */}
+      {!isContactVerified ? (
+        <>
+          <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          Phone Number
+        </label>
+     
             <div className="relative">
               <input
                 type="tel"
@@ -111,13 +122,12 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 value={phoneInput}
                 onChange={handlePhoneChange}
                 disabled={showOtpField || (!shouldShowRegister && isRegister)}
-                className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
-                text-black font-medium focus:border-blue-500 focus:ring-2 
+                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-gray-300 
+                text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
                 focus:ring-blue-200 transition-all duration-200 outline-none"
-                placeholder="Phone Number"
+                placeholder="1234567890"
                 required
               />
-                        
               {showOtpField && (
                 <button 
                   type="button"
@@ -129,23 +139,33 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 </button>
               )}
             </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {showOtpField ? 
+                "We've sent a verification code to your phone" : 
+                "We'll verify this number for booking updates"}
+            </p>
             
-            {!showOtpField ? (
- <div className="flex justify-center mt-4">
- <button 
-   type="button"
-   onClick={handleSendOtp}
-   disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-   className="px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-600 
-   text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
-   disabled:cursor-not-allowed transition-all duration-200 w-[200px]"
- >
-   Send Verification Code
- </button>
-</div>
-
-            ) : (
-              <>
+          </div>
+          
+          {!showOtpField ? (
+            <div className="flex justify-center mt-2">
+              <button 
+                type="button"
+                onClick={handleSendOtp}
+                disabled={!phoneInput || (!shouldShowRegister && isRegister)}
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 
+                text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
+                disabled:cursor-not-allowed transition-all duration-200 w-full max-w-xs"
+              >
+                Send Verification Code
+              </button>
+            </div>
+          ) : (
+            <>
+              <div>
+                <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
+                  Verification Code
+                </label>
                 <div className="relative">
                   <input
                     type="text"
@@ -153,70 +173,73 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     value={otpInput}
                     onChange={handleOtpChange}
                     disabled={!shouldShowRegister && isRegister}
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
-                    text-black font-medium focus:border-blue-500 focus:ring-2 
+                    className="w-full px-4 py-3 rounded-lg bg-white/40 border border-gray-300 
+                    text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
                     focus:ring-blue-200 transition-all duration-200 outline-none"
-                    placeholder="Verification Code"
+                    placeholder="Enter 6-digit code"
                     required
                   />
                 </div>
+                <p className="mt-1 text-xs text-gray-500">Check your SMS messages for the code</p>
+              </div>
+              
+              <div className="flex flex-col gap-3">
+                <button 
+                  type="button"
+                  onClick={handleVerifyOtp}
+                  disabled={!otpInput || isContactVerified || (!shouldShowRegister && isRegister)}
+                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 
+                  text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
+                  disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  Verify Phone Number
+                </button>
                 
-                <div className="flex flex-col md:flex-row gap-4">
+                {!isRegister && (
                   <button 
                     type="button"
-                    onClick={handleVerifyOtp}
-                    disabled={!otpInput || isContactVerified || (!shouldShowRegister && isRegister)}
-                    className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-600 text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    onClick={handleEditNumber}
+                    disabled={!shouldShowRegister && isRegister}
+                    className="px-6 py-2.5 rounded-lg bg-gray-100 border border-gray-300 
+                    text-gray-700 font-medium hover:bg-gray-200 focus:outline-none 
+                    focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                   >
-                    Verify Phone Number
+                    Edit Number
                   </button>
-                  
-                  {!isRegister && (
-                    <button 
-                      type="button"
-                      onClick={handleEditNumber}
-                      disabled={!shouldShowRegister && isRegister}
-                      className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
-                      text-black font-medium focus:border-blue-500 focus:ring-2 
-                      focus:ring-blue-200 transition-all duration-200 outline-none"
-                   >
-                      Edit Number
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-          </>
-        ) : (
-          <div className ="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
-          text-black font-medium focus:border-blue-500 focus:ring-2 
-          focus:ring-blue-200 transition-all duration-200 outline-none">
-                      <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
+                )}
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-blue-800">
-                  Verified Phone: {verifiedPhoneNumber}
-                </p>
-              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <div className="rounded-lg bg-blue-50/50 border border-blue-200 p-4">
+          <div className="flex items-start">
+            <div className="flex-shrink-0 mt-0.5">
+              <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
             </div>
-            
-            {shouldShowRegister && (
-              <button 
-                type="button"
-                onClick={handleEditNumber}
-                className="mt-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-              >
-                Change Phone Number
-              </button>
-            )}
-            <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800">
+                Verified Phone Number
+              </h3>
+              <p className="text-sm text-gray-700 mt-1">
+                {verifiedPhoneNumber}
+              </p>
+              {shouldShowRegister && (
+                <button 
+                  type="button"
+                  onClick={handleEditNumber}
+                  className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+                >
+                  Change Phone Number
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+          <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
+        </div>
+      )}
     </div>
   );
 }
