@@ -71,7 +71,6 @@ export default function UserInquiries({}) {
 
   const columns = UserColumns({ handleViewDetails, handleViewPackage });
 
-  // Status badge color mapping
   const getStatusColor = (status) => {
     switch(status?.toLowerCase()) {
       case 'active':
@@ -123,7 +122,6 @@ export default function UserInquiries({}) {
     }
   };
 
-  // Get random color for avatar based on name
   const getAvatarColor = (name) => {
     const colors = [
       'bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500',
@@ -133,7 +131,6 @@ export default function UserInquiries({}) {
     
     if (!name) return colors[0];
     
-    // Generate a consistent index based on the name
     const charSum = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
     return colors[charSum % colors.length];
   };
@@ -141,7 +138,6 @@ export default function UserInquiries({}) {
   return (
     <div className="p-5 pt-14 md:pt-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section with animated gradient */}
         <div className="mb-8 text-center relative overflow-hidden p-6 rounded-2xl bg-white bg-opacity-50 backdrop-blur-sm border border-white border-opacity-50 shadow-lg">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-indigo-400/10 to-purple-400/10 animate-gradient-x"></div>
           <div className="relative z-10">
