@@ -21,9 +21,18 @@ const AllTravelPackagesPage = () => {
         status: status || "active", // Default to active if not specified
         page: 1,
         pageSize: 10,
-        select: "title,image,price,status"
+        select: "title,category"
+      };
+      const paramsWithImage = {
+        category,
+        location,
+        status: status || "active", // Default to active if not specified
+        page: 1,
+        pageSize: 10,
+        select: "image,price,status"
       };
        dispatch(fetchTravelPackagesApi(params));
+       dispatch(fetchTravelPackagesApi(paramsWithImage));
     }, [category, location, status, dispatch]);
     
     // Pass all filter props to PackagesVerification

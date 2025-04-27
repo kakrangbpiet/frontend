@@ -45,6 +45,7 @@ export default function PackagesVerification({
       location: currentLocation,
       page: paginationModel.page + 1,
       pageSize: paginationModel.pageSize,
+      select:"id,title,location,category,image",
     };
     dispatch(fetchTravelPackagesApi(params));
   }, [dispatch, toggleCategoryType, paginationModel, currentCategory, currentLocation]);

@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container } from '@mui/material';
 import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
+import { Box } from 'lucide-react';
 
 function AddPackagePage() {
 
@@ -19,9 +19,9 @@ function AddPackagePage() {
     }
   }, [isUserAuthenticated, history]);
   return (
-    <Container className='mt-24'>
+    <Box className='pt-24'>
             <AddTravelPackageForm  userType={userType} formEvent={"Add Package"} />
-    </Container>
+    </Box>
   )
 }
 

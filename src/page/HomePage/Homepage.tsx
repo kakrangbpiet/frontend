@@ -209,13 +209,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({
       status: "active",
-      select: "title,price,status"
+      select: "title,category"
     }));
   }, [dispatch]);
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({
       status: "active",
-      select: "title,price,status,image,originalPrice,category"
+      select: "title,image,category"
     }));
   }, [dispatch]);
 

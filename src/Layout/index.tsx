@@ -89,7 +89,7 @@ const Layout = () => {
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden bg-grey-900">
     <ScrollToTop />
       <Header title={"SAMSARA"} links={sidebarItem} auth={auth} toggleMobileMenu={toggleMobileMenu}
         mobileMenuOpen={mobileMenuOpen} isMobile={isMobile} />

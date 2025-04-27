@@ -8,7 +8,7 @@ import { AppDispatch } from '../../redux/store';
 import { DateAvailability, ITravelPackage } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
 import CustomTextField from '../CustomTextField';
-import { addTravelPackageApi } from '../../redux/slices/Travel/travelApiSlice';
+import { addTravelPackageApi, } from '../../redux/slices/Travel/travelApiSlice';
 import locationsData from './Location.json';
 import AddIcon from '@mui/icons-material/Add';  // Fixed import
 import UnixDateInput from './DatePicker';
@@ -36,7 +36,7 @@ const statusOptions = ['active', 'inactive', 'sold-out', 'coming-soon'];
 const travelTypeOptions = ['group', 'private', 'self-guided'];
 
 const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formEvent }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState<ITravelPackage>(
     itemInfo
       ? itemInfo
@@ -53,9 +53,20 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         availableSpots: undefined,
         travelType: undefined,
         dateAvailabilities: [],
-        activities:[]
+        activities: []
       }
   );
+
+  useEffect(() => {
+    if (itemInfo) {
+      setFormData(itemInfo);
+      setDescription(itemInfo.description || "");
+      setDateAvailabilities(itemInfo.dateAvailabilities || []);
+      setActivities(itemInfo.activities || []);
+    }
+  }, [itemInfo]);
+
+
   const [description, setDescription] = useState(itemInfo ? itemInfo.description : "");
 
   const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
@@ -83,16 +94,17 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       availableSpots: undefined,
       travelType: undefined,
       dateAvailabilities: [],
-      activities:[]
+      activities: []
     });
     setActivities([]);
     setDescription('');
     setErrors(newErrors);
   };
+console.log(itemInfo.videos);
 
   const handleDescriptionChange = (value: string) => {
     setDescription(value);
-};
+  };
 
   const handleAddDateAvailability = () => {
     setDateAvailabilities([
@@ -156,7 +168,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     });
 
     if (!hasErrors) {
-      (dispatch as AppDispatch)(
+      dispatch(
         addTravelPackageApi({
           newTravelPackageData: {
             ...formData,
@@ -244,7 +256,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
             />
           </Grid>
 
-   
+
           <Grid size={{ xs: 12, md: 12 }}>
             <Typography variant="h6" gutterBottom>
               Date Availabilities
@@ -413,7 +425,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
             {formData.image && (
               <Box mt={2}>
                 <img
-                  src={formData.image}
+                  src={`data:video/mp4;base64,${formData.image}`}
                   alt="Main preview"
                   style={{ maxWidth: '200px', maxHeight: '200px' }}
                 />
@@ -462,10 +474,10 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
               uploadFormat="BASE64"
             />
             <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-              {formData.videos?.map((video, index) => (
+              {formData?.videos?.map((video, index) => (
                 <Box key={index} position="relative">
                   <img
-                    src={`data:image/jpeg;base64,${video}`}
+                    src={`data:video/mp4;base64,${video}`}
                     alt={`Gallery ${index + 1}`}
                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                   />
@@ -478,7 +490,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
                       backgroundColor: 'rgba(255,255,255,0.7)'
                     }}
                     onClick={() => {
-                      const updatedVideos= [...(formData.videos || [])];
+                      const updatedVideos = [...(formData.videos || [])];
                       updatedVideos.splice(index, 1);
                       setFormData({ ...formData, videos: updatedVideos as string[] });
                     }}
@@ -490,7 +502,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
             </Box>
           </Grid>
 
-          <Grid size={{xs:12}}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="h6">Activities</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
               <TextField
@@ -509,12 +521,12 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
                 Add
               </Button>
             </Box>
-            
+
             {activities.map((activity, index) => (
-              <Box key={index} sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 1, 
+              <Box key={index} sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
                 mb: 1,
                 p: 1,
                 backgroundColor: '#f5f5f5',
