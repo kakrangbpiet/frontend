@@ -76,6 +76,14 @@ export const renderCustomStyles = (node: any, index: number) => {
         return <h1 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h1>;
       case 'h2':
         return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+      case 'h3':
+        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+      case 'h4':
+        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+      case 'h4':
+        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
+      case 'h4':
+        return <h2 key={index} className="mb-6 text-md leading-relaxed">{Array.from(node.childNodes).map((childNode, idx) => renderCustomStyles(childNode, idx))}</h2>;
 
       // Handle iframes
       case 'iframe':
