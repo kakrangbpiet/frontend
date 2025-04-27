@@ -47,48 +47,45 @@ const SingleTravelPackageDetails = () => {
   // Staggered loading pattern
   useEffect(() => {
 
-  if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
-    dispatch(fetchSingleTravelPackageApi({
-      itemId: travelPackageId,
-    }));
-  }
-  else{
-    // First load essential fields
-    dispatch(fetchSingleTravelPackageApi({
-      itemId: travelPackageId,
-      select: "title,description,status"
-    }));
-    dispatch(fetchSingleTravelPackageApi({
-      itemId: travelPackageId,
-      select: "image,status"
-    }));
-    dispatch(fetchSingleTravelPackageApi({
-      itemId: travelPackageId,
-      select: "images"
-    }));
-  }
+    if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
+      dispatch(fetchSingleTravelPackageApi({
+        itemId: travelPackageId,
+      }));
+    }
+    else {
+      // First load essential fields
+      dispatch(fetchSingleTravelPackageApi({
+        itemId: travelPackageId,
+        select: "title,description,status"
+      }));
+      dispatch(fetchSingleTravelPackageApi({
+        itemId: travelPackageId,
+        select: "image,status,dateAvailabilities"
+      }));
+
+    }
 
     // Finally load dates and other secondary data
     dispatch(fetchTravelPackageDatesApi({ packageId: travelPackageId }));
 
-  
+
   }, [dispatch]);
 
   // Handle photos tab click - load full images if not already loaded
   useEffect(() => {
-    if (activeTab === 'photos' && !selectedTravelPackage?.images) {
+    if (activeTab === 'photos') {
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId,
         select: "images"
       }));
     }
-  }, [activeTab, dispatch, travelPackageId, selectedTravelPackage]);
+  }, [activeTab, dispatch]);
 
   const packageData = selectedTravelPackage;
 
   // Default values and null checks
   const description = packageData?.description ?? '';
-  const dateAvailabilities = useSelector(selectPackageDates(travelPackageId))?? [];
+  const dateAvailabilities = useSelector(selectPackageDates(travelPackageId)) ?? [];
   const image = packageData?.image ?? '';
   const images = packageData?.images ?? [image];
   const videos = packageData?.videos ?? [];
@@ -131,14 +128,14 @@ const SingleTravelPackageDetails = () => {
     return (
       <div className="min-h-screen w-full bg-transparent pt-26">
         <div className="max-w-6xl mx-auto mt-6 flex flex-wrap justify-between items-center space-x-2 mb-4">
-        {status &&  <button
+          {status && <button
             disabled={isUpdating}
             onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
             className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white rounded-lg shadow-lg disabled:opacity-50 transition duration-300 font-medium"
           >
             {status === 'inactive' ? 'Activate' : 'Deactivate'}
           </button>
-        }
+          }
 
           <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
             <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
@@ -272,41 +269,47 @@ const SingleTravelPackageDetails = () => {
 
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
 
-                  {isImagesLoading && images.length===0 ? (
+                  {isImagesLoading &&
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {[...Array(4)].map((_, index) => (
-                        <div key={index} className="w-full">
-                          <Skeleton variant="rectangular" height={200} />
-                        </div>
-                      ))}
+
                     </div>
-                  ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {images.map((img, index) => (
-                        <div
-                          key={index}
-                          className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
-                          onClick={() => {
-                            setSelectedImageIndex(index);
-                            setGalleryOpen(true);
-                          }}
-                        >
-                          <img
-                            src={`data:image/jpeg;base64,${img}`}
-                            alt={`${title} - image ${index + 1}`}
-                            className="w-full h-48 md:h-64 object-cover"
-                          />
-                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                              </svg>
-                            </div>
+
+                  }
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {images.map((img, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
+                        onClick={() => {
+                          setSelectedImageIndex(index);
+                          setGalleryOpen(true);
+                        }}
+                      >
+                        <img
+                          src={`data:image/jpeg;base64,${img}`}
+                          alt={`${title} - image ${index + 1}`}
+                          className="w-full h-48 md:h-64 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </div>
+                    ))}
+                    {isImagesLoading &&
+                      <>
+                        {[...Array(4)].map((_, index) => (
+                          <div key={index} className="w-full">
+
+                            <Skeleton variant="rectangular" height={260} />
+                          </div>
+                        ))}
+                      </>
+                    }
+                  </div>
                 </div>
               )}
 
@@ -411,7 +414,7 @@ const SingleTravelPackageDetails = () => {
               {activeTab === 'dates' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Available Dates</h2>
-                    <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
+                  <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
                 </div>
               )}
             </div>
