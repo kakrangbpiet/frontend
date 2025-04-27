@@ -51,22 +51,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
       {/*full width*/}
       <section className="container mx-auto px-4">
         <div className="hover-sw-nav hover-sw-2">
-          {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, index) => (
-                <div key={index} className="w-full">
-                  <Skeleton variant="rectangular" height={200} />
-                  <Skeleton variant="text" width="80%" />
-                  <Skeleton variant="text" width="60%" />
-                </div>
-              ))}
-            </div>
-          ) : travelPackages.length === 0 ? (
-            <div className="text-white p-4 border border-white/20 rounded text-center">
-              No packages found for this category.
-            </div>
-          ) : (
-
+      
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {travelPackages.map((pkg: ITravelPackage) => (
                 <div key={pkg.id} className="w-full">
@@ -164,7 +149,17 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                 </div>
               ))}
             </div>
-          )}
+              {loading &&
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {[...Array(4)].map((_, index) => (
+                    <div key={index} className="w-full">
+                      <Skeleton variant="rectangular" height={200} />
+                      <Skeleton variant="text" width="80%" />
+                      <Skeleton variant="text" width="60%" />
+                    </div>
+                  ))}
+                </div>
+              }
 
           <div className="text-center mt-8">
             <button

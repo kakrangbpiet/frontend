@@ -8,17 +8,17 @@ import { ITravelPackage, useSelectedTravelPackage } from '../../redux/slices/Tra
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
 import Registration from '../../components/Registration';
-import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData';
 import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay } from './DateAvailability';
 import FullScreenGallery from './FullScreenGallery';
 import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
+import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
+
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
 
-  const [mockPackage, setMockPackage] = useState<ITravelPackage | undefined>(undefined);
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
 
@@ -37,21 +37,15 @@ const SingleTravelPackageDetails = () => {
     dispatch(setActiveHistory(travelPackageId))
   }, [dispatch]);
 
-  useEffect(() => {
-    //mock
-    const foundPackage = mockTravelPackages.find(pkg => pkg.id === travelPackageId);
-    setMockPackage(foundPackage);
 
-    // db
-    if (travelPackageId) {
+  useEffect(() => {
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId
       }));
-    }
-  }, [travelPackageId]);
+  }, [dispatch,travelPackageId]);
 
   // mock 
-  const packageData = mockPackage || selectedTravelPackage;
+  const packageData = selectedTravelPackage;
 
   // Default values and null checks
   const description = packageData?.description ?? '';
@@ -67,7 +61,6 @@ const SingleTravelPackageDetails = () => {
   const travelType = packageData?.travelType ?? 'group';
   const maxTravelers = packageData?.maxTravelers ?? 0;
   const activities = packageData?.activities ?? null;
-console.log(packageData);
 
   const navigateToHome = () => {
     navigate("/");
@@ -93,7 +86,7 @@ console.log(packageData);
     setShowMobileForm(!showMobileForm);
   };
 
-  if (!packageData && !mockPackage) {
+  if (!packageData) {
     return (
       <div className="min-h-screen w-full bg-transparent p-4 flex flex-col items-center justify-center">
         <div className="w-full max-w-6xl animate-pulse">
@@ -163,9 +156,6 @@ console.log(packageData);
                 <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 drop-shadow-lg bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
                   {title}
                 </h1>
-                <p className="text-lg md:text-xl max-w-3xl drop-shadow-md hidden md:block">
-                  {description.length > 120 ? description.substring(0, 120) + '...' : description}
-                </p>
               </div>
             </div>
             <button
@@ -199,9 +189,9 @@ console.log(packageData);
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
                     About {title}
                   </h2>
-                  <p className="mb-6">{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
-                  <p className="mb-6">Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
 
+                  {parseHTML(description).map((node, index) => renderCustomStyles(node, index))}
+           
                   <div className="relative mb-8 rounded-lg overflow-hidden shadow-md bg-black/50 transform hover:scale-[1.01] transition duration-500 cursor-pointer">
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200 relative">
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -218,7 +208,7 @@ console.log(packageData);
                       </div>
                     </div>
                   </div>
-                  {activities &&
+                  {activities && activities.length>0 &&
                     <>
                       <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-4">
                         Activities to Enjoy

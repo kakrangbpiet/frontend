@@ -12,6 +12,7 @@ import { addTravelPackageApi } from '../../redux/slices/Travel/travelApiSlice';
 import locationsData from './Location.json';
 import AddIcon from '@mui/icons-material/Add';  // Fixed import
 import UnixDateInput from './DatePicker';
+import WYSIWYGEditor from '../WYSWYGEditor';
 
 interface AddTravelPackageProps {
   itemInfo?: ITravelPackage;
@@ -25,7 +26,6 @@ interface ErrorMessages {
 
 const newErrors: ErrorMessages = {
   title: '',
-  description: '',
   location: '',
   category: '',
   status: '',
@@ -43,7 +43,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       : {
         id: '',
         title: '',
-        description: '',
         image: '',
         images: [],
         videos: [],
@@ -57,6 +56,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         activities:[]
       }
   );
+  const [description, setDescription] = useState(itemInfo ? itemInfo.description : "");
 
   const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
     itemInfo?.dateAvailabilities || []
@@ -73,7 +73,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     setFormData({
       id: '',
       title: '',
-      description: '',
       image: '',
       images: [],
       videos: [],
@@ -87,8 +86,13 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       activities:[]
     });
     setActivities([]);
+    setDescription('');
     setErrors(newErrors);
   };
+
+  const handleDescriptionChange = (value: string) => {
+    setDescription(value);
+};
 
   const handleAddDateAvailability = () => {
     setDateAvailabilities([
@@ -156,6 +160,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
         addTravelPackageApi({
           newTravelPackageData: {
             ...formData,
+            description,
             activities: activities,
             dateAvailabilities: dateAvailabilities.length > 0 ? dateAvailabilities : undefined,
             id: itemInfo?.id || '',
@@ -385,19 +390,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
           {/* Description - full width */}
           <Grid size={{ xs: 12, md: 12 }}>
             <Typography variant="h6">Description</Typography>
-            <CustomTextField
-              id="description"
-              type="text"
-              label="Description"
-              value={formData.description}
-              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'description')}
-              placeholder="Enter description"
-              error={errors.description}
-              isError={!!errors.description}
-              fullWidth
-              multiline
-              rows={4}
-            />
+            <WYSIWYGEditor value={description || ''} onChange={handleDescriptionChange} />
             {errors.description && (
               <Typography color="error" variant="body2">
                 {errors.description}

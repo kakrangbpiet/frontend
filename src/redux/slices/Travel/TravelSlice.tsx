@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface ITravelPackage {
     id: string;
     title: string;
-    description: string;
+    description?: string;
     image: string;
     images?: string[]; // Additional images for gallery
     videos?: IVideosResponse[] | string[]; 
