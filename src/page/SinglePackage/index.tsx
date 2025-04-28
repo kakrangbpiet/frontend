@@ -409,7 +409,7 @@ const SingleTravelPackageDetails = () => {
           <div className="relative w-full max-w-lg max-h-[90vh] overflow-auto rounded-xl">
             <button
               onClick={toggleMobileForm}
-              className="absolute top-2 right-2 z-10 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300"
+              className="absolute top-5 right-2 z-10 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300"
               aria-label="Close form"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
