@@ -95,7 +95,8 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
     name: userDetails?.name || '',
     email: userDetails?.email || '',
     phoneNumber: userDetails?.phoneNumber || '',
-    specialRequests: ''
+    specialRequests: '',
+    price: '',
   });
 
   const handleNext = () => {
@@ -226,7 +227,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
   )}
 </div>
             
-            <div className="px-2 py-4 flex justify-between">
+            <div className="px-2 py-4 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
               {activeStep > 0 && (
                 <button
                   onClick={handleBack}
@@ -243,7 +244,18 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
                 }`}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Continue'}
+            
               </button>
+              {inquiryData.tripType==="pre-planned" && activeStep === inquirySteps.length - 1  &&
+                  <button
+                    onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
+                    className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${
+                      activeStep === 0 ? 'w-full ml-auto' : ''
+                    }`}
+                  >
+                   Pay Now
+                  </button>
+                }
             </div>
           </>
         )}

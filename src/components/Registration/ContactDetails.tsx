@@ -4,9 +4,10 @@ import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlic
 import { SelectConactVerified, SelectContact, selectTrxId, setContactVerified } from '../../redux/slices/login/authSlice';
 import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
+import AdditionalServices from './AdditionalServices';
 
 interface ContactDetailsProps {
-  inquiryData: any;
+  inquiryData: TravelInquiry;
   setInquiryData: any;
   isRegister?: boolean;
   shouldShowRegister?: boolean;
@@ -95,9 +96,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             value={inquiryData.email}
             onChange={(e) => handleChange('email', e.target.value)}
             disabled={!shouldShowRegister && isRegister}
-            className="w-full px-4 py-3 rounded-lg bg-white/40 border border-gray-300 
+            className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
              text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-             focus:ring-blue-200 transition-all duration-200 outline-none"
+             focus:ring-blue-200 transition-all duration-200 outline-none "
             placeholder="your.email@example.com"
             required
           />
@@ -122,7 +123,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 value={phoneInput}
                 onChange={handlePhoneChange}
                 disabled={showOtpField || (!shouldShowRegister && isRegister)}
-                className="w-full px-4 py-3 rounded-lg bg-white/40 border border-gray-300 
+                className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
                 text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
                 focus:ring-blue-200 transition-all duration-200 outline-none"
                 placeholder="1234567890"
@@ -173,7 +174,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     value={otpInput}
                     onChange={handleOtpChange}
                     disabled={!shouldShowRegister && isRegister}
-                    className="w-full px-4 py-3 rounded-lg bg-white/40 border border-gray-300 
+                    className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
                     text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
                     focus:ring-blue-200 transition-all duration-200 outline-none"
                     placeholder="Enter 6-digit code"
@@ -212,18 +213,18 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           )}
         </>
       ) : (
-        <div className="rounded-lg bg-blue-50/50 border border-blue-200 p-4">
+        <div className="rounded-lg  border border-blue-200 p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0 mt-0.5">
               <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
             </div>
-            <div className="ml-3">
+            <div className="ml-3 ">
               <h3 className="text-sm font-medium text-blue-800">
                 Verified Phone Number
               </h3>
-              <p className="text-sm text-gray-700 mt-1">
+              <p className="text-sm  mt-1 text-white">
                 {verifiedPhoneNumber}
               </p>
               {shouldShowRegister && (
@@ -240,6 +241,11 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
         </div>
       )}
+      {!shouldShowRegister && !isRegister && inquiryData.tripType === 'pre-planned' && 
+      <AdditionalServices
+      inquiryData={inquiryData}
+      setInquiryData={setInquiryData}
+    />}
     </div>
   );
 }

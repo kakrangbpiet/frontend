@@ -16,6 +16,7 @@ export interface TravelInquiry extends IUser {
   specialRequests?: string;
   status?: 'pending' | 'confirmed' | 'rejected' | 'completed';
   createdAt?: string;
+  price?:string
 }
 
 export interface TravelerInfo {

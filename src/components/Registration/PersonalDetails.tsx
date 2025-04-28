@@ -1,4 +1,4 @@
-import { Box, TextField } from '@mui/material';
+import { Box } from '@mui/material';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
 
 interface PersonalDetailsProps {
@@ -19,30 +19,6 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
     }));
   };
 
-  // Custom MUI styles
-  const textFieldStyle = {
-    '& .MuiOutlinedInput-root': {
-      backgroundColor: 'rgba(255, 255, 255, 0.4)', 
-      borderRadius: '0.75rem',
-      backdropFilter: 'blur(20px)', 
-      WebkitBackdropFilter: 'blur(20px)', 
-      border: '1px solid rgba(255, 255, 255, 0.3)',
-      '& fieldset': {
-        borderColor: 'rgba(255, 255, 255, 0.5)',
-      },
-      '&:hover fieldset': {
-        borderColor: 'rgba(255, 255, 255, 0.5)',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: '#3b82f6',
-      },
-    },
-    '& input': {
-      fontWeight: '500',
-      color: '#fffff',
-    },
-  };
-
   return (
     <Box sx={{ px: 2, mt: 2 }}>
       {/* Name input */}
@@ -54,18 +30,19 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
           <p className="text-xs text-gray-500 dark:text-gray-400">We'll use this name for your booking</p>
         )}
       </div>
-      <TextField
-        fullWidth
+      <input
+        type="text"
         id="name"
-        placeholder="Enter your full name"
-        value={inquiryData.name}
+        value={inquiryData.email}
         onChange={(e) => handleChange('name', e.target.value)}
-        margin="normal"
-        required
         disabled={!shouldShowRegister && isRegister}
-        sx={textFieldStyle}
+        className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
+             text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
+             focus:ring-blue-200 transition-all duration-200 outline-none "
+        placeholder="Enter your full name"
+        required
       />
-      
+
       {/* Passenger count input */}
       {!isRegister && (
         <>
@@ -79,21 +56,21 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
               </p>
             )}
           </div>
-          <TextField
-            fullWidth
-            id="passengers"
-            placeholder="Enter number of passengers"
+          <input
             type="number"
-            inputProps={{ min: 1 }}
+            id="passengerCount"
             value={inquiryData.passengerCount}
-            onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 1)}
-            margin="normal"
+            onChange={(e) => handleChange('passengerCount', e.target.value)}
+            disabled={!shouldShowRegister && isRegister}
+            className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
+             text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
+             focus:ring-blue-200 transition-all duration-200 outline-none "
+            placeholder="Enter number of passengers"
             required
-            sx={textFieldStyle}
           />
         </>
       )}
-      
+
       {/* Special requests input */}
       {!isRegister && (
         <>
@@ -105,16 +82,20 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
               Let us know if you have any special requirements
             </p>
           </div>
-          <TextField
-            fullWidth
-            id="requests"
-            placeholder="E.g., dietary restrictions, accessibility needs, etc."
-            value={inquiryData.specialRequests}
+
+
+          <textarea
+            id="specialRequests"
+            value={inquiryData.specialRequests}  // Changed from email to specialRequests
             onChange={(e) => handleChange('specialRequests', e.target.value)}
-            margin="normal"
-            multiline
-            rows={4}
-            sx={textFieldStyle}
+            disabled={!shouldShowRegister && isRegister}
+            rows={4}  // Number of visible rows
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 
+           text-white font-medium focus:border-blue-500 focus:ring-2 
+           focus:ring-blue-200 transition-all duration-200 outline-none
+           resize-y"  // Allows vertical resizing
+            placeholder="E.g., dietary restrictions, accessibility needs, etc."
+            required
           />
         </>
       )}

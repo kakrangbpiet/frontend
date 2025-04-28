@@ -24,11 +24,13 @@ const formatCurrency = (amount: number): string => {
 export const DateAvailabilityDisplay = ({ 
     dateAvailabilities,
     startDate,
+    setPrice,
     setStartDate,
     setEndDate,
 }: { 
     dateAvailabilities: DateAvailability[],
     startDate?: number,
+    setPrice?: (price: number) => void,
     setStartDate?: (date: number) => void,
     setEndDate?: (date: number) => void,
 }) => {
@@ -113,6 +115,7 @@ export const DateAvailabilityDisplay = ({
                                 }`}
                                 onClick={() => {
                                     setStartDate(availability.startDate);
+                                    setPrice(availability.price);
                                     setEndDate(availability.endDate);
                                 }}
                                 aria-selected={startDate === availability.startDate}

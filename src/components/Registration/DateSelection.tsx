@@ -10,6 +10,7 @@ interface DateSelectionTabsProps {
   startDate?: number;
   endDate?: number;
   setStartDate: (date?: number) => void;
+  setPrice: (price?: number) => void;
   setEndDate: (date?: number) => void;
   onValidationError?: (message: string) => void;
   isCustomForm?:boolean;
@@ -23,6 +24,7 @@ function DateSelectionTabs({
   endDate,
   setStartDate,
   setEndDate,
+  setPrice,
   onValidationError,
   isCustomForm
 }: DateSelectionTabsProps) {
@@ -148,7 +150,7 @@ function DateSelectionTabs({
       </div>
     ) : (
       <div className="max-h-64 overflow-auto pr-1 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-transparent">
-          <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} startDate={startDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+          <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} startDate={startDate} setStartDate={setStartDate} setEndDate={setEndDate} setPrice={setPrice} />
       </div>
     )}
   </div>
