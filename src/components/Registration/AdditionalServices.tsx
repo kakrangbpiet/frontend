@@ -3,15 +3,24 @@ import { useState, useEffect } from 'react';
 interface AdditionalServicesProps {
   inquiryData: any;
   setInquiryData: any;
+  tripPrice?: number; 
+  passengerCount?: number; 
 }
 
-function AdditionalServices({ inquiryData, setInquiryData }: AdditionalServicesProps) {
+function AdditionalServices({ 
+  inquiryData, 
+  setInquiryData, 
+  tripPrice = 0, 
+  passengerCount = 1 
+}: AdditionalServicesProps) {
   const [showTooltip, setShowTooltip] = useState({
     medical: false,
     translator: false,
     photography: false,
+    total: false,
   });
 
+  // Initialize additional services
   useEffect(() => {
     setInquiryData(prev => ({
       ...prev,
@@ -24,6 +33,7 @@ function AdditionalServices({ inquiryData, setInquiryData }: AdditionalServicesP
     }));
   }, []);
 
+  // Calculate additional services cost
   useEffect(() => {
     const translatorCost = inquiryData.additionalServices?.translator ? 10000 : 0;
     const photographyCost = inquiryData.additionalServices?.photography ? 10000 : 0;
@@ -35,6 +45,18 @@ function AdditionalServices({ inquiryData, setInquiryData }: AdditionalServicesP
     }));
   }, [inquiryData.additionalServices?.translator, inquiryData.additionalServices?.photography]);
   
+  // Calculate total price
+  useEffect(() => {
+    const basePrice = tripPrice * passengerCount;
+    const additionalCost = inquiryData.additionalServicesCost || 0;
+    const totalPrice = basePrice + additionalCost;
+    
+    setInquiryData(prev => ({
+      ...prev,
+      totalPrice: totalPrice
+    }));
+  }, [tripPrice, passengerCount, inquiryData.additionalServicesCost]);
+
   const handleServiceChange = (service: string, checked: boolean) => {
     setInquiryData(prev => ({
       ...prev,
@@ -43,6 +65,16 @@ function AdditionalServices({ inquiryData, setInquiryData }: AdditionalServicesP
         [service]: checked
       }
     }));
+  };
+
+  // Format currency to INR
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
   };
 
   return (
@@ -147,6 +179,36 @@ function AdditionalServices({ inquiryData, setInquiryData }: AdditionalServicesP
             </div>
           </div>
         )}
+
+        {/* Total Price Section */}
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <span className="font-bold text-white text-lg">Total Price:</span>
+              <div 
+                className="ml-2 cursor-pointer relative"
+                onMouseEnter={() => setShowTooltip({...showTooltip, total: true})}
+                onMouseLeave={() => setShowTooltip({...showTooltip, total: false})}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clipRule="evenodd" />
+                </svg>
+                {showTooltip.total && (
+                  <div className="absolute z-10 w-72 p-2 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 text-sm text-gray-700">
+                    Trip price (₹{tripPrice} × {passengerCount}) + Additional services (₹{inquiryData.additionalServicesCost || 0})
+                  </div>
+                )}
+              </div>
+            </div>
+            <span className="font-extrabold text-xl text-blue-600">
+              {formatCurrency(inquiryData.totalPrice || 0)}
+            </span>
+          </div>
+          <div className="mt-2 text-sm text-white/70">
+            <p>Base trip: {formatCurrency(tripPrice)} × {passengerCount} {passengerCount > 1 ? 'passengers' : 'passenger'}</p>
+            <p>Additional services: {formatCurrency(inquiryData.additionalServicesCost || 0)}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
