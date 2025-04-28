@@ -4,6 +4,7 @@ import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlic
 import { SelectConactVerified, SelectContact, selectTrxId, setContactVerified } from '../../redux/slices/login/authSlice';
 import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
+import AdditionalServices from './AdditionalServices'; 
 
 interface ContactDetailsProps {
   inquiryData: any;
@@ -82,12 +83,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <div className="space-y-6">
-      {/* Email Input */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-          Email Address
-        </label>
+
+    <div>
+      <div className="space-y-7">
         <div className="relative">
           <input
             type="email"
@@ -146,26 +144,22 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             </p>
             
           </div>
-          
-          {!showOtpField ? (
-            <div className="flex justify-center mt-2">
-              <button 
-                type="button"
-                onClick={handleSendOtp}
-                disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-                className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 
-                text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
-                disabled:cursor-not-allowed transition-all duration-200 w-full max-w-xs"
-              >
-                Send Verification Code
-              </button>
-            </div>
-          ) : (
-            <>
-              <div>
-                <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
-                  Verification Code
-                </label>
+
+            {!showOtpField ? (
+              <div className="flex justify-center mt-4">
+                <button 
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={!phoneInput || (!shouldShowRegister && isRegister)}
+                  className="px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-600 
+                  text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
+                  disabled:cursor-not-allowed transition-all duration-200 w-[200px]"
+                >
+                  Send Verification Code
+                </button>
+              </div>
+            ) : (
+              <>
                 <div className="relative">
                   <input
                     type="text"
@@ -207,6 +201,37 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     Edit Number
                   </button>
                 )}
+                  
+                  {!isRegister && (
+                    <button 
+                      type="button"
+                      onClick={handleEditNumber}
+                      disabled={!shouldShowRegister && isRegister}
+                      className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+                      text-black font-medium focus:border-blue-500 focus:ring-2 
+                      focus:ring-blue-200 transition-all duration-200 outline-none"
+                    >
+                      Edit Number
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        ) : (
+          <div className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.25)] border border-gray-300 
+          text-black font-medium focus:border-blue-500 focus:ring-2 
+          focus:ring-blue-200 transition-all duration-200 outline-none">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-bold text-blue-800">
+                  Verified Phone: {verifiedPhoneNumber}
+                </p>
               </div>
             </>
           )}
@@ -240,6 +265,14 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           <input type="hidden" name="phoneNumber" value={verifiedPhoneNumber || ''} />
         </div>
       )}
+        )}
+        
+        {/* Additional Services Section - Now using the imported component */}
+        <AdditionalServices
+          inquiryData={inquiryData}
+          setInquiryData={setInquiryData}
+        />
+      </div>
     </div>
   );
 }
