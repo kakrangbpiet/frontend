@@ -51,8 +51,8 @@ const HeroText = styled.div`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 600; 
+  font-size: 2.3rem;
+  font-weight: 400; 
   margin-bottom: 1rem;
   
   @media (max-width: 768px) {
