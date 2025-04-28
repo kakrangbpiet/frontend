@@ -95,7 +95,8 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
     name: userDetails?.name || '',
     email: userDetails?.email || '',
     phoneNumber: userDetails?.phoneNumber || '',
-    specialRequests: ''
+    specialRequests: '',
+    price: '',
   });
 
   const handleNext = () => {
