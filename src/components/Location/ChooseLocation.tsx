@@ -28,6 +28,7 @@ function ChooseLocation({ open, handleClose, setAddress }: { open: boolean, hand
 
   return (
     <div>
+      <div>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -52,6 +53,7 @@ function ChooseLocation({ open, handleClose, setAddress }: { open: boolean, hand
           </Button>
         </DialogActions>
       </Dialog>
+      </div>
 
       <ManualLocation setAddress={setAddress} open={openManualLocation} handleClose={hanldeCloseLocationDailog} />
       {openLiveLocation &&

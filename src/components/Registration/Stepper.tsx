@@ -167,12 +167,10 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
         const registrationResult = await dispatch(registerUserDispatcher({userData:inquiryToSend})).unwrap();
         
         if (registrationResult) {
-          await dispatch(createTravelInquiry(inquiryToSend));
-          handleNext();
+          await dispatch(createTravelInquiry({inquiryToSend,handleNext}));
         }
       } else {
-        await dispatch(createTravelInquiry(inquiryToSend));
-        handleNext();
+        await dispatch(createTravelInquiry({inquiryToSend,handleNext}));
       }
     } catch (error) {
       console.error('Error submitting inquiry:', error);

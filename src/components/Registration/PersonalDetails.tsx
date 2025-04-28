@@ -33,7 +33,7 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
       <input
         type="text"
         id="name"
-        value={inquiryData.email}
+        value={inquiryData.name}
         onChange={(e) => handleChange('name', e.target.value)}
         disabled={!shouldShowRegister && isRegister}
         className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 

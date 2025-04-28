@@ -6,12 +6,13 @@ import { ApiError } from "../../../../Datatypes";
 // Async Thunks
 export const createTravelInquiry = createAsyncThunk(
     'bookTravel/createInquiry',
-    async (inquiryData: Omit<TravelInquiry, 'inquiryId' | 'status'>, { rejectWithValue }) => {
+    async ({ inquiryToSend, handleNext }: { inquiryToSend: Omit<TravelInquiry, 'inquiryId' | 'status'>; handleNext: () => void }, { rejectWithValue }) => {
       try {
         const response = await Request({
           endpointId: 'CREATE_TRAVEL_INQUIRY',
-          data: inquiryData,
+          data: inquiryToSend,
         });
+        handleNext();
         
         return response.data as TravelInquiry;
       } catch (error) {
