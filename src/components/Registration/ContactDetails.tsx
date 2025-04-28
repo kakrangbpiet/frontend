@@ -7,7 +7,7 @@ import { AppDispatch } from '../../redux/store';
 import AdditionalServices from './AdditionalServices';
 
 interface ContactDetailsProps {
-  inquiryData: TravelInquiry;
+  inquiryData: any;
   setInquiryData: any;
   isRegister?: boolean;
   shouldShowRegister?: boolean;
