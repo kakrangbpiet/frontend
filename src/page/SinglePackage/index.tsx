@@ -17,7 +17,6 @@ import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss
 import { Skeleton } from '@mui/material';
 import styled from 'styled-components';
 
-
 const StyledVideo = styled.video`
   width: 100%;
   height: 100%;
@@ -28,9 +27,8 @@ const SingleTravelPackageDetails = () => {
 
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
-
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedMedia, setSelectedMedia] = useState<{ type: 'image' | 'video', index: number }>({ type: 'image', index: 0 });
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -102,7 +100,7 @@ const SingleTravelPackageDetails = () => {
   const travelType = packageData?.travelType ?? 'group';
   const maxTravelers = packageData?.maxTravelers ?? 0;
   const activities = packageData?.activities ?? null;
-console.log(videos);
+  console.log(videos);
 
   const navigateToHome = () => {
     navigate("/");
@@ -168,7 +166,7 @@ console.log(videos);
     <div className="">
       <div className="">
         {videos &&
-          <MediaBackground video={ videos.randomVideo } />
+          <MediaBackground video={videos.randomVideo} />
         }
       </div>
       <div className="absolute inset-0 overflow-hidden">
@@ -278,7 +276,7 @@ console.log(videos);
                         key={index}
                         className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
                         onClick={() => {
-                          setSelectedImageIndex(index);
+                          setSelectedMedia({ type: 'image', index });
                           setGalleryOpen(true);
                         }}
                       >
@@ -300,7 +298,6 @@ console.log(videos);
                       <>
                         {[...Array(4)].map((_, index) => (
                           <div key={index} className="w-full">
-
                             <Skeleton variant="rectangular" height={260} />
                           </div>
                         ))}
@@ -315,17 +312,20 @@ console.log(videos);
                         key={index}
                         className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
                         onClick={() => {
-                          setSelectedImageIndex(index);
+                          setSelectedMedia({ type: 'video', index });
                           setGalleryOpen(true);
                         }}
                       >
-    <StyledVideo 
-        src={`data:video/mp4;base64,${vid?.base64Data}`}
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
+                        <div className='w-full h-48 md:h-64 object-cover'>
+                          <StyledVideo
+                            src={`data:video/mp4;base64,${vid?.base64Data}`}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                          />
+                        </div>
+
                         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                           <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -339,7 +339,6 @@ console.log(videos);
                       <>
                         {[...Array(4)].map((_, index) => (
                           <div key={index} className="w-full">
-
                             <Skeleton variant="rectangular" height={260} />
                           </div>
                         ))}
@@ -385,67 +384,6 @@ console.log(videos);
                   </div>
                 </div>
               )}
-              {/* {activeTab === 'highlights' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Package Highlights</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-6 md:mb-8">
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white text-sm md:text-base">Duration:  Days,  Nights</p>
-                    </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white text-sm md:text-base">Category: {category}</p>
-                    </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white text-sm md:text-base">Travel Type: {travelType}</p>
-                    </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white text-sm md:text-base">Location: {location}</p>
-                    </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white text-sm md:text-base">All-inclusive package</p>
-                    </div>
-                    <div className="flex items-center gap-3 hover:bg-white/5 p-2 md:p-3 rounded-lg transition-all duration-300">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                      <p className="text-white text-sm md:text-base">Professional tour guides</p>
-                    </div>
-                  </div>
-
-                  <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-3 md:mb-4">
-                    Included Services
-                  </h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 text-white text-sm md:text-base">
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                      </svg>
-                      Accommodation
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                      </svg>
-                      Daily breakfast and dinner
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                      </svg>
-                      Transportation
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <svg className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                      </svg>
-                      Guided tours
-                    </li>
-                  </ul>
-                </div>
-              )} */}
 
               {activeTab === 'dates' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
@@ -495,8 +433,9 @@ console.log(videos);
       )}
       <FullScreenGallery
         images={images}
+        videos={videos?.allVideos || []}
         isOpen={galleryOpen}
-        initialIndex={selectedImageIndex}
+        initialMedia={selectedMedia}
         onClose={() => setGalleryOpen(false)}
       />
     </div>
