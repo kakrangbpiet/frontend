@@ -85,9 +85,8 @@ const FullScreenGallery = ({
 
   return (
     <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center backdrop-blur-xl">
-
-         {/* Close button */}
-         <button
+      {/* Close button */}
+      <button
         onClick={onClose}
         className="absolute top-32 right-6 z-10 p-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
         aria-label="Close gallery"
@@ -155,8 +154,8 @@ const FullScreenGallery = ({
             key={index}
             onClick={() => setCurrentMedia({ type: media.type, index })}
             className={`flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border-2 transition-all duration-200 ${index === currentMedia.index
-                ? 'border-emerald-400 scale-110 shadow-lg'
-                : 'border-transparent opacity-70 hover:opacity-100 hover:scale-105'
+              ? 'border-emerald-400 scale-110 shadow-lg'
+              : 'border-transparent opacity-70 hover:opacity-100 hover:scale-105'
               }`}
           >
             {media.type === 'image' ? (
@@ -172,12 +171,12 @@ const FullScreenGallery = ({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <video
-                            src={`data:video/mp4;base64,${media?.base64Data}`}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                          />
+                  src={`data:video/mp4;base64,${media?.base64Data}`}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
               </div>
             )}
           </button>
