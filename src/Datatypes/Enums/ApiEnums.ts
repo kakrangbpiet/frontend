@@ -1,5 +1,5 @@
-// const backendUrl="http://localhost:3000/v1"
-const backendUrl="http://54.237.234.107:3000/v1"
+const backendUrl="http://localhost:3000/v1"
+// const backendUrl="http://54.237.234.107:3000/v1"
 
 export const ApiEndpoint: Record<string, any> = {
   // AUTHENTICATION ENDPOINTS
@@ -54,7 +54,7 @@ export const ApiEndpoint: Record<string, any> = {
     errorMessage: ""
   },
   GET_ALL_USERS: { 
-    apiId: 20, 
+    apiId: 6, 
     withAuth: true, 
     url: `${backendUrl}/getAllUsers`, 
     method: 'GET', 
@@ -128,6 +128,16 @@ export const ApiEndpoint: Record<string, any> = {
     apiId: 26, 
     withAuth: true, 
     url: `${backendUrl}/Travel/videos`, 
+    method: 'GET', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Getting Package Videos",
+    successMessage: "Package Videos Fetched successfully",
+    errorMessage: "Error Getting Package Videos"
+  },
+  GET_TRAVEL_RANDOM_VIDEO: { 
+    apiId: 26, 
+    withAuth: true, 
+    url: `${backendUrl}/Travel/randomvideo`, 
     method: 'GET', 
     headers: { 'Content-Type': 'application/json' },
     loadingMessage: "Getting Package Videos",

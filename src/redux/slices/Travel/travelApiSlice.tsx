@@ -446,39 +446,85 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
     if (!itemId) {
       return rejectWithValue('Item ID is required');
     }
+    dispatch(setLoadedItems({
+      loadingFields: { videos: true },
+      loading: true
+    }));
 
-    dispatch(setLoadedItems({ loading: true }));
     try {
       const response = await Request({
         endpointId: 'GET_TRAVEL_ITEM_VIDEOS',
         slug: `/${itemId}`,
       });
 
-      // Type the response data as IVideosResponse[]
-      const videosData: IVideosResponse[] = Array.isArray(response.data) 
-        ? response.data.map((item: any) => ({
-            videoCount: item.videoCount,
-            randomVideo: {
-              id: item.randomVideo.id,
-              base64Data: item.randomVideo.base64Data
-            }
-          }))
-        : [{
-            videoCount: response.data.videoCount,
-            randomVideo: {
-              id: response.data.randomVideo.id,
-              base64Data: response.data.randomVideo.base64Data
-            }
-          }];
+      const videosData: IVideosResponse = {
+        videoCount: response.data.videoCount,
+        allVideos: response.data.allVideos.map((video: any) => ({
+          id: video.id,
+          base64Data: video.base64Data
+        }))
+      };
 
       dispatch(setTravelItemVideos({
         packageId: itemId,
-        videos: videosData
+        videos: videosData // Now passing object directly, not array
       }));
-      dispatch(setLoadedItems({ loading: false }));
+      
+      dispatch(setLoadedItems({ 
+        loading: false,
+        loadingFields: { videos: false }
+      }));
 
       const apiSuccess: ApiSuccess = {
         message: 'Videos fetched successfully',
+        data: videosData,
+      };
+      return apiSuccess;
+    } catch (error) {
+      dispatch(setLoadedItems({ 
+        loading: false,
+        loadingFields: { videos: false }
+      }));
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error === "string" ? castedError?.error : 'Unknown Error');
+    }
+  }
+);
+
+export const fetchTravelItemRandomVideoApi = createAsyncThunk(
+  'travelCollection/setTravelItemRandomVideo',
+  async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
+    if (!itemId) {
+      return rejectWithValue('Item ID is required');
+    }
+
+    dispatch(setLoadedItems({ loading: true }));
+    try {
+      const response = await Request({
+        endpointId: 'GET_TRAVEL_RANDOM_VIDEO',
+        slug: `/${itemId}`,
+      });
+
+      // Always treat response as single object (not array)
+      const responseData = Array.isArray(response.data) ? response.data[0] : response.data;
+      
+      const videosData: IVideosResponse = {
+        videoCount: responseData.videoCount,
+        randomVideo: {
+          id: responseData.randomVideo.id,
+          base64Data: responseData.randomVideo.base64Data
+        }
+      };
+
+      dispatch(setTravelItemVideos({
+        packageId: itemId,
+        videos: videosData // Passing object directly
+      }));
+      
+      dispatch(setLoadedItems({ loading: false }));
+
+      const apiSuccess: ApiSuccess = {
+        message: 'Random video fetched successfully',
         data: videosData,
       };
       return apiSuccess;

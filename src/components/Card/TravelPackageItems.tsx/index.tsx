@@ -19,8 +19,6 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
   const navigate = useNavigate();
 
   // Debug logging to verify data
-  console.log("Travel packages being rendered:", travelPackages);
-
   const handleNavigate = (id: string, title: string) => {
     navigate(`/package/${id}/${title}`);
   };

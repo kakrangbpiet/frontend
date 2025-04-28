@@ -7,7 +7,7 @@ export interface ITravelPackage {
     description?: string;
     image: string;
     images?: string[]; // Additional images for gallery
-    videos?: IVideosResponse[] | string[]; 
+    videos?: IVideosResponse | any; 
     location?: string;
     category: string;
     status: 'active' | 'inactive' | 'sold-out' | 'coming-soon';
@@ -27,7 +27,8 @@ export interface ITravelPackage {
   }
   export interface IVideosResponse {
     videoCount: number;
-    randomVideo: IVideoItem;
+    allVideos?: IVideoItem[];
+    randomVideo?: IVideoItem;
   }
   export interface DateAvailability {
     id?: string;
@@ -148,13 +149,64 @@ const travelSlice = createSlice({
     addItem: (state, action: PayloadAction<ITravelPackage>) => {
       state.travelPackages.push(action.payload);
     },
-    setTravelItemVideos: (state, action: PayloadAction<{ packageId: string; videos: IVideosResponse[] }>) => {
+    setTravelItemVideos: (state, action: PayloadAction<{ packageId: string; videos: IVideosResponse | IVideosResponse[] }>) => {
       const { packageId, videos } = action.payload;
       const packageIndex = state.travelPackages.findIndex((item) => item.id === packageId);
       
       if (packageIndex !== -1) {
-        // Update the main travelPackages array
-        state.travelPackages[packageIndex].videos = videos;
+        // Get current videos data (could be array or object)
+        const currentVideos = state.travelPackages[packageIndex].videos;
+        
+        // Initialize mergedVideos as an object to store all video data
+        let mergedVideos: IVideosResponse = {
+          videoCount: 0,
+          allVideos: [],
+          randomVideo: undefined
+        };
+    
+        // If currentVideos exists, merge it
+        if (currentVideos) {
+          if (Array.isArray(currentVideos)) {
+            // Handle array case (legacy format)
+            currentVideos.forEach(videoItem => {
+              mergedVideos = {
+                videoCount: videoItem.videoCount || mergedVideos.videoCount,
+                allVideos: videoItem.allVideos || mergedVideos.allVideos,
+                randomVideo: videoItem.randomVideo || mergedVideos.randomVideo
+              };
+            });
+          } else {
+            // Handle object case
+            mergedVideos = {
+              ...currentVideos,
+              videoCount: currentVideos.videoCount || mergedVideos.videoCount,
+              allVideos: currentVideos.allVideos || mergedVideos.allVideos,
+              randomVideo: currentVideos.randomVideo || mergedVideos.randomVideo
+            };
+          }
+        }
+    
+        // Merge new videos data
+        if (Array.isArray(videos)) {
+          videos.forEach(videoItem => {
+            mergedVideos = {
+              videoCount: videoItem.videoCount || mergedVideos.videoCount,
+              allVideos: videoItem.allVideos || mergedVideos.allVideos,
+              randomVideo: videoItem.randomVideo || mergedVideos.randomVideo
+            };
+          });
+        } else {
+          mergedVideos = {
+            ...mergedVideos,
+            ...videos,
+            videoCount: videos.videoCount !== undefined ? videos.videoCount : mergedVideos.videoCount,
+            allVideos: videos.allVideos || mergedVideos.allVideos,
+            randomVideo: videos.randomVideo || mergedVideos.randomVideo
+          };
+        }
+    
+        // Update the state with merged videos (store as object, not array)
+        state.travelPackages[packageIndex].videos = mergedVideos;
         
         // Also update any instances in the categorized packages
         for (const category in state.travelPackagesByCategory) {
@@ -162,7 +214,7 @@ const travelSlice = createSlice({
             (item) => item.id === packageId
           );
           if (categoryPackageIndex !== -1) {
-            state.travelPackagesByCategory[category][categoryPackageIndex].videos = videos;
+            state.travelPackagesByCategory[category][categoryPackageIndex].videos = mergedVideos;
           }
         }
       }

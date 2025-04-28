@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
 import { selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchSingleTravelPackageApi, fetchTravelItemVideosApi, fetchTravelPackageDatesApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchSingleTravelPackageApi, fetchTravelItemRandomVideoApi, fetchTravelItemVideosApi, fetchTravelPackageDatesApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
 import { ITravelPackage, selectFieldLoading, selectPackageDates, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
@@ -15,7 +15,13 @@ import FullScreenGallery from './FullScreenGallery';
 import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
 import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
 import { Skeleton } from '@mui/material';
+import styled from 'styled-components';
 
+
+const StyledVideo = styled.video`
+  width: 100%;
+  height: 100%;
+`;
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
@@ -34,19 +40,17 @@ const SingleTravelPackageDetails = () => {
   const isDescriptionLoading = useSelector(selectFieldLoading('description'));
   const isImageLoading = useSelector(selectFieldLoading('image'));
   const isImagesLoading = useSelector(selectFieldLoading('images'));
-
+  const isVideosLoading = useSelector(selectFieldLoading('videos'));
 
   // Fetch from Redux 
   const selectedTravelPackage = useSelector(useSelectedTravelPackage(travelPackageId)) as ITravelPackage | undefined;
   useEffect(() => {
-    dispatch(fetchTravelItemVideosApi({ itemId: travelPackageId }));
+    dispatch(fetchTravelItemRandomVideoApi({ itemId: travelPackageId }));
     dispatch(setActiveHistory(travelPackageId))
   }, [dispatch]);
 
-
   // Staggered loading pattern
   useEffect(() => {
-
     if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId,
@@ -64,10 +68,8 @@ const SingleTravelPackageDetails = () => {
       }));
 
     }
-
     // Finally load dates and other secondary data
     dispatch(fetchTravelPackageDatesApi({ packageId: travelPackageId }));
-
 
   }, [dispatch]);
 
@@ -77,6 +79,9 @@ const SingleTravelPackageDetails = () => {
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId,
         select: "images"
+      }));
+      dispatch(fetchTravelItemVideosApi({
+        itemId: travelPackageId,
       }));
     }
   }, [activeTab, dispatch]);
@@ -97,6 +102,7 @@ const SingleTravelPackageDetails = () => {
   const travelType = packageData?.travelType ?? 'group';
   const maxTravelers = packageData?.maxTravelers ?? 0;
   const activities = packageData?.activities ?? null;
+console.log(videos);
 
   const navigateToHome = () => {
     navigate("/");
@@ -121,7 +127,6 @@ const SingleTravelPackageDetails = () => {
   const toggleMobileForm = () => {
     setShowMobileForm(!showMobileForm);
   };
-
 
   // Admin view
   if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
@@ -162,8 +167,8 @@ const SingleTravelPackageDetails = () => {
   return (
     <div className="">
       <div className="">
-        {videos.length > 0 &&
-          <MediaBackground video={{ base64Data: videos[0] }} />
+        {videos &&
+          <MediaBackground video={ videos.randomVideo } />
         }
       </div>
       <div className="absolute inset-0 overflow-hidden">
@@ -179,7 +184,6 @@ const SingleTravelPackageDetails = () => {
                 alt={title}
                 className="w-full h-64 md:h-96 object-cover"
               />
-
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
               <div className="p-4 md:p-10 text-white">
@@ -268,13 +272,6 @@ const SingleTravelPackageDetails = () => {
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
 
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
-
-                  {isImagesLoading &&
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-
-                    </div>
-
-                  }
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {images.map((img, index) => (
                       <div
@@ -300,6 +297,45 @@ const SingleTravelPackageDetails = () => {
                       </div>
                     ))}
                     {isImagesLoading &&
+                      <>
+                        {[...Array(4)].map((_, index) => (
+                          <div key={index} className="w-full">
+
+                            <Skeleton variant="rectangular" height={260} />
+                          </div>
+                        ))}
+                      </>
+                    }
+                  </div>
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Video Gallery</h2>
+
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {videos && videos?.allVideos?.map((vid, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-500 cursor-pointer group relative"
+                        onClick={() => {
+                          setSelectedImageIndex(index);
+                          setGalleryOpen(true);
+                        }}
+                      >
+    <StyledVideo 
+        src={`data:video/mp4;base64,${vid?.base64Data}`}
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <div className="bg-black/50 backdrop-blur-sm p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {isVideosLoading &&
                       <>
                         {[...Array(4)].map((_, index) => (
                           <div key={index} className="w-full">
