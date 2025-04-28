@@ -8,10 +8,10 @@ import { AppDispatch } from "../../../redux/store";
 import LoadingOverlay from "../../../components/LoadingOverlay";
 import Datagrid from "../../../components/DataGrid/NewDataGrid";
 import SearchBar from "../../../components/Searchbar";
-import { 
-  selectUsersLoading, 
-  selectVerifiedUsers, 
-  selectUnverifiedUsers 
+import {
+  selectUsersLoading,
+  selectVerifiedUsers,
+  selectUnverifiedUsers
 } from "../../../redux/slices/Admin/UsersSlice";
 import { UserCategory } from "../../../Datatypes/Enums/UserEnums";
 import { isAuthenticated, selectUserType } from "../../../redux/slices/login/authSlice";
@@ -21,18 +21,18 @@ export default function AllUsers() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [tabValue, setTabValue] = useState(0);
-  
+
   const verifiedUsers = useSelector(selectVerifiedUsers);
   const unverifiedUsers = useSelector(selectUnverifiedUsers);
   const loading = useSelector(selectUsersLoading);
-  
+
   const isUserAuthenticated = useSelector(isAuthenticated);
   const selectedUserType = useSelector(selectUserType);
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (!isUserAuthenticated && selectedUserType!==UserCategory.KAKRAN_SUPER_ADMIN) {
-      navigation("/"); 
+    if (!isUserAuthenticated && selectedUserType !== UserCategory.KAKRAN_SUPER_ADMIN) {
+      navigation("/");
     }
   }, [isUserAuthenticated, history]);
 
@@ -47,18 +47,18 @@ export default function AllUsers() {
   const filterUsers = (users: any[], query: string) => {
     return users.filter(
       (user) =>
-        (user.email?.toLowerCase().includes(query.toLowerCase()) ||
-         user.phoneNumber?.toLowerCase().includes(query.toLowerCase()) ||
-         user.name?.toLowerCase().includes(query.toLowerCase()))
-)
+      (user.email?.toLowerCase().includes(query.toLowerCase()) ||
+        user.phoneNumber?.toLowerCase().includes(query.toLowerCase()) ||
+        user.name?.toLowerCase().includes(query.toLowerCase()))
+    )
   };
 
   const verifiedRows = filterUsers(verifiedUsers, searchQuery);
   const unverifiedRows = filterUsers(unverifiedUsers, searchQuery);
-  
-    const handleViewDetails = (row: any) => {
-      navigate(`/inquiries/${row.id}`);
-    };
+
+  const handleViewDetails = (row: any) => {
+    navigate(`/inquiries/${row.id}`);
+  };
 
   const columns = UserColumns({ handleViewDetails });
 
@@ -84,17 +84,19 @@ export default function AllUsers() {
               </Box>
 
               <LoadingOverlay loading={loading} />
-              
+
               {tabValue === 0 ? (
                 <Datagrid
+                  sx={{}}
                   getRowId={(row) => row.id}
                   columns={columns}
-                  rows={verifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined}                />
+                  rows={verifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined} />
               ) : (
                 <Datagrid
-                    getRowId={(row) => row.id}
-                    columns={columns}
-                    rows={unverifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined}                />
+                  sx={{}}
+                  getRowId={(row) => row.id}
+                  columns={columns}
+                  rows={unverifiedRows} paginationModel={undefined} onPaginationModelChange={undefined} rowCount={undefined} loading={undefined} />
               )}
             </Paper>
           </Box>

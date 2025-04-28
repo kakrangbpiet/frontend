@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface ITravelPackage {
     id: string;
     title: string;
-    description: string;
+    description?: string;
     image: string;
     images?: string[]; // Additional images for gallery
     videos?: IVideosResponse[] | string[]; 
@@ -30,17 +30,20 @@ export interface ITravelPackage {
     randomVideo: IVideoItem;
   }
   export interface DateAvailability {
+    id?: string;
     startDate: number;
     endDate: number;
     maxTravelers: number;
     availableSpots: number;
     price: number;
     originalPrice?: number; // For showing discounts
+    travelPackageId?:string
   }
   interface TravelState {
     travelPackages: ITravelPackage[];
     travelPackagesByCategory: { [category: string]: ITravelPackage[] };
     loading: boolean;
+    loadingFields: Record<string, boolean>; 
     loadingByCategory: { [category: string]: boolean };
     categories?: string[];
     locations?: Array<{ value: string; label: string }>;
@@ -58,6 +61,7 @@ const initialState: TravelState = {
   travelPackages: [] as ITravelPackage[],
   travelPackagesByCategory: {} as { [category: string]: ITravelPackage[] },
   loading: false,
+  loadingFields: {},
   loadingByCategory: {},
   categories: [],
   locations: [],
@@ -77,6 +81,7 @@ const travelSlice = createSlice({
     setLoadedItems: (state, action: PayloadAction<{
       itemData?: ITravelPackage[];
       loading: boolean;
+      loadingFields?: Record<string, boolean>;
       pagination?: {
         currentPage: number;
         pageSize: number;
@@ -84,16 +89,23 @@ const travelSlice = createSlice({
         totalPages: number;
       };
     }>) => {
-      const { itemData, loading, pagination } = action.payload;
+      const { itemData, loading, loadingFields, pagination } = action.payload;
     
       if (itemData) {
         itemData.forEach((newItem) => {
           const index = state.travelPackages.findIndex((item) => item.id === newItem.id);
           if (index !== -1) {
-            // Update existing item
-            state.travelPackages[index] = newItem;
+            // Deep merge the existing item with the new data
+            state.travelPackages[index] = {
+              ...state.travelPackages[index],
+              ...newItem,
+              // Special handling for arrays to prevent overwriting
+              images: newItem.images ?? state.travelPackages[index].images,
+              videos: newItem.videos ?? state.travelPackages[index].videos,
+              dateAvailabilities: newItem.dateAvailabilities ?? state.travelPackages[index].dateAvailabilities,
+              activities: newItem.activities ?? state.travelPackages[index].activities
+            };
           } else {
-            // Add new item
             state.travelPackages.push(newItem);
           }
         });
@@ -104,7 +116,15 @@ const travelSlice = createSlice({
       }
     
       state.loading = loading;
-    },    
+    
+      if (loadingFields) {
+        state.loadingFields = {
+          ...state.loadingFields,
+          ...loadingFields,
+        };
+      }
+    },
+    
     setTravelPackagesByCategory: (
       state,
       action: PayloadAction<{ category: string; itemData?: ITravelPackage[]; loading: boolean }>
@@ -147,6 +167,26 @@ const travelSlice = createSlice({
         }
       }
     },
+    updatePackageDates: (state, action: PayloadAction<{
+      packageId: string;
+      dateAvailabilities: DateAvailability[];
+    }>) => {
+      const { packageId, dateAvailabilities } = action.payload;
+      const packageIndex = state.travelPackages.findIndex(p => p.id === packageId);
+      
+      if (packageIndex !== -1) {
+        state.travelPackages[packageIndex].dateAvailabilities = dateAvailabilities;
+        
+        // Also update in categorized packages if exists
+        for (const category in state.travelPackagesByCategory) {
+          const catPackageIndex = state.travelPackagesByCategory[category]
+            .findIndex(p => p.id === packageId);
+          if (catPackageIndex !== -1) {
+            state.travelPackagesByCategory[category][catPackageIndex].dateAvailabilities = dateAvailabilities;
+          }
+        }
+      }
+    },
     updateItem: (state, action: PayloadAction<ITravelPackage>) => {
       const updatedItem = action.payload;
       const itemIndex = state.travelPackages.findIndex((item) => item.id === updatedItem.id);
@@ -176,6 +216,7 @@ export const {
   setCategories,
   setLocations,
   setTitles,
+  updatePackageDates
 } = travelSlice.actions;
 
 export default travelSlice.reducer;
@@ -200,6 +241,15 @@ export const selectLocations = (state: { travelCollection: TravelState }) =>
 
 export const selectTitles = (state: { travelCollection: TravelState }) =>
   state.travelCollection.titles || [];
+
+export const selectFieldLoading = (field: string) => (state: { travelCollection: TravelState }) =>
+  state.travelCollection.loadingFields[field] || false;
+
+export const selectPackageDates = (packageId: string) => (state: { travelCollection: TravelState }) => {
+  const packageItem = state.travelCollection.travelPackages.find(p => p.id === packageId);
+  return packageItem?.dateAvailabilities || [];
+};
+
 
 // export interface ITravelPackage {
 //     id: string;

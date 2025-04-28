@@ -67,91 +67,117 @@ function LocationDetails({
   };
 
   return (
-    <Box sx={{}}>
-      <TextField
-        fullWidth
-        placeholder="Choose Current Location"
-        value={inquiryData.address}
-        onClick={() => setOpenAddressDialog(true)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <PlaceIcon />
-            </InputAdornment>
-          ),
-          readOnly: true,
-        }}
-        margin="normal"
-        required
-        disabled={!shouldShowRegister && isRegister}
-        sx={textFieldStyle}
-      />
+    <Box sx={{}} className="space-y-6">
+      {/* Current Location */}
+      <div className='m-0'>
+  
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          Your Current Location
+        </label>
+        <TextField
+          fullWidth
+          placeholder="Select your location"
+          value={inquiryData.address}
+          onClick={() => setOpenAddressDialog(true)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <PlaceIcon className="text-gray-500" />
+              </InputAdornment>
+            ),
+            readOnly: true,
+          }}
+          margin="normal"
+          required
+          disabled={!shouldShowRegister && isRegister}
+          sx={textFieldStyle}
+        />
+        {inquiryData.address && (
+          <p className="mt-0 text-xs text-gray-100">We'll use this for pickup arrangements</p>
+        )}
+      </div>
 
       {!isRegister && (
         <>
+          {/* Destination */}
           {('destination' in inquiryData) && (
-            inquiryData.destination ? (
-              <TextField
-                fullWidth
-                value={inquiryData.destination}
-                placeholder="Destination"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PlaceIcon />
-                    </InputAdornment>
-                  ),
-                  readOnly: true,
-                }}
-                margin="normal"
-                sx={textFieldStyle}
-                disabled={true}
-              />
-            ) : (
-              isCustomForm && titles.length > 0 && (
-                <Autocomplete
-                  options={titles}
-                  getOptionLabel={(option) => option.title}
-                  value={null}
-                  onChange={(_, newValue) => {
-                    handleChange('destination', newValue?.title || '');
-                    handleChange('packageTitle', newValue?.title || '');
-                    handleChange('packageId', newValue?.id || '');
+            <div>
+              {inquiryData.destination ? (
+                <TextField
+                  fullWidth
+                  value={inquiryData.destination}
+                  placeholder="Destination"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PlaceIcon className="text-gray-500" />
+                      </InputAdornment>
+                    ),
+                    readOnly: true,
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      fullWidth
-                      placeholder="Select Destination"
-                      InputProps={{
-                        ...params.InputProps,
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <PlaceIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      margin="normal"
-                      required
-                      sx={textFieldStyle}
-                    />
-                  )}
+                  margin="normal"
+                  sx={textFieldStyle}
+                  disabled={true}
                 />
-              )
-            )
+              ) : (
+                isCustomForm && titles.length > 0 && (
+                  <div>
+                    <Autocomplete
+                      options={titles}
+                      getOptionLabel={(option) => option.title}
+                      value={null}
+                      onChange={(_, newValue) => {
+                        handleChange('destination', newValue?.title || '');
+                        handleChange('packageTitle', newValue?.title || '');
+                        handleChange('packageId', newValue?.id || '');
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          fullWidth
+                          placeholder="Choose your destination"
+                          InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PlaceIcon className="text-gray-500" />
+                              </InputAdornment>
+                            ),
+                          }}
+                          margin="normal"
+                          required
+                          sx={textFieldStyle}
+                        />
+                      )}
+                    />
+                    <p className="mt-1 text-xs text-gray-100">Select from our available destinations</p>
+                  </div>
+                )
+              )}
+            </div>
           )}
 
+          {/* Date Selection */}
           {'startDate' in inquiryData && 'endDate' in inquiryData && (
-            <DateSelectionTabs
-              tripType={('tripType' in inquiryData ? inquiryData.tripType : 'pre-planned') as 'pre-planned' | 'custom'}
-              setTripType={(type) => handleChange('tripType', type)}
-              dateAvailabilities={dateAvailabilities}
-              startDate={inquiryData.startDate}
-              endDate={inquiryData.endDate}
-              setStartDate={(date) => handleChange('startDate', date)}
-              setEndDate={(date) => handleChange('endDate', date)}
-              isCustomForm={isCustomForm}
-            />
+            <div>
+              <DateSelectionTabs
+                tripType={('tripType' in inquiryData ? inquiryData.tripType : 'pre-planned') as 'pre-planned' | 'custom'}
+                setTripType={(type) => handleChange('tripType', type)}
+                dateAvailabilities={dateAvailabilities}
+                startDate={inquiryData.startDate}
+                endDate={inquiryData.endDate}
+                setStartDate={(date) => handleChange('startDate', date)}
+                setEndDate={(date) => handleChange('endDate', date)}
+                isCustomForm={isCustomForm}
+              />
+              {inquiryData.startDate && inquiryData.endDate && (
+                <p className="mt-1 text-xs text-gray-100">
+                  {inquiryData.tripType === 'custom' ? 
+                    "Your custom dates have been selected" : 
+                    "Pre-planned itinerary dates selected"}
+                </p>
+              )}
+            </div>
           )}
         </>
       )}

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories, updatePackageDates } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
@@ -13,11 +13,21 @@ export const fetchTravelPackagesApi = createAsyncThunk(
       status?: string;
       location?: string;
       category?: string;
-      select?: string
+      select?: string;
     },
     { rejectWithValue, dispatch }
   ) => {
-    dispatch(setLoadedItems({ loading: true }));
+    // Determine which fields are being loaded
+    const loadingFields = params.select ? params.select.split(',') : ['all'];
+    
+    // Set loading state for each field
+    dispatch(setLoadedItems({ 
+      loading: true,
+      loadingFields: loadingFields.reduce((acc, field) => {
+        acc[field] = true;
+        return acc;
+      }, {} as Record<string, boolean>)
+    }));
 
     try {
       const queryParams = new URLSearchParams();
@@ -26,8 +36,7 @@ export const fetchTravelPackagesApi = createAsyncThunk(
       if (params?.category) queryParams.append('category', params.category);
       if (params?.pageSize) queryParams.append('pageSize', String(params.pageSize));
       if (params?.page) queryParams.append('page', String(params.page));
-      
-      if (params?.select) queryParams.append('select',params.select);
+      if (params?.select) queryParams.append('select', params.select);
 
       const slug = queryParams.toString() ? `?${queryParams.toString()}` : '';
 
@@ -40,7 +49,11 @@ export const fetchTravelPackagesApi = createAsyncThunk(
 
       dispatch(setLoadedItems({
         itemData: data,
-        loading: true,
+        loading: false,
+        loadingFields: loadingFields.reduce((acc, field) => {
+          acc[field] = false;
+          return acc;
+        }, {} as Record<string, boolean>),
         pagination: {
           currentPage: page || 1,
           pageSize: pageSize || 10,
@@ -54,11 +67,13 @@ export const fetchTravelPackagesApi = createAsyncThunk(
         message: 'Items fetched successfully',
         data: response.data,
       };
-      dispatch(setLoadedItems({ loading: false }));
 
       return apiSuccess;
     } catch (error) {
-      dispatch(setLoadedItems({ loading: false }));
+      dispatch(setLoadedItems({ 
+        loading: false,
+        loadingFields: {}
+      }));
       const castedError = error as ApiError;
       return rejectWithValue(
         typeof castedError?.error === 'string' ? castedError?.error : 'Unknown Error'
@@ -69,18 +84,48 @@ export const fetchTravelPackagesApi = createAsyncThunk(
 
 export const fetchSingleTravelPackageApi = createAsyncThunk(
   'travelCollection/setLoadedItems',
-  async ({ itemId }: { itemId?: string }, { rejectWithValue, dispatch }) => {
+  async (
+    { 
+      itemId, 
+      select 
+    }: { 
+      itemId?: string; 
+      select?: string;
+    }, 
+    { rejectWithValue, dispatch }
+  ) => {
+    // Determine which fields are being loaded
+    const loadingFields = select ? select.split(',') : ['all'];
+    
+    // Set loading state for each field
     dispatch(setLoadedItems({
       loading: true,
+      loadingFields: loadingFields.reduce((acc, field) => {
+        acc[field] = true;
+        return acc;
+      }, {} as Record<string, boolean>)
     }));
+
     try {
+      const queryParams = new URLSearchParams();
+      if (select) queryParams.append('select', select);
+      
+      const slug = `/${itemId}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+
       const response = await Request({
         endpointId: "GET_SINGLE_TRAVEL_ITEM",
-        slug: `/${itemId}`,
+        slug,
       });
 
       const item: ITravelPackage = response.data;
-      dispatch(setLoadedItems({ itemData: [item], loading: false }));
+      dispatch(setLoadedItems({ 
+        itemData: [item], 
+        loading: false,
+        loadingFields: loadingFields.reduce((acc, field) => {
+          acc[field] = false;
+          return acc;
+        }, {} as Record<string, boolean>)
+      }));
 
       const apiSuccess: ApiSuccess = {
         statusCode: response.status,
@@ -93,6 +138,7 @@ export const fetchSingleTravelPackageApi = createAsyncThunk(
     } catch (error) {
       dispatch(setLoadedItems({
         loading: false,
+        loadingFields: {}
       }));
       const castedError = error as ApiError;
       return rejectWithValue(castedError?.error === "string" ? castedError?.error : 'Unknown Error');
@@ -137,6 +183,43 @@ export const addTravelPackageApi = createAsyncThunk(
       setIsSaving(false);
       const castedError = error as ApiError;
       return rejectWithValue(castedError?.error === "string" ? castedError?.error : 'Unknown Error');
+    }
+  }
+);
+// Add these to your existing async thunks
+export const fetchTravelPackageDatesApi = createAsyncThunk(
+  'travelCollection/setPackageDates',
+  async (
+    { packageId }: { packageId: string },
+    { rejectWithValue, dispatch }
+  ) => {
+    try {
+      const response = await Request({
+        endpointId: "GET_TRAVEL_ITEM_DATES",
+        slug: `/${packageId}`,
+      });
+      
+
+      dispatch(updatePackageDates({
+        packageId: packageId,
+        dateAvailabilities: response.data
+      }));
+      dispatch(setLoadedItems({
+        loadingFields: {
+          dateAvailabilities: false
+        },
+        loading: false
+      }));
+
+      return {
+        statusCode: response.status,
+        message: 'Dates fetched successfully',
+        data: response.data,
+      };
+
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Error fetching dates');
     }
   }
 );

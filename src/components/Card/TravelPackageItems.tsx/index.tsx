@@ -1,5 +1,5 @@
 import React from 'react';
-import { Skeleton, Chip } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { ITravelPackage } from '../../../redux/slices/Travel/TravelSlice';
 import CustomSwiper from '../../Swiper';
@@ -28,45 +28,30 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
     navigate(`/packages`);
   };
 
-  const renderStatusChip = (status: ITravelPackage['status']) => {
-    const statusColors: Record<ITravelPackage['status'], 'success' | 'default' | 'error' | 'warning'> = {
-      'active': 'success',
-      'inactive': 'default',
-      'sold-out': 'error',
-      'coming-soon': 'warning'
-    };
+  // const renderStatusChip = (status?: ITravelPackage['status']) => {
+  //   const statusColors: Record<ITravelPackage['status'], 'success' | 'default' | 'error' | 'warning'> = {
+  //     'active': 'success',
+  //     'inactive': 'default',
+  //     'sold-out': 'error',
+  //     'coming-soon': 'warning'
+  //   };
 
-    return (
-      <Chip
-        label={status.toUpperCase()}
-        color={statusColors[status]}
-        size="small"
-        sx={{ position: 'absolute', top: 8, right: 8, zIndex: 10 }}
-      />
-    );
-  };
+  //   return (
+  //     <Chip
+  //       label={status?.toUpperCase()}
+  //       color={statusColors[status]}
+  //       size="small"
+  //       sx={{ position: 'absolute', top: 8, right: 8, zIndex: 10 }}
+  //     />
+  //   );
+  // };
 
   return (
     <div className="w-full bg-gradient-to-br from-white/10 to-white/20 backdrop-blur-md py-8" style={{ position: 'relative', zIndex: 5, width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
       {/*full width*/}
       <section className="container mx-auto px-4">
         <div className="hover-sw-nav hover-sw-2">
-          {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {[...Array(4)].map((_, index) => (
-                <div key={index} className="w-full">
-                  <Skeleton variant="rectangular" height={200} />
-                  <Skeleton variant="text" width="80%" />
-                  <Skeleton variant="text" width="60%" />
-                </div>
-              ))}
-            </div>
-          ) : travelPackages.length === 0 ? (
-            <div className="text-white p-4 border border-white/20 rounded text-center">
-              No packages found for this category.
-            </div>
-          ) : (
-
+      
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {travelPackages.map((pkg: ITravelPackage) => (
                 <div key={pkg.id} className="w-full">
@@ -74,9 +59,9 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                     className="cursor-pointer relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg transition-all duration-300 h-full hover:transform hover:-translate-y-2 hover:shadow-xl"
                     onClick={() => handleNavigate(pkg.id, pkg.title)}
                   >
-                    <div className="relative z-10">
+                    {/* <div className="relative z-10">
                       {renderStatusChip(pkg.status)}
-                    </div>
+                    </div> */}
 
                     <div className="h-40 md:h-56 overflow-hidden">
                       {pkg.image ? (
@@ -164,7 +149,17 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                 </div>
               ))}
             </div>
-          )}
+              {loading &&
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {[...Array(4)].map((_, index) => (
+                    <div key={index} className="w-full">
+                      <Skeleton variant="rectangular" height={200} />
+                      <Skeleton variant="text" width="80%" />
+                      <Skeleton variant="text" width="60%" />
+                    </div>
+                  ))}
+                </div>
+              }
 
           <div className="text-center mt-8">
             <button

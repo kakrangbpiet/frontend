@@ -3,22 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
 import { selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchSingleTravelPackageApi, fetchTravelItemVideosApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
-import { ITravelPackage, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { fetchSingleTravelPackageApi, fetchTravelItemVideosApi, fetchTravelPackageDatesApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
+import { ITravelPackage, selectFieldLoading, selectPackageDates, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
 import Registration from '../../components/Registration';
-import { mockTravelPackages } from '../../components/Card/TravelPackageItems.tsx/mockData';
 import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay } from './DateAvailability';
 import FullScreenGallery from './FullScreenGallery';
 import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
+import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
+import { Skeleton } from '@mui/material';
+
 
 const SingleTravelPackageDetails = () => {
   const { travelPackageTitle, travelPackageId } = useParams<{ travelPackageTitle: string; travelPackageId: string }>();
 
-  const [mockPackage, setMockPackage] = useState<ITravelPackage | undefined>(undefined);
   const [activeTab, setActiveTab] = useState('overview');
   const [showMobileForm, setShowMobileForm] = useState(false);
 
@@ -30,6 +31,11 @@ const SingleTravelPackageDetails = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const userType = useSelector(selectUserType);
 
+  const isDescriptionLoading = useSelector(selectFieldLoading('description'));
+  const isImageLoading = useSelector(selectFieldLoading('image'));
+  const isImagesLoading = useSelector(selectFieldLoading('images'));
+
+
   // Fetch from Redux 
   const selectedTravelPackage = useSelector(useSelectedTravelPackage(travelPackageId)) as ITravelPackage | undefined;
   useEffect(() => {
@@ -37,37 +43,60 @@ const SingleTravelPackageDetails = () => {
     dispatch(setActiveHistory(travelPackageId))
   }, [dispatch]);
 
-  useEffect(() => {
-    //mock
-    const foundPackage = mockTravelPackages.find(pkg => pkg.id === travelPackageId);
-    setMockPackage(foundPackage);
 
-    // db
-    if (travelPackageId) {
+  // Staggered loading pattern
+  useEffect(() => {
+
+    if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
       dispatch(fetchSingleTravelPackageApi({
-        itemId: travelPackageId
+        itemId: travelPackageId,
       }));
     }
-  }, [travelPackageId]);
+    else {
+      // First load essential fields
+      dispatch(fetchSingleTravelPackageApi({
+        itemId: travelPackageId,
+        select: "title,description,status"
+      }));
+      dispatch(fetchSingleTravelPackageApi({
+        itemId: travelPackageId,
+        select: "image,status,dateAvailabilities"
+      }));
 
-  // mock 
-  const packageData = mockPackage || selectedTravelPackage;
+    }
+
+    // Finally load dates and other secondary data
+    dispatch(fetchTravelPackageDatesApi({ packageId: travelPackageId }));
+
+
+  }, [dispatch]);
+
+  // Handle photos tab click - load full images if not already loaded
+  useEffect(() => {
+    if (activeTab === 'photos') {
+      dispatch(fetchSingleTravelPackageApi({
+        itemId: travelPackageId,
+        select: "images"
+      }));
+    }
+  }, [activeTab, dispatch]);
+
+  const packageData = selectedTravelPackage;
 
   // Default values and null checks
   const description = packageData?.description ?? '';
-  const dateAvailabilities = packageData?.dateAvailabilities ?? [];
+  const dateAvailabilities = useSelector(selectPackageDates(travelPackageId)) ?? [];
   const image = packageData?.image ?? '';
   const images = packageData?.images ?? [image];
   const videos = packageData?.videos ?? [];
   const title = packageData?.title ?? travelPackageTitle ?? '';
-  const location = packageData?.title ?? '';
+  const location = packageData?.location ?? '';
   const category = packageData?.category ?? '';
   const status = packageData?.status ?? 'inactive';
   const availableSpots = packageData?.availableSpots ?? 0;
   const travelType = packageData?.travelType ?? 'group';
   const maxTravelers = packageData?.maxTravelers ?? 0;
   const activities = packageData?.activities ?? null;
-console.log(packageData);
 
   const navigateToHome = () => {
     navigate("/");
@@ -93,32 +122,20 @@ console.log(packageData);
     setShowMobileForm(!showMobileForm);
   };
 
-  if (!packageData && !mockPackage) {
-    return (
-      <div className="min-h-screen w-full bg-transparent p-4 flex flex-col items-center justify-center">
-        <div className="w-full max-w-6xl animate-pulse">
-          <div className="h-8 bg-gray-700 rounded w-1/3 mb-6"></div>
-          <div className="h-96 bg-gray-700 rounded mb-6"></div>
-          <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
-          <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
-          <div className="h-40 bg-gray-700 rounded mb-6 w-full"></div>
-        </div>
-      </div>
-    );
-  }
 
   // Admin view
   if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
     return (
-      <div className="min-h-screen w-full bg-transparent p-6">
+      <div className="min-h-screen w-full bg-transparent pt-26">
         <div className="max-w-6xl mx-auto mt-6 flex flex-wrap justify-between items-center space-x-2 mb-4">
-          <button
+          {status && <button
             disabled={isUpdating}
             onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
             className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white rounded-lg shadow-lg disabled:opacity-50 transition duration-300 font-medium"
           >
             {status === 'inactive' ? 'Activate' : 'Deactivate'}
           </button>
+          }
 
           <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
             <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
@@ -133,7 +150,8 @@ console.log(packageData);
               availableSpots,
               travelType,
               maxTravelers,
-              dateAvailabilities
+              dateAvailabilities,
+              activities
             }} userType={userType} />
           </div>
         </div>
@@ -152,20 +170,22 @@ console.log(packageData);
       </div>
       <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-16 md:pt-24">
         <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
-          <div className="relative rounded-xl overflow-hidden mb-8 md:mb-12 shadow-2xl">
-            <img
-              src={`data:image/jpeg;base64,${image}`}
-              alt={title}
-              className="w-full h-64 md:h-96 object-cover"
-            />
+          <div className="relative rounded-xl overflow-hidden mb-8 md:mb-12 shadow-2xl h-64 md:h-96 object-cover">
+            {isImageLoading && !image ? (
+              <Skeleton variant="rectangular" height={400} />
+            ) : (
+              <img
+                src={`data:image/jpeg;base64,${image}`}
+                alt={title}
+                className="w-full h-64 md:h-96 object-cover"
+              />
+
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
               <div className="p-4 md:p-10 text-white">
                 <h1 className="text-3xl md:text-5xl font-bold mb-2 md:mb-4 drop-shadow-lg bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
                   {title}
                 </h1>
-                <p className="text-lg md:text-xl max-w-3xl drop-shadow-md hidden md:block">
-                  {description.length > 120 ? description.substring(0, 120) + '...' : description}
-                </p>
               </div>
             </div>
             <button
@@ -199,8 +219,13 @@ console.log(packageData);
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
                     About {title}
                   </h2>
-                  <p className="mb-6">{description || `Experience the beauty and adventure of ${location} with this exclusive travel package. Perfect for those seeking an unforgettable journey.`}</p>
-                  <p className="mb-6">Set in stunning surroundings, this destination offers a perfect blend of relaxation and adventure, making it ideal for travelers of all kinds.</p>
+                  {isDescriptionLoading && !description ? (
+                    <Skeleton variant="text" width="80%" />
+                  ) : (
+                    <div>
+                      {parseHTML(description).map((node, index) => renderCustomStyles(node, index))}
+                    </div>
+                  )}
 
                   <div className="relative mb-8 rounded-lg overflow-hidden shadow-md bg-black/50 transform hover:scale-[1.01] transition duration-500 cursor-pointer">
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200 relative">
@@ -218,7 +243,7 @@ console.log(packageData);
                       </div>
                     </div>
                   </div>
-                  {activities &&
+                  {activities && activities.length > 0 &&
                     <>
                       <h3 className="text-lg md:text-xl font-semibold text-emerald-300 mb-4">
                         Activities to Enjoy
@@ -241,8 +266,16 @@ console.log(packageData);
 
               {activeTab === 'photos' && (
                 <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
+
+                  {isImagesLoading &&
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+                    </div>
+
+                  }
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {images.map((img, index) => (
                       <div
                         key={index}
@@ -266,6 +299,16 @@ console.log(packageData);
                         </div>
                       </div>
                     ))}
+                    {isImagesLoading &&
+                      <>
+                        {[...Array(4)].map((_, index) => (
+                          <div key={index} className="w-full">
+
+                            <Skeleton variant="rectangular" height={260} />
+                          </div>
+                        ))}
+                      </>
+                    }
                   </div>
                 </div>
               )}
@@ -279,14 +322,14 @@ console.log(packageData);
                     <div className="w-full  bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
                       <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-emerald-300">Ask Our AI Assistant</h3>
                       <AiPromptGenerator data={{
-                        title: selectedTravelPackage.title,
-                        description: selectedTravelPackage.description,
-                        location: selectedTravelPackage.location,
-                        category: selectedTravelPackage.category,
-                        travelType: selectedTravelPackage.travelType,
-                        availableSpots: selectedTravelPackage.availableSpots,
-                        maxTravelers: selectedTravelPackage.maxTravelers,
-                        availableDates: selectedTravelPackage.dateAvailabilities,
+                        title: selectedTravelPackage?.title,
+                        description: selectedTravelPackage?.description,
+                        location: selectedTravelPackage?.location,
+                        category: selectedTravelPackage?.category,
+                        travelType: selectedTravelPackage?.travelType,
+                        availableSpots: selectedTravelPackage?.availableSpots,
+                        maxTravelers: selectedTravelPackage?.maxTravelers,
+                        availableDates: selectedTravelPackage?.dateAvailabilities,
                       }} />
                     </div>
 

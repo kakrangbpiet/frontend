@@ -45,6 +45,7 @@ export default function PackagesVerification({
       location: currentLocation,
       page: paginationModel.page + 1,
       pageSize: paginationModel.pageSize,
+      select:"id,title,location,category,image",
     };
     dispatch(fetchTravelPackagesApi(params));
   }, [dispatch, toggleCategoryType, paginationModel, currentCategory, currentLocation]);
@@ -77,7 +78,7 @@ export default function PackagesVerification({
   return (
       <Box>
         <Box sx={{ width: "100%" }}>
-            <Box sx={{ width: "100%", margin: "8px", position: "relative" }}>
+            <Box sx={{ width: "100%", pt:2, position: "relative" }}>
                 {userType === UserCategory.KAKRAN_SUPER_ADMIN && (
                   <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
                     <SearchBar

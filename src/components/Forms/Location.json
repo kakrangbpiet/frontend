@@ -1,24 +1,9 @@
 {
     "locations": [
-      {
-        "value": "himachal",
-        "label": "Himachal"
-      },
+     
       {
         "value": "uttrakhand",
         "label": "Uttrakhand"
-      },
-      {
-        "value": "ladakh",
-        "label": "Ladakh"
-      },
-      {
-        "value": "kerala",
-        "label": "Kerala"
-      },
-      {
-        "value": "nepal",
-        "label": "Nepal"
       }
     ]
   }
