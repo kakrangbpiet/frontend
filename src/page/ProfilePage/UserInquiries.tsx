@@ -13,6 +13,8 @@ import {
 } from "../../redux/slices/Travel/Booking/BoookTravelSlice";
 import { fetchUserInquiries } from "../../redux/slices/Travel/Booking/BookTravelApiSlice";
 import { formatDate } from "../SinglePackage/DateAvailability";
+import RazorpayPaymentButton from "../../components/Payment/RazorpayPaymentButton";
+import { isAuthenticated } from "../../redux/slices/login/authSlice";
 
 export default function UserInquiries({ }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +27,15 @@ export default function UserInquiries({ }) {
 
   const userInquiries = useSelector(selectUserInquiries);
   const loading = useSelector(selectBookingLoading);
+
+    const isUserAuthenticated = useSelector(isAuthenticated);
+    const navigation = useNavigate();
+  
+    useEffect(() => {
+      if (!isUserAuthenticated) {
+        navigation("/"); 
+      }
+    }, [isUserAuthenticated, history]);
 
   useEffect(() => {
     dispatch(fetchUserInquiries(userId));
@@ -57,9 +68,9 @@ export default function UserInquiries({ }) {
 
   const verifiedRows = filterUsers(userInquiries, searchQuery, activeFilter);
 
-  const handleViewDetails = (row: any) => {
-    navigate(`/inquiry/${userId}/${row.id}`);
-  };
+  // const handleViewDetails = (row: any) => {
+  //   navigate(`/inquiry/${userId}/${row.id}`);
+  // };
 
   const handleViewPackage = (row: any) => {
     navigate(`/package/${row.packageId}/${row.packageTitle}`);
@@ -134,6 +145,18 @@ export default function UserInquiries({ }) {
     const charSum = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
     return colors[charSum % colors.length];
   };
+
+    const submitTravelInquiry = async () => {
+      try {
+  
+        if (!isUserAuthenticated) {
+        } else {
+          alert("User Not Logged In!");
+        }
+      } catch (error) {
+        console.error('Error submitting inquiry:', error);
+      }
+    };
 
   return (
     <div className="">
@@ -285,12 +308,19 @@ export default function UserInquiries({ }) {
                           </span>
 
                           {inquiry.status === "pending" &&
-                            <button
-                              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium flex items-center transition-colors duration-200 shadow-sm"
-                              onClick={() => handleViewDetails(inquiry)}
-                            >
-                              Pay Now
-                            </button>
+                                  <RazorpayPaymentButton
+                                  inquiryId={inquiry.packageId || ''}
+                                  amount={inquiry.price ? parseFloat(inquiry.price) * 100 : 0}
+                                  onSuccess={(paymentId) => {
+                                    // Handle successful payment
+                                    console.log('Payment successful:', paymentId);
+                                    submitTravelInquiry(); // Submit the inquiry after payment
+                                  }}
+                                  onError={(error) => {
+                                    console.error('Payment failed:', error);
+                                    alert('Payment failed. Please try again.');
+                                  }}
+                                />
                           }
                         </div>
                       </div>

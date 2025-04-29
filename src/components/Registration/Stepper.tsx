@@ -17,6 +17,7 @@ import { formatDate } from '../../page/SinglePackage/DateAvailability';
 import LocationDetails from './LocationDetails';
 import PersonalDetails from './PersonalDetails';
 import ContactDetails from './ContactDetails';
+import RazorpayPaymentButton from '../Payment/RazorpayPaymentButton';
 
 const inquirySteps = [
   'Travel Destination',
@@ -237,23 +238,29 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
                 </button>
               )}
 
+              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
+                <RazorpayPaymentButton
+                  inquiryId={inquiryData.packageId || ''}
+                  amount={inquiryData.price ? parseFloat(inquiryData.price) * 100 : 0}
+                  onSuccess={(paymentId) => {
+                    // Handle successful payment
+                    console.log('Payment successful:', paymentId);
+                    submitTravelInquiry(); // Submit the inquiry after payment
+                  }}
+                  onError={(error) => {
+                    console.error('Payment failed:', error);
+                    alert('Payment failed. Please try again.');
+                  }}
+                />
+              }
+
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
                 className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${activeStep === 0 ? 'w-full ml-auto' : ''
                   }`}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Continue'}
-
               </button>
-              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
-                <button
-                  onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
-                  className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${activeStep === 0 ? 'w-full ml-auto' : ''
-                    }`}
-                >
-                  Pay Now
-                </button>
-              }
             </div>
           </>
         )}
