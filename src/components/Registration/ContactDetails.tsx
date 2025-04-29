@@ -91,39 +91,36 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-3">
       {/* Email Input */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+        <label htmlFor="email" className="block text-xs font-medium text-gray-200 mb-1">
           Email Address
         </label>
-        <div className="relative">
-          <input
-            type="email"
-            id="email"
-            value={inquiryData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            disabled={!shouldShowRegister && isRegister}
-            className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
-            text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-            focus:ring-blue-200 transition-all duration-200 outline-none "
-            placeholder="your.email@example.com"
-            required
-          />
-          {inquiryData.email && (
-            <p className="mt-1 text-xs text-gray-500">We'll send booking confirmation to this email</p>
-          )}
-        </div>
+        <input
+          type="email"
+          id="email"
+          value={inquiryData.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+          disabled={!shouldShowRegister && isRegister}
+          className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+          font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+          transition-all duration-200 outline-none"
+          placeholder="your.email@example.com"
+          required
+        />
+        {inquiryData.email && (
+          <p className="text-xs text-gray-400">Booking confirmation email</p>
+        )}
       </div>
       
       {/* Phone Verification Flow */}
       {!isContactVerified ? (
         <>
           <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-          Phone Number
-        </label>
-
+            <label htmlFor="phone" className="block text-xs font-medium text-gray-200 mb-1">
+              Phone Number
+            </label>
             <div className="relative">
               <input
                 type="tel"
@@ -131,9 +128,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 value={phoneInput}
                 onChange={handlePhoneChange}
                 disabled={showOtpField || (!shouldShowRegister && isRegister)}
-                className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
-                text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-                focus:ring-blue-200 transition-all duration-200 outline-none"
+                className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+                font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+                transition-all duration-200 outline-none"
                 placeholder="1234567890"
                 required
               />
@@ -142,29 +139,28 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                   type="button"
                   onClick={handleSendOtp}
                   disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-                  className="absolute right-2 top-2.5 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  className="absolute right-2 top-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium"
                 >
                   Resend
                 </button>
               )}
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-gray-400">
               {showOtpField ? 
-                "We've sent a verification code to your phone" : 
-                "We'll verify this number for booking updates"}
+                "Verification code sent" : 
+                "For booking updates"}
             </p>
-            
           </div>
           
           {!showOtpField ? (
-            <div className="flex justify-center mt-2">
+            <div className="flex justify-center mt-1">
               <button 
                 type="button"
                 onClick={handleSendOtp}
                 disabled={!phoneInput || (!shouldShowRegister && isRegister)}
-                className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 
-                text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
-                disabled:cursor-not-allowed transition-all duration-200 w-full max-w-xs"
+                className="px-4 py-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-700 
+                text-white text-sm font-medium shadow hover:shadow-md disabled:opacity-50 
+                disabled:cursor-not-allowed transition-all duration-200 w-full"
               >
                 Send Verification Code
               </button>
@@ -172,7 +168,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           ) : (
             <>
               <div>
-                <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="otp" className="block text-xs font-medium text-gray-200 mb-1">
                   Verification Code
                 </label>
                 <div className="relative">
@@ -182,17 +178,17 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     value={otpInput}
                     onChange={handleOtpChange}
                     disabled={!shouldShowRegister && isRegister}
-                    className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
-                    text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-                    focus:ring-blue-200 transition-all duration-200 outline-none"
+                    className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+                    font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+                    transition-all duration-200 outline-none"
                     placeholder="Enter 6-digit code"
                     required
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500">Check your SMS messages for the code</p>
+                <p className="text-xs text-gray-400">Check SMS for code</p>
               </div>
               
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
                 <button 
                   type="button"
                   onClick={handleVerifyOtp}
