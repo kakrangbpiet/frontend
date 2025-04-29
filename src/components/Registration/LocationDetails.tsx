@@ -102,7 +102,7 @@ function LocationDetails({
           {/* Destination */}
           {('destination' in inquiryData) && (
             <div>
-              {inquiryData.destination ? (
+              {inquiryData.destination && !isCustomForm ? (
                 <TextField
                   fullWidth
                   value={inquiryData.destination}

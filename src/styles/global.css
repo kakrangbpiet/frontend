@@ -1,0 +1,15 @@
+
+@font-face {
+    font-family: 'CallunaSans';
+    src: url('/font/CallunaRegular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @layer base {
+    body {
+      font-family: 'CallunaSans', sans-serif;
+    }
+  }
+  
+  

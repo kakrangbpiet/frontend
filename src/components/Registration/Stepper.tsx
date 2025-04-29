@@ -19,27 +19,27 @@ import PersonalDetails from './PersonalDetails';
 import ContactDetails from './ContactDetails';
 
 const inquirySteps = [
-  'Travel Destination', 
-  'Personal Information', 
+  'Travel Destination',
+  'Personal Information',
   'Contact Details'
 ];
 
 // Update the getStepContent function
 function getStepContent(
-  step: number, 
-  inquiryData: TravelInquiry, 
-  setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>, 
+  step: number,
+  inquiryData: TravelInquiry,
+  setInquiryData: React.Dispatch<React.SetStateAction<TravelInquiry>>,
   dateAvailabilities: DateAvailability[],
-  titles: {id: string, title: string}[],
-  isCustomForm?:boolean,
+  titles: { id: string, title: string }[],
+  isCustomForm?: boolean,
 ) {
   switch (step) {
     case 0:
       return (
-        <LocationDetails 
+        <LocationDetails
           isCustomForm={isCustomForm}
-          inquiryData={inquiryData} 
-          setInquiryData={setInquiryData} 
+          inquiryData={inquiryData}
+          setInquiryData={setInquiryData}
           dateAvailabilities={dateAvailabilities}
           titles={titles} // Pass titles to LocationDetails
         />
@@ -56,17 +56,16 @@ function getStepContent(
 // In the TravelInquiryForm component, update the render section:
 
 
-function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId?: string, packageTitle?: string,isCustomForm?:boolean }) {
+function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageId?: string, packageTitle?: string, isCustomForm?: boolean }) {
   const dispatch = useDispatch<AppDispatch>();
-  console.log(packageId,packageTitle);
-  
+
   const [activeStep, setActiveStep] = useState(0);
   const auth = useSelector(isAuthenticated);
   const token = useSelector(selectToken);
   const selectedPackage = useSelector(useSelectedTravelPackage(packageId));
   const navigate = useNavigate();
   const titles = useSelector(selectTitles);
-  const getUserDetailsFromToken = (token: string | null): {name?: string, email?: string, phoneNumber?: string} => {
+  const getUserDetailsFromToken = (token: string | null): { name?: string, email?: string, phoneNumber?: string } => {
     if (!token) return {};
     try {
       const decoded = jwtDecode(token) as JwtPayload;
@@ -80,15 +79,15 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
       return {};
     }
   };
-  
+
   const userDetails = getUserDetailsFromToken(token);
-  
+
   const [inquiryData, setInquiryData] = useState<TravelInquiry>({
     packageId: packageId,
     packageTitle: packageTitle,
     destination: packageTitle,
     address: "",
-    tripType: 'custom',
+    tripType: selectedPackage?.travelType || 'pre-planned',
     startDate: null,
     endDate: null,
     passengerCount: 1,
@@ -118,6 +117,10 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
       case 0:
         if (!inquiryData.address) {
           alert('Please select your current location');
+          return false;
+        }
+        if (!inquiryData.destination) {
+          alert('Please select your destination');
           return false;
         }
         if (inquiryData.tripType === 'pre-planned' && (!inquiryData.startDate || !inquiryData.endDate)) {
@@ -154,7 +157,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
         alert('Please provide your email');
         return false;
       }
-      
+
       const inquiryToSend = {
         ...inquiryData,
         category: UserCategory.User,
@@ -162,25 +165,24 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
         formattedStartDate: inquiryData.startDate ? formatDate(inquiryData.startDate) : undefined,
         formattedEndDate: inquiryData.endDate ? formatDate(inquiryData.endDate) : undefined
       };
-      
+
       if (!auth) {
-        const registrationResult = await dispatch(registerUserDispatcher({userData:inquiryToSend})).unwrap();
-        
+        const registrationResult = await dispatch(registerUserDispatcher({ userData: inquiryToSend })).unwrap();
+
         if (registrationResult) {
-          await dispatch(createTravelInquiry({inquiryToSend,handleNext}));
+          await dispatch(createTravelInquiry({ inquiryToSend, handleNext }));
         }
       } else {
-        await dispatch(createTravelInquiry({inquiryToSend,handleNext}));
+        await dispatch(createTravelInquiry({ inquiryToSend, handleNext }));
       }
     } catch (error) {
       console.error('Error submitting inquiry:', error);
-      alert('There was an error submitting your inquiry. Please try again.');
     }
   };
 
   return (
     <div className="">
-      <div className="bg-transparent-900/90 backdrop-blur-md rounded-xl overflow-hidden border border-white/20 shadow-2xl">
+      <div className="bg-transparent-900/90 backdrop-blur-md rounded-xl  overflow-y-auto overflow-hidden border border-white/20 shadow-2xl">
         <div className="bg-transparent-800/80 p-4 border-b border-gray-700">
           <h2 className="text-xl font-semibold text-white text-center mb-4">Travel Inquiry Form</h2>
           <div className="flex items-center justify-between mb-1">
@@ -195,7 +197,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
             </div>
           </div>
           <div className="h-1 w-full bg-gray-700 rounded-full">
-            <div 
+            <div
               className="h-1 bg-blue-500 rounded-full transition-all duration-300"
               style={{ width: `${((activeStep + 1) / 3) * 100}%` }}
             ></div>
@@ -205,7 +207,7 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
         {activeStep === inquirySteps.length ? (
           <div className="text-center py-2 bg-gray-800/80 backdrop-blur-md p-6">
             <h3 className="text-lg font-semibold mb-6 text-white">Thank you for your inquiry!</h3>
-            <button 
+            <button
               onClick={navigateToProfile}
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition transform hover:-translate-y-0.5"
             >
@@ -215,16 +217,16 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
         ) : (
           <>
             <div className="p-5 bg-transaprent-100/10 backdrop-blur-md min-h-[300px]">
-  {getStepContent(
-    activeStep, 
-    inquiryData, 
-    setInquiryData, 
-    selectedPackage?.dateAvailabilities || [],
-    titles,
-    isCustomForm
-  )}
-</div>
-            
+              {getStepContent(
+                activeStep,
+                inquiryData,
+                setInquiryData,
+                selectedPackage?.dateAvailabilities || [],
+                titles,
+                isCustomForm
+              )}
+            </div>
+
             <div className="px-2 py-4 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
               {activeStep > 0 && (
                 <button
@@ -234,26 +236,24 @@ function TravelInquiryForm({ packageId, packageTitle,isCustomForm }: { packageId
                   Back
                 </button>
               )}
-              
+
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
-                className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${
-                  activeStep === 0 ? 'w-full ml-auto' : ''
-                }`}
+                className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${activeStep === 0 ? 'w-full ml-auto' : ''
+                  }`}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Continue'}
-            
+
               </button>
-              {inquiryData.tripType==="pre-planned" && activeStep === inquirySteps.length - 1  &&
-                  <button
-                    onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
-                    className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${
-                      activeStep === 0 ? 'w-full ml-auto' : ''
+              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
+                <button
+                  onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
+                  className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${activeStep === 0 ? 'w-full ml-auto' : ''
                     }`}
-                  >
-                   Pay Now
-                  </button>
-                }
+                >
+                  Pay Now
+                </button>
+              }
             </div>
           </>
         )}

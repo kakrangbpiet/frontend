@@ -43,7 +43,7 @@ const Request = async ({ endpointId, slug, data }: any) => {
 
     return response.data;  // Return the response data for further processing
   } catch (error) {
-
+    alert(error?.response?.data?.details || error?.response?.data?.message || endpoint?.errorMessage || "Unexpected error occurred.");
     throw error;  // Re-throw the error for further handling
   }
 };

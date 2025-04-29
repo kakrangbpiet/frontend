@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({
       <div className="hidden md:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
         <nav className="flex space-x-8 lg:space-x-12 text-white tracking-wide">
           {links.map((link, index) => (
-            <div className={`hover:text-white-400 text-white text-lg px-3 py-2 rounded 
+              <div className={`hover:text-gray-400 text-white text-lg font-extralight text-[15px] px-3 py-2 rounded 
                 ${window.location.pathname === link.to ? 'bg-transparent' : 'bg-transparent'}`}
               key={index}
               onClick={() => navigate(link.to)}

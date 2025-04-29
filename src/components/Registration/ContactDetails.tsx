@@ -23,6 +23,14 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   const trxId = useSelector(selectTrxId);
 
   useEffect(() => {
+    document.body.classList.add('overflow-auto');
+    
+    return () => {
+      document.body.classList.remove('overflow-auto');
+    };
+  }, []);
+
+  useEffect(() => {
     if (isContactVerified) {
       setInquiryData(prev => ({
         ...prev,
@@ -83,7 +91,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-6">
       {/* Email Input */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -97,8 +105,8 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
             onChange={(e) => handleChange('email', e.target.value)}
             disabled={!shouldShowRegister && isRegister}
             className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
-             text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-             focus:ring-blue-200 transition-all duration-200 outline-none "
+            text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
+            focus:ring-blue-200 transition-all duration-200 outline-none "
             placeholder="your.email@example.com"
             required
           />
@@ -115,7 +123,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
           Phone Number
         </label>
-     
+
             <div className="relative">
               <input
                 type="tel"
@@ -213,7 +221,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           )}
         </>
       ) : (
-        <div className="rounded-lg  border border-blue-200 p-4">
+        <div className="rounded-lg  yborder border-blue-200 p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0 mt-0.5">
               <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
