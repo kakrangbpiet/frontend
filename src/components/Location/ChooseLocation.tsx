@@ -28,12 +28,12 @@ function ChooseLocation({ open, handleClose, setAddress }: { open: boolean, hand
 
   return (
     <div>
-      <div>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        maxWidth="xs"
       >
         <DialogTitle id="alert-dialog-title">
           {"Use Google's location service?"}
@@ -45,15 +45,12 @@ function ChooseLocation({ open, handleClose, setAddress }: { open: boolean, hand
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={chooseLocationManually} sx={{
-          }}>Choose Manually</Button>
-          <Button onClick={chooseLiveLocation} autoFocus sx={{
-          }}>
+          <Button onClick={chooseLocationManually}>Choose Manually</Button>
+          <Button onClick={chooseLiveLocation} autoFocus>
             Use My Location
           </Button>
         </DialogActions>
       </Dialog>
-      </div>
 
       <ManualLocation setAddress={setAddress} open={openManualLocation} handleClose={hanldeCloseLocationDailog} />
       {openLiveLocation &&

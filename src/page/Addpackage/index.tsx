@@ -19,7 +19,7 @@ function AddPackagePage() {
     }
   }, [isUserAuthenticated, history]);
   return (
-    <Box className='pt-24'>
+    <Box className='pt-10'>
             <AddTravelPackageForm  userType={userType} formEvent={"Add Package"} />
     </Box>
   )

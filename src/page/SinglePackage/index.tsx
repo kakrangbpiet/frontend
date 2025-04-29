@@ -129,7 +129,7 @@ const SingleTravelPackageDetails = () => {
   // Admin view
   if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
     return (
-      <div className="min-h-screen w-full bg-transparent pt-26">
+      <div className="min-h-screen w-full bg-transparent ">
         <div className="max-w-6xl mx-auto mt-6 flex flex-wrap justify-between items-center space-x-2 mb-4">
           {status && <button
             disabled={isUpdating}
@@ -140,7 +140,7 @@ const SingleTravelPackageDetails = () => {
           </button>
           }
 
-          <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
+          <div className="bg-black/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
             <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
               id: travelPackageId,
               title,
@@ -164,14 +164,14 @@ const SingleTravelPackageDetails = () => {
 
   return (
     <div className="">
-      <div className="">
         {videos &&
           <MediaBackground video={videos.randomVideo} />
         }
+      <div className="">
       </div>
       <div className="absolute inset-0 overflow-hidden">
       </div>
-      <div className="backdrop-blur-[4px] bg-black/40 min-h-screen pt-16 md:pt-24">
+      <div className="backdrop-blur-[4px]  min-h-screen pt-6 md:pt-2">
         <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
           <div className="relative rounded-xl overflow-hidden mb-8 md:mb-12 shadow-2xl h-64 md:h-96 object-cover">
             {isImageLoading && !image ? (
@@ -199,14 +199,14 @@ const SingleTravelPackageDetails = () => {
           </div>
 
           {/* Tabs Navigation - Scrollable on mobile */}
-          <div className="flex mb-6 md:mb-8 overflow-x-auto bg-white/10 backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg">
+          <div className="flex mb-6 md:mb-8 overflow-x-auto  backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg bg-black/40">
             {['overview', 'photos', 'Ask Ai', 'dates'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 md:px-6 md:py-3 text-white font-medium rounded-lg transition flex-none text-sm md:text-base whitespace-nowrap ${activeTab === tab
-                  ? 'bg-white/20 shadow-md border border-white/30'
-                  : 'hover:bg-white/10 border border-transparent'
+                  ? 'bg-black/40 shadow-md border border-white/30'
+                  : 'hover:bg-black/10 border border-transparent'
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -214,11 +214,10 @@ const SingleTravelPackageDetails = () => {
             ))}
           </div>
 
-          <div className="mb-8 md:mb-12 flex flex-col lg:flex-row">
-            <div className="w-full lg:w-3/4 lg:pr-8">
+          <div className="mb-8 md:mb-12 flex flex-col lg:flex-row bg-black/40 border border-white/20 rounded-xl" >
               {activeTab === 'overview' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
-                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
+                               <div className="bg-black/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
                     About {title}
                   </h2>
                   {isDescriptionLoading && !description ? (
@@ -254,7 +253,7 @@ const SingleTravelPackageDetails = () => {
                         {activities?.map((activity, index) => (
                           <div
                             key={index}
-                            className="bg-white/10 backdrop-blur-md rounded-lg p-2 md:p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300 text-sm md:text-base"
+                            className="bg-black/10 backdrop-blur-md rounded-lg p-2 md:p-4 text-center border border-white/20 shadow-md hover:bg-white/20 transition-all transform hover:scale-105 duration-300 text-sm md:text-base"
                           >
                             <span className="block font-medium">{activity}</span>
                           </div>
@@ -267,7 +266,7 @@ const SingleTravelPackageDetails = () => {
               )}
 
               {activeTab === 'photos' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                <div className="bg-black/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
 
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Photo Gallery</h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -354,7 +353,7 @@ const SingleTravelPackageDetails = () => {
                     <div className="w-full  mb-4 md:mb-0 md:pr-6 lg:pr-8">
                       <h2 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-white">Need Help Planning Your Trip?</h2>
                     </div>
-                    <div className="w-full  bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
+                    <div className="w-full  bg-black/10 backdrop-blur-md rounded-xl p-4 md:p-6 border border-white/20 shadow-xl">
                       <h3 className="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-emerald-300">Ask Our AI Assistant</h3>
                       <AiPromptGenerator data={{
                         title: selectedTravelPackage?.title,
@@ -386,7 +385,7 @@ const SingleTravelPackageDetails = () => {
               )}
 
               {activeTab === 'dates' && (
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                <div className="bg-black/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
                   <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4 md:mb-6">Available Dates</h2>
                   <DateAvailabilityDisplay dateAvailabilities={dateAvailabilities} />
                 </div>
@@ -399,7 +398,6 @@ const SingleTravelPackageDetails = () => {
             </div>
           </div>
 
-        </div>
       </div>
 
       {/* Mobile Form Modal  */}

@@ -48,7 +48,8 @@ const MainContent = styled.main<{
   $auth: boolean
 }>`
   flex: 1;
-    position: relative;
+  position: relative;
+  padding-top:100px;
   position: relative;
   z-index: 1; // Ensure content appears above the video
 `;
@@ -89,7 +90,7 @@ const Layout = () => {
   };
 
   return (
-    <div className="relative w-full overflow-hidden bg-grey-900">
+    <div className="relative w-full overflow-hidden">
     <ScrollToTop />
       <Header title={"SAMSARA"} links={sidebarItem} auth={auth} toggleMobileMenu={toggleMobileMenu}
         mobileMenuOpen={mobileMenuOpen} isMobile={isMobile} />

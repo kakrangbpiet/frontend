@@ -587,24 +587,62 @@ export const fetchAllLocations = createAsyncThunk(
 
 export const fetchAllTitles = createAsyncThunk(
   'travelCollection/fetchAllTitles',
-  async (_, { rejectWithValue, dispatch }) => {
+  async (
+    params: {
+      status?: string;
+      select?: string;
+    } = {},
+    { rejectWithValue, dispatch }
+  ) => {
+    
+    // Set loading state for titles
+    dispatch(setLoadedItems({ 
+      loading: true,
+      loadingFields: {
+        titles: true
+      }
+    }));
+
     try {
+      const queryParams = new URLSearchParams();
+      if (params?.status) queryParams.append('status', params.status);
+      if (params?.select) queryParams.append('select', params.select);
+
+      const slug = queryParams.toString() ? `?${queryParams.toString()}` : '';
+
       const response = await Request({
         endpointId: "GET_ALL_TITLES",
+        slug,
       });
 
       const titles = response.data as Array<{ id: string; title: string }>;
 
       dispatch(setTitles(titles));
+      dispatch(setLoadedItems({
+        loading: false,
+        loadingFields: {
+          titles: false
+        }
+      }));
 
-      return {
+      const apiSuccess: ApiSuccess = {
         statusCode: response.status,
         message: 'Titles fetched successfully',
         data: titles,
       };
+
+      return apiSuccess;
     } catch (error) {
+      dispatch(setLoadedItems({ 
+        loading: false,
+        loadingFields: {
+          titles: false
+        }
+      }));
       const castedError = error as ApiError;
-      return rejectWithValue(castedError?.error || 'Failed to fetch titles');
+      return rejectWithValue(
+        typeof castedError?.error === 'string' ? castedError?.error : 'Failed to fetch titles'
+      );
     }
   }
 );

@@ -29,7 +29,7 @@ const ContentOverlay = styled.div`
   position: relative;
   width: 100%;
   height: 100vh; 
-  min-height: 60vh; 
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,8 +51,8 @@ const HeroText = styled.div`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 2.3rem;
-  font-weight: 400; 
+  font-size: 2.5rem;
+  font-weight: 300; 
   margin-bottom: 1rem;
   
   @media (max-width: 768px) {
@@ -135,19 +135,20 @@ const ButtonGroup = styled.div`
   width: 100%;
   
   @media (max-width: 640px) {
-    gap: 0.5rem; 
+    flex-direction: column;
+    gap: 0.75rem;
   }
 `;
 
 const Button = styled.button`
   padding: 0.75rem 1.5rem;
-  border-radius: 24px;
+  border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
   color: white;
   font-size: 1rem;
-  font-weight: 1000;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -157,23 +158,12 @@ const Button = styled.button`
   }
   
   @media (max-width: 640px) {
-    font-size: 0.85rem; 
-    padding: 0.9rem 1rem;
+    width: 100%;
+    font-size: 0.875rem;
+    padding: 0.625rem 1.25rem;
   }
-    `;
-const useClickOutside = (ref: React.RefObject<HTMLElement>, callback: () => void) => {
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, callback]);
-};
+`;
+
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -185,20 +175,15 @@ const HomePage: React.FC = () => {
   const { title } = useOutletContext<{ title: string }>();
   const categories = useSelector(selectCategories);
   const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
   const titles = useSelector(selectTitles);
   const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
-  const searchContainerRef = React.useRef<HTMLDivElement>(null);
-  useClickOutside(searchContainerRef, () => {
-    setIsSearchFocused(false);
-    setSearchResults([]);
-  });
 
   useEffect(() => {
     // Fetch all categories, and titles when component mounts
     dispatch(fetchAllCategories());
-    dispatch(fetchAllTitles());
+    dispatch(fetchAllTitles({ status: "active" }));
 
     if (auth && selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
       navigate("/dashboard");
@@ -208,13 +193,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({
       status: "active",
-      select: "title,category"
+      select: "title,price,category"
     }));
   }, [dispatch]);
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({
       status: "active",
-      select: "title,image,category"
+      select: "title,price,status,image"
     }));
   }, [dispatch]);
 
@@ -254,7 +239,7 @@ const HomePage: React.FC = () => {
           results.push({
             type: 'category',
             value: category,
-            label: `${category}`
+            label: `Category: ${category}`
           });
         }
       });
@@ -270,6 +255,7 @@ const HomePage: React.FC = () => {
         }
       });
 
+
       // Match titles
       titles.forEach(item => {
         if (item.title.toLowerCase().includes(query.toLowerCase())) {
@@ -283,43 +269,7 @@ const HomePage: React.FC = () => {
 
       setSearchResults(results.slice(0, 5)); // Limit to 5 results
     } else {
-      // When query is empty but input is focused, show default suggestions
-      if (isSearchFocused) {
-        const defaultResults: any[] = [];
-
-        // Add some popular categories
-        ['hotdeals', 'pre-planned-trips'].forEach(category => {
-          if (categories.includes(category)) {
-            defaultResults.push({
-              type: 'category',
-              value: category,
-              label: `${category}`
-            });
-          }
-        });
-
-        // Add some popular locations
-        locationsData.locations.slice(0, 3).forEach(location => {
-          defaultResults.push({
-            type: 'location',
-            value: location,
-            label: `Search in ${location.label}`
-          });
-        });
-
-        // Add some popular titles (limit to 3)
-        titles.slice(0, 3).forEach(title => {
-          defaultResults.push({
-            type: 'title',
-            value: title,
-            label: `Tour: ${title.title}`
-          });
-        });
-
-        setSearchResults(defaultResults);
-      } else {
-        setSearchResults([]);
-      }
+      setSearchResults([]);
     }
   };
 
@@ -362,52 +312,21 @@ const HomePage: React.FC = () => {
         </HeroText>
 
         <ButtonContainer>
-          <SearchContainer ref={searchContainerRef}>
+          <SearchContainer>
             <SearchInput
               type="text"
               placeholder="Search for destinations, categories, or tours..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              onFocus={() => {
-                setIsSearchFocused(true);
-                if (searchQuery.length === 0) {
-                  // Show some default suggestions or recent searches when empty
-                  handleSearch(''); // This will trigger showing all available options
-                }
-              }}
-              onBlur={() => {
-                // Add a small delay to allow click events on results to fire first
-                setTimeout(() => setIsSearchFocused(false), 200);
-              }}
             />
-            {(searchResults.length > 0 || (isSearchFocused && searchQuery.length === 0)) && (
+            {searchResults.length > 0 && (
               <SearchResults>
-                {searchResults.length > 0 ? (
-                  searchResults.map((result, index) => (
-                    <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
-                      <ResultType>{result.type}</ResultType>
-                      {result.label}
-                    </SearchResultItem>
-                  ))
-                ) : (
-                  // Show default suggestions when input is focused but empty
-                  <>
-                    <SearchResultItem onClick={() => navigate('/packages?category=hotdeals')}>
-                      <ResultType>category</ResultType>
-                      Hot Deals
-                    </SearchResultItem>
-                    <SearchResultItem onClick={() => navigate('/packages?category=pre-planned-trips')}>
-                      <ResultType>category</ResultType>
-                      Pre-planned Trips
-                    </SearchResultItem>
-                    {locationsData.locations.slice(0, 3).map((location, index) => (
-                      <SearchResultItem key={`loc-${index}`} onClick={() => navigate(`/packages?location=${encodeURIComponent(location.value)}`)}>
-                        <ResultType>location</ResultType>
-                        Search in {location.label}
-                      </SearchResultItem>
-                    ))}
-                  </>
-                )}
+                {searchResults.map((result, index) => (
+                  <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
+                    <ResultType>{result.type}</ResultType>
+                    {result.label}
+                  </SearchResultItem>
+                ))}
               </SearchResults>
             )}
           </SearchContainer>
@@ -424,7 +343,6 @@ const HomePage: React.FC = () => {
         <Dialog
           open={openInquiryDialog}
           onClose={handleCloseInquiryDialog}
-          maxWidth="md"
           fullWidth
           PaperProps={{
             style: {
@@ -434,9 +352,15 @@ const HomePage: React.FC = () => {
             }
           }}
         >
-          <TravelInquiryForm
-            isCustomForm={true}
-          />
+          <div className=" inset-0 z-50 bg-transparent bg-opacity-100 flex items-center justify-center p-10 backdrop-blur-3xl">
+            {/* change 3xl for more blur for minimum use lg/xl  */}
+            <div className="relative w-full max-w-lg max-h-[90vh] overflow-auto rounded-xl">
+
+              <TravelInquiryForm
+                isCustomForm={true}
+              />
+            </div>
+          </div>
         </Dialog>
       </ContentOverlay>
 
@@ -455,7 +379,7 @@ const HomePage: React.FC = () => {
 
 
       {/*Content */}
-      <div className="text-center mt-12">
+      <div className="text-center mt-4">
         <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
           Explore With Us
         </div>
@@ -479,6 +403,10 @@ const HomePage: React.FC = () => {
         </div>
       </div> */}
       {/*todo //UI*/}
+
+
+
+
 
 
       <DashboardGrid>

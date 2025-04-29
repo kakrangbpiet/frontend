@@ -17,7 +17,7 @@ interface DateSelectionTabsProps {
 }
 
 function DateSelectionTabs({
-  tripType,
+  // tripType,
   setTripType,
   dateAvailabilities,
   startDate,
@@ -28,7 +28,7 @@ function DateSelectionTabs({
   onValidationError,
   isCustomForm
 }: DateSelectionTabsProps) {
-  const [activeTab, setActiveTab] = useState<'pre-planned' | 'custom'>(tripType);
+  const [activeTab, setActiveTab] = useState<'pre-planned' | 'custom'>(isCustomForm ? "custom" : "pre-planned");
   const [dateError, setDateError] = useState<string | null>(null);
 
   // Validate date selections
@@ -123,7 +123,7 @@ function DateSelectionTabs({
       id="custom-label"
       className={`font-medium ${activeTab === 'custom' ? 'text-blue-500' : 'text-gray-200'}`}
     >
-      Custom Dates
+      Select Own Dates
     </span>
   </label>
 </div>
