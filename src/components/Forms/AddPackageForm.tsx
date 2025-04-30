@@ -100,7 +100,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
     setDescription('');
     setErrors(newErrors);
   };
-console.log(itemInfo.videos);
+console.log(itemInfo?.videos);
 
   const handleDescriptionChange = (value: string) => {
     setDescription(value);
@@ -262,7 +262,7 @@ console.log(itemInfo.videos);
               Date Availabilities
             </Typography>
 
-            {dateAvailabilities.map((dateAvailability, index) => (
+            {dateAvailabilities?.map((dateAvailability, index) => (
               <UnixDateInput
                 key={index}
                 startDate={dateAvailability.startDate}

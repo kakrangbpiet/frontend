@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, selectUserType } from '../../redux/slices/login/authSlice';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
-import { Box } from 'lucide-react';
+import { Box } from '@mui/material';
 
 function AddPackagePage() {
 
@@ -19,7 +19,7 @@ function AddPackagePage() {
     }
   }, [isUserAuthenticated, history]);
   return (
-    <Box className='pt-10'>
+    <Box className=''>
             <AddTravelPackageForm  userType={userType} formEvent={"Add Package"} />
     </Box>
   )

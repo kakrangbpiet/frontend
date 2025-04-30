@@ -1,6 +1,5 @@
   import React, { useState, useEffect } from 'react';
   import { useDispatch, useSelector } from 'react-redux';
-  import { useNavigate } from 'react-router-dom';
   import {
     Button,
     FormHelperText,
@@ -18,7 +17,6 @@
   import { AppDispatch } from '../../redux/store';
   import { 
     authLoading, 
-    isAuthenticated, 
     SelectConactVerified, 
     SelectContact, 
     selectTrxId 
@@ -34,12 +32,10 @@
 
   const PasswordlessLoginForm: React.FC<LoginProps> = ({ onVerified }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
     
     // Redux state
     const isAuthLoading = useSelector(authLoading);
     const trxId = useSelector(selectTrxId);
-    const isUserAuthenticated = useSelector(isAuthenticated);
     const isContactVerified = useSelector(SelectConactVerified);
     const verifiedContactState = useSelector(SelectContact);
     
@@ -53,19 +49,11 @@
     const [resendTimer, setResendTimer] = useState(0);
 
     useEffect(() => {
-      if (isContactVerified) {
-        navigate('/profile');
-        onVerified && onVerified(verifiedContact);
-      }
-    }, [isContactVerified, navigate, verifiedContact, onVerified]);
-
-    useEffect(() => {
-      if (isUserAuthenticated) {
-        navigate("/profile");
-        onVerified && onVerified(verifiedContact);
-      }
-    }, [isUserAuthenticated, verifiedContact, navigate, onVerified]);
-
+      return () => {
+        // Cleanup any pending timers or async operations
+      };
+    }, []);
+    
     useEffect(() => {
       let interval: NodeJS.Timeout;
       if (resendDisabled && resendTimer > 0) {
@@ -118,7 +106,6 @@
           setError('OTP is required');
           return;
         }
-        setError('');
         await dispatch(
           registerNumberOtpDispatcher({
             otp,
@@ -127,7 +114,9 @@
             phoneNumber,
           })
         ).unwrap();
-        onVerified && onVerified(verifiedContact);
+             setTimeout(() => {
+        onVerified?.(verifiedContact);
+      }, 100);
       } catch (error) {
         setError('Failed to verify OTP');
       }
@@ -159,7 +148,7 @@
           Login to Your Account
           </Typography>
           
-          <form noValidate>
+          <form noValidate onSubmit={(e) => e.preventDefault()}>
             <Grid container spacing={3}>
               {!isContactVerified && (
                 <Grid size={{xs:12}}>
@@ -183,6 +172,12 @@
                               borderRadius: 2,
                               backgroundColor: 'white',
                               '&:hover': { backgroundColor: 'white' },
+                            }}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleSendOtp();
+                              }
                             }}
                           />
                           <Button
@@ -233,6 +228,12 @@
                               '&:hover': { backgroundColor: 'white' },
                               letterSpacing: '0.5rem',
                               textAlign: 'center'
+                            }}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleVerifyOtp();
+                              }
                             }}
                           />
                           <Button

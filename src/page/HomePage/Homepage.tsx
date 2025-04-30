@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -28,8 +28,8 @@ const PackagesSection = styled.div`
 const ContentOverlay = styled.div`
   position: relative;
   width: 100%;
-  height: 100vh; 
-  min-height: 100vh; 
+  height: 90vh; 
+  min-height: 90vh; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,12 +51,12 @@ const HeroText = styled.div`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 300; 
   margin-bottom: 1rem;
   
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 `;
 
@@ -173,12 +173,14 @@ const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const { title } = useOutletContext<{ title: string }>();
+  const [showResults, setShowResults] = useState(false);
   const categories = useSelector(selectCategories);
   const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
 
   const titles = useSelector(selectTitles);
   const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Fetch all categories, and titles when component mounts
@@ -203,6 +205,19 @@ const HomePage: React.FC = () => {
     }));
   }, [dispatch]);
 
+  // Close search results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   // const handleLoadCategories = async () => {
   //   try {
   //     dispatch(
@@ -230,6 +245,8 @@ const HomePage: React.FC = () => {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    setShowResults(true);
+    
     if (query.length > 0) {
       const results: any[] = [];
 
@@ -255,7 +272,6 @@ const HomePage: React.FC = () => {
         }
       });
 
-
       // Match titles
       titles.forEach(item => {
         if (item.title.toLowerCase().includes(query.toLowerCase())) {
@@ -267,16 +283,62 @@ const HomePage: React.FC = () => {
         }
       });
 
-      setSearchResults(results.slice(0, 5)); // Limit to 5 results
+      setSearchResults(results);
     } else {
-      setSearchResults([]);
+      // When search is empty, show all available options
+      const allResults: any[] = [];
+      
+      categories.forEach(category => {
+        allResults.push({
+          type: 'category',
+          value: category,
+          label: `Category: ${category}`
+        });
+      });
+
+      titles.forEach(item => {
+        allResults.push({
+          type: 'title',
+          value: item,
+          label: `Tour: ${item.title}`
+        });
+      });
+
+      setSearchResults(allResults.slice(0, 10)); // Limit to 10 results
     }
   };
 
 
+
+  const handleSearchFocus = () => {
+    setShowResults(true);
+    if (searchQuery.length === 0) {
+      // Show all available options when input is focused and empty
+      const allResults: any[] = [];
+      
+      categories.forEach(category => {
+        allResults.push({
+          type: 'category',
+          value: category,
+          label: `Category: ${category}`
+        });
+      });
+
+      titles.forEach(item => {
+        allResults.push({
+          type: 'title',
+          value: item,
+          label: `Tour: ${item.title}`
+        });
+      });
+
+      setSearchResults(allResults.slice(0, 10)); // Limit to 10 results
+    }
+  };
+
   const handleResultClick = (result: any) => {
     setSearchQuery('');
-    setSearchResults([]);
+    setShowResults(false);
 
     if (result.type === 'category') {
       navigate(`/packages?category=${encodeURIComponent(result.value)}`);
@@ -312,24 +374,44 @@ const HomePage: React.FC = () => {
         </HeroText>
 
         <ButtonContainer>
-          <SearchContainer>
+        <SearchContainer ref={searchRef}>
             <SearchInput
               type="text"
-              placeholder="Search for destinations, categories, or tours..."
+              placeholder="Search for Destinations, Cities or Tours..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
+              onFocus={handleSearchFocus}
             />
-            {searchResults.length > 0 && (
+            {showResults && (
               <SearchResults>
-                {searchResults.map((result, index) => (
-                  <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
-                    <ResultType>{result.type}</ResultType>
-                    {result.label}
+                {searchResults.length > 0 ? (
+                  searchResults.map((result, index) => (
+                    <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
+                      <ResultType>{result.type}</ResultType>
+                      {result.label}
+                    </SearchResultItem>
+                  ))
+                ) : (
+                  <SearchResultItem>
+                    Nothing found. Try our best packages:
+                    {categories.slice(0, 3).map((category, index) => (
+                      <div key={`cat-${index}`} onClick={() => navigate(`/packages?category=${encodeURIComponent(category)}`)}>
+                        <ResultType>category</ResultType>
+                        {category}
+                      </div>
+                    ))}
+                    {titles.slice(0, 3).map((title, index) => (
+                      <div key={`title-${index}`} onClick={() => navigate(`/package/${title.id}/${title.title}`)}>
+                        <ResultType>tour</ResultType>
+                        {title.title}
+                      </div>
+                    ))}
                   </SearchResultItem>
-                ))}
+                )}
               </SearchResults>
             )}
           </SearchContainer>
+
 
           <ButtonGroup>
             <Button onClick={handleCustomizedTripClick}>
@@ -341,16 +423,13 @@ const HomePage: React.FC = () => {
           </ButtonGroup>
         </ButtonContainer>
         <FormDialog
-  open={openInquiryDialog}
-  onClose={handleCloseInquiryDialog}
->
-  <TravelInquiryForm isCustomForm={true} />
-</FormDialog>
+          open={openInquiryDialog}
+          onClose={handleCloseInquiryDialog}
+        >
+          <TravelInquiryForm isCustomForm={true} />
+        </FormDialog>
       </ContentOverlay>
-
-
       {/*test */}
-
       <div className="relative w-full min-h-[50vh] bg-transparent bg-opacity-50 flex flex-col items-center justify-center text-center p-4 pt-20 pb-40">
         <h1 className="text-4xl font-bold text-white mt-6">
           Start with a Feeling, End with a Journey
@@ -360,8 +439,6 @@ const HomePage: React.FC = () => {
           quiet paths call your name, and every sunrise reveals nature’s magic
         </p>
       </div>
-
-
       {/*Content */}
       <div className="text-center mt-4">
         <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">

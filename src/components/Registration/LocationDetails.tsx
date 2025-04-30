@@ -96,9 +96,6 @@ function LocationDetails({
           disabled={!shouldShowRegister && isRegister}
           sx={textFieldStyle}
         />
-        {inquiryData.address && (
-          <p className="mt-0 text-xs text-gray-100">Pickup location</p>
-        )}
       </div>
 
       {!isRegister && (
@@ -107,7 +104,7 @@ function LocationDetails({
           {('destination' in inquiryData) && (
             <div>
               <label htmlFor="destination" className="block text-xs font-medium text-gray-200 mb-1">
-                Destination
+              Your Travel Destination
               </label>
               {inquiryData.destination && !isCustomForm ? (
                 <TextField

@@ -22,8 +22,6 @@ import {
 import TravelInquiryForm from '../../components/Registration/Stepper';
 import FormDialog from '../../components/Registration/FormDailog';
 
-
-
 const StyledVideo = styled.video`
   width: 100%;
   height: 100%;
@@ -56,13 +54,11 @@ const SingleTravelPackageDetails = () => {
 
   // Staggered loading pattern
   useEffect(() => {
-    if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
+    if (userType  && userType === UserCategory.KAKRAN_SUPER_ADMIN) {
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId,
       }));
-    }
-    else {
-      // First load essential fields
+    } else {
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId,
         select: "title,description,status"
@@ -71,12 +67,10 @@ const SingleTravelPackageDetails = () => {
         itemId: travelPackageId,
         select: "image,status,dateAvailabilities"
       }));
-
     }
-    // Finally load dates and other secondary data
     dispatch(fetchTravelPackageDatesApi({ packageId: travelPackageId }));
-
-  }, [dispatch]);
+  }, [dispatch,userType,travelPackageId]);
+  
 
   // Handle photos tab click - load full images if not already loaded
   useEffect(() => {
@@ -89,25 +83,7 @@ const SingleTravelPackageDetails = () => {
         itemId: travelPackageId,
       }));
     }
-  }, [activeTab, dispatch]);
-
-  const packageData = selectedTravelPackage;
-
-  // Default values and null checks
-  const description = packageData?.description ?? '';
-  const dateAvailabilities = useSelector(selectPackageDates(travelPackageId)) ?? [];
-  const image = packageData?.image ?? '';
-  const images = packageData?.images ?? [image];
-  const videos = packageData?.videos ?? [];
-  const title = packageData?.title ?? travelPackageTitle ?? '';
-  const location = packageData?.location ?? '';
-  const category = packageData?.category ?? '';
-  const status = packageData?.status ?? 'inactive';
-  const availableSpots = packageData?.availableSpots ?? 0;
-  const travelType = packageData?.travelType ?? 'group';
-  const maxTravelers = packageData?.maxTravelers ?? 0;
-  const activities = packageData?.activities ?? null;
-  console.log(videos);
+  }, [activeTab, dispatch,travelPackageId]);
 
   const navigateToHome = () => {
     navigate("/");
@@ -133,51 +109,60 @@ const SingleTravelPackageDetails = () => {
     setShowMobileForm(!showMobileForm);
   };
 
-  // Admin view
-  if (userType === UserCategory.KAKRAN_SUPER_ADMIN) {
-    return (
-      <div className="min-h-screen w-full bg-transparent ">
-        <div className="max-w-6xl mx-auto mt-6 flex flex-wrap justify-between items-center space-x-2 mb-4">
-          {status && <button
-            disabled={isUpdating}
-            onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
-            className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white rounded-lg shadow-lg disabled:opacity-50 transition duration-300 font-medium"
-          >
-            {status === 'inactive' ? 'Activate' : 'Deactivate'}
-          </button>
-          }
 
-          <div className="bg-black/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
-            <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
-              id: travelPackageId,
-              title,
-              description,
-              image,
-              images,
-              location,
-              category,
-              status,
-              availableSpots,
-              travelType,
-              maxTravelers,
-              dateAvailabilities,
-              activities
-            }} userType={userType} />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Default values and null checks
+  const description = selectedTravelPackage?.description ?? '';
+  const dateAvailabilities = useSelector(selectPackageDates(travelPackageId)) ?? [];
+  const image = selectedTravelPackage?.image ?? '';
+  const images = selectedTravelPackage?.images ?? [image];
+  const videos = selectedTravelPackage?.videos ?? [];
+  const title = selectedTravelPackage?.title ?? travelPackageTitle ?? '';
+  const location = selectedTravelPackage?.location ?? '';
+  const category = selectedTravelPackage?.category ?? '';
+  const status = selectedTravelPackage?.status ?? 'inactive';
+  const availableSpots = selectedTravelPackage?.availableSpots ?? 0;
+  const travelType = selectedTravelPackage?.travelType ?? 'group';
+  const maxTravelers = selectedTravelPackage?.maxTravelers ?? 0;
+  const activities = selectedTravelPackage?.activities ?? null;
+
+
 
   return (
     <div className="">
       {videos &&
         <MediaBackground video={videos.randomVideo} />
       }
+      {userType === UserCategory.KAKRAN_SUPER_ADMIN ? (
+             <div className="min-h-screen w-full bg-transparent ">
+             {status && <button
+               disabled={isUpdating}
+               onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
+               className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white rounded-lg shadow-lg disabled:opacity-50 transition duration-300 font-medium"
+             >
+               {status === 'inactive' ? 'Activate' : 'Deactivate'}
+             </button>
+             }
+   
+             <div className="bg-black/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
+               <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
+                 id: travelPackageId,
+                 title,
+                 description,
+                 image,
+                 images,
+                 location,
+                 category,
+                 status,
+                 availableSpots,
+                 travelType,
+                 maxTravelers,
+                 dateAvailabilities,
+                 activities
+               }} userType={userType} />
+             </div>
+         </div>
+      ):(
       <div className="">
-      </div>
-      <div className="absolute inset-0 overflow-hidden">
-      </div>
       <div className="backdrop-blur-[4px]  min-h-screen pt-6 md:pt-2">
         <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
           <div className="relative rounded-xl overflow-hidden mb-8 md:mb-12 shadow-2xl h-64 md:h-96 object-cover">
@@ -437,6 +422,9 @@ const SingleTravelPackageDetails = () => {
         initialMedia={selectedMedia}
         onClose={() => setGalleryOpen(false)}
       />
+      </div>
+      )}
+
     </div>
   );
 };

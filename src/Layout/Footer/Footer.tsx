@@ -45,6 +45,16 @@ const Footer: React.FC<FooterProps> = ({
     dispatch(logout());
   };
 
+  const renderLoginDialog = () => (
+    <Dialog open={open} onClose={() => setOpen(false)}>
+      <PasswordlessLoginForm 
+        onVerified={() => {
+          handleClose()
+          // Optional: Add any post-login logic here
+        }} 
+      />
+    </Dialog>
+  );
   const footerStyle: React.CSSProperties = {
     padding: isMobile ? '24px 16px' : '32px 40px',
     background: variant === 'light'
@@ -243,9 +253,7 @@ const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        <Dialog open={open} onClose={handleClose}>
-          <PasswordlessLoginForm onVerified={handleClose} />
-        </Dialog>
+        {renderLoginDialog()}
       </footer>
     </Container>
   );

@@ -5,7 +5,6 @@ import { Info } from 'lucide-react';
 export const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString('en-IN', {
-        weekday: 'short',
         month: 'short',
         day: 'numeric',
         year: 'numeric'
@@ -21,13 +20,13 @@ const formatCurrency = (amount: number): string => {
     }).format(amount);
 };
 
-export const DateAvailabilityDisplay = ({ 
+export const DateAvailabilityDisplay = ({
     dateAvailabilities,
     startDate,
     setPrice,
     setStartDate,
     setEndDate,
-}: { 
+}: {
     dateAvailabilities: DateAvailability[],
     startDate?: number,
     setPrice?: (price: number) => void,
@@ -70,13 +69,13 @@ export const DateAvailabilityDisplay = ({
     };
 
     return (
-        <div className="p-3 sm:p-4 mb-6 sm:mb-8">
+        <div className="p-2 sm:p-2 mb-6 sm:mb-8">
             <div className="flex items-center justify-between">
                 <div className="font-medium text-white ml-1 mb-3 flex items-center">
                     <span className="text-sm sm:text-base">Available Dates</span>
                     <div className="relative ml-2">
-                        <Info 
-                            size={16} 
+                        <Info
+                            size={16}
                             className="text-white cursor-help"
                             onMouseEnter={() => setShowTooltip(true)}
                             onMouseLeave={() => setShowTooltip(false)}
@@ -104,15 +103,14 @@ export const DateAvailabilityDisplay = ({
                         const durationDays = Math.ceil((availability.endDate - availability.startDate) / (60 * 60 * 24));
                         const discount = calculateDiscount(availability.price, availability.originalPrice);
                         const hasPrice = availability.price !== undefined && availability.price !== null;
-                        
+
                         return (
                             <div
                                 key={index}
-                                className={`p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${
-                                    startDate === availability.startDate 
-                                        ? 'bg-blue-500/30 border-2 border-blue-500 shadow-lg shadow-blue-500/20' 
-                                        : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-md hover:-translate-y-0.5'
-                                }`}
+                                className={`p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-300 ${startDate === availability.startDate
+                                    ? 'bg-blue-500/30 border-2 border-blue-500 shadow-lg shadow-blue-500/20'
+                                    : 'bg-white/5 border border-white/10 hover:bg-white/10 hover:shadow-md hover:-translate-y-0.5'
+                                    }`}
                                 onClick={() => {
                                     setStartDate(availability.startDate);
                                     setPrice(availability.price);
@@ -121,7 +119,7 @@ export const DateAvailabilityDisplay = ({
                                 aria-selected={startDate === availability.startDate}
                                 role="option"
                             >
-                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                                <div className="flex flex-row sm:flex-row justify-between ">
                                     <div>
                                         <p className="font-medium text-white text-sm sm:text-base break-words">
                                             {formatDate(availability.startDate)} - {formatDate(availability.endDate)}
@@ -130,8 +128,8 @@ export const DateAvailabilityDisplay = ({
                                             {durationDays} {durationDays === 1 ? 'day' : 'days'}
                                         </p>
                                     </div>
-                                    
-                                    <div className="mt-2 sm:mt-0 text-right">
+
+                                    <div className=" sm:mt-0 text-right">
                                         {hasPrice ? (
                                             <div className="flex flex-wrap items-center justify-end gap-1">
                                                 {discount > 0 && (
@@ -155,27 +153,31 @@ export const DateAvailabilityDisplay = ({
                                         )}
                                     </div>
                                 </div>
-                                
-                                <div className="flex items-center mt-3">
-                                    <div className={`w-2 h-2 rounded-full mr-2 ${status.color}`}></div>
-                                    <p className={`text-xs sm:text-sm ${status.textColor}`}>
-                                        {status.text}
-                                    </p>
-                                </div>
-                                
+
+
+
                                 {availability.availableSpots > 0 && (
                                     <div className="mt-2">
                                         <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2">
-                                            <div 
-                                                className="bg-blue-500 h-1.5 sm:h-2 rounded-full" 
-                                                style={{ 
-                                                    width: `${Math.min(100, (availability.availableSpots / availability.maxTravelers) * 100)}%` 
+                                            <div
+                                                className="bg-blue-500 h-1.5 sm:h-2 rounded-full"
+                                                style={{
+                                                    width: `${Math.min(100, (availability.availableSpots / availability.maxTravelers) * 100)}%`
                                                 }}
                                             ></div>
                                         </div>
-                                        <p className="text-xs text-white/50 mt-1">
-                                            {availability.maxTravelers - availability.availableSpots} of {availability.maxTravelers} spots booked
-                                        </p>
+                                        <div className="flex items-center mt-1 justify-between">
+                                            <div className="flex items-center">
+
+                                                <div className={`w-2 h-2 rounded-full mr-2 ${status.color}`}></div>
+                                                <p className={`text-xs sm:text-sm ${status.textColor}`}>
+                                                    {status.text}
+                                                </p>
+                                            </div>
+                                            <p className="text-xs text-white/50 mt-1">
+                                                {availability.maxTravelers - availability.availableSpots} of {availability.maxTravelers} spots booked
+                                            </p>
+                                        </div>
                                     </div>
                                 )}
                             </div>
