@@ -220,11 +220,12 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
               )}
             </div>
 
-            <div className="px-2 py-3 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
+            <div className="px-2 gap-2 py-3 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
               {activeStep > 0 && (
                 <button
                   onClick={handleBack}
-                  className="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm font-medium hover:bg-gray-600 transition-colors"
+                  
+                  className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
                 >
                   Back
                 </button>
@@ -232,7 +233,7 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
 
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
-                className={`px-4 py-2 bg-blue-500/50 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors ${activeStep === 0 ? 'w-full ml-auto' : ''}`}
+                className={`w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base ${activeStep === 0 ? 'w-full ml-auto' : ''}`}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Continue'}
               </button>
@@ -240,7 +241,7 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
               {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
                 <button
                   onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
-                  className="px-4 py-2 ml-2 bg-blue-500/50 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors"
+                  className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
                 >
                   Pay Now
                 </button>

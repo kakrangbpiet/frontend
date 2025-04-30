@@ -9,8 +9,8 @@ import { selectCategories, selectedTravelPackages, selectedTravelPackagesLoading
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import locationsData from '../../components/Forms/Location.json';
-import { Dialog } from '@mui/material';
 import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
+import FormDialog from '../../components/Registration/FormDailog.tsx';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -340,28 +340,12 @@ const HomePage: React.FC = () => {
             </Button>
           </ButtonGroup>
         </ButtonContainer>
-        <Dialog
-          open={openInquiryDialog}
-          onClose={handleCloseInquiryDialog}
-          fullWidth
-          PaperProps={{
-            style: {
-              backgroundColor: 'transparent',
-              boxShadow: 'none',
-              overflow: 'visible',
-            }
-          }}
-        >
-          <div className=" inset-0 z-50 bg-transparent bg-opacity-100 flex items-center justify-center p-10 backdrop-blur-3xl">
-            {/* change 3xl for more blur for minimum use lg/xl  */}
-            <div className="relative w-full max-w-lg max-h-[90vh] overflow-auto rounded-xl">
-
-              <TravelInquiryForm
-                isCustomForm={true}
-              />
-            </div>
-          </div>
-        </Dialog>
+        <FormDialog
+  open={openInquiryDialog}
+  onClose={handleCloseInquiryDialog}
+>
+  <TravelInquiryForm isCustomForm={true} />
+</FormDialog>
       </ContentOverlay>
 
 

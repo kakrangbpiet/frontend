@@ -7,7 +7,6 @@ import { fetchSingleTravelPackageApi, fetchTravelItemRandomVideoApi, fetchTravel
 import { ITravelPackage, selectFieldLoading, selectPackageDates, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
-import Registration from '../../components/Registration';
 import { MediaBackground } from './bgRenderer';
 import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay } from './DateAvailability';
@@ -16,6 +15,14 @@ import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
 import { parseHTML, renderCustomStyles } from '../../scripts/handleTravelItemcss';
 import { Skeleton } from '@mui/material';
 import styled from 'styled-components';
+import {
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
+import TravelInquiryForm from '../../components/Registration/Stepper';
+import FormDialog from '../../components/Registration/FormDailog';
+
+
 
 const StyledVideo = styled.video`
   width: 100%;
@@ -164,9 +171,9 @@ const SingleTravelPackageDetails = () => {
 
   return (
     <div className="">
-        {videos &&
-          <MediaBackground video={videos.randomVideo} />
-        }
+      {videos &&
+        <MediaBackground video={videos.randomVideo} />
+      }
       <div className="">
       </div>
       <div className="absolute inset-0 overflow-hidden">
@@ -199,14 +206,14 @@ const SingleTravelPackageDetails = () => {
           </div>
 
           {/* Tabs Navigation - Scrollable on mobile */}
-          <div className="flex mb-6 md:mb-8 overflow-x-auto  backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg bg-black/40">
+          <div className="flex mb-6 md:mb-8 overflow-x-auto bg-white/10 backdrop-blur-md rounded-xl p-1.5 border border-white/20 shadow-lg">
             {['overview', 'photos', 'Ask Ai', 'dates'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 md:px-6 md:py-3 text-white font-medium rounded-lg transition flex-none text-sm md:text-base whitespace-nowrap ${activeTab === tab
-                  ? 'bg-black/40 shadow-md border border-white/30'
-                  : 'hover:bg-black/10 border border-transparent'
+                  ? 'bg-white/20 shadow-md border border-white/30'
+                  : 'hover:bg-white/10 border border-transparent'
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -214,10 +221,11 @@ const SingleTravelPackageDetails = () => {
             ))}
           </div>
 
-          <div className="mb-8 md:mb-12 flex flex-col lg:flex-row bg-black/40 border border-white/20 rounded-xl" >
+          <div className="mb-8 md:mb-12 flex flex-col lg:flex-row">
+            <div className="w-full lg:w-2/3 lg:pr-8">
               {activeTab === 'overview' && (
-                               <div className="bg-black/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
-  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
+                <div className="bg-black/10 backdrop-blur-md rounded-xl p-4 md:p-8 text-white border border-white/20 shadow-xl">
+                  <h2 className="text-xl md:text-2xl font-semibold text-emerald-300 mb-4">
                     About {title}
                   </h2>
                   {isDescriptionLoading && !description ? (
@@ -391,33 +399,26 @@ const SingleTravelPackageDetails = () => {
                 </div>
               )}
             </div>
-
             {/* Hide travel inquiry form on mobile - only show in desktop */}
             <div className="hidden lg:block lg:w-1/3">
-              <Registration packageId={travelPackageId || ''} packageTitle={travelPackageTitle} />
+              <TravelInquiryForm packageId={travelPackageId || ''} packageTitle={travelPackageTitle} />
             </div>
+
           </div>
+
+        </div>
 
       </div>
 
       {/* Mobile Form Modal  */}
-      {showMobileForm && (
-        <div className="fixed inset-0 z-50 bg-transparent bg-opacity-100 flex items-center justify-center p-2 backdrop-blur-3xl">
-          {/* change 3xl for more blur for minimum use lg/xl  */}
-          <div className="relative w-full max-w-lg max-h-[90vh] overflow-auto rounded-xl">
-            <button
-              onClick={toggleMobileForm}
-              className="absolute top-5 right-2 z-10 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full p-2 transition-all duration-300"
-              aria-label="Close form"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <Registration packageId={travelPackageId || ''} packageTitle={title} />
-          </div>
-        </div>
-      )}
+      <FormDialog
+        open={showMobileForm}
+        onClose={toggleMobileForm}
+        fullScreen={useMediaQuery(useTheme().breakpoints.down('sm'))}
+        maxWidth="md"
+      >
+        <TravelInquiryForm packageId={travelPackageId || ''} packageTitle={title} />
+      </FormDialog>
       {/* Mobile Book Now Button - fixed at bottom */}
       {status === 'active' && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent z-30">
