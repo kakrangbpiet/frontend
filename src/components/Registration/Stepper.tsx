@@ -17,6 +17,7 @@ import { formatDate } from '../../page/SinglePackage/DateAvailability';
 import LocationDetails from './LocationDetails';
 import PersonalDetails from './PersonalDetails';
 import ContactDetails from './ContactDetails';
+import RazorpayPaymentButton from '../Payment/RazorpayPaymentButton';
 
 const inquirySteps = [
   'Destination',
@@ -230,6 +231,22 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
                   Back
                 </button>
               )}
+
+              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
+                <RazorpayPaymentButton
+                  inquiryId={inquiryData.packageId || ''}
+                  amount={inquiryData.price ? parseFloat(inquiryData.price) * 100 : 0}
+                  onSuccess={(paymentId) => {
+                    // Handle successful payment
+                    console.log('Payment successful:', paymentId);
+                    submitTravelInquiry(); // Submit the inquiry after payment
+                  }}
+                  onError={(error) => {
+                    console.error('Payment failed:', error);
+                    alert('Payment failed. Please try again.');
+                  }}
+                />
+              }
 
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
