@@ -29,15 +29,13 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
           value={inquiryData.name}
           onChange={(e) => handleChange('name', e.target.value)}
           disabled={!shouldShowRegister && isRegister}
-          className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+          className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
              font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
              transition-all duration-200 outline-none"
           placeholder="Enter your full name"
           required
         />
-        {inquiryData.name && (
-          <p className="text-xs text-gray-400">Booking name</p>
-        )}
+       
       </div>
 
       {/* Passenger count input */}
@@ -52,7 +50,7 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
             value={inquiryData.passengerCount}
             onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 1)}
             disabled={!shouldShowRegister && isRegister}
-            className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+            className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
                font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
                transition-all duration-200 outline-none"
             placeholder="Enter number of passengers"

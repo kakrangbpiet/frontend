@@ -103,7 +103,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           value={inquiryData.email}
           onChange={(e) => handleChange('email', e.target.value)}
           disabled={!shouldShowRegister && isRegister}
-          className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+          className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
           font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
           transition-all duration-200 outline-none"
           placeholder="your.email@example.com"
@@ -128,7 +128,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 value={phoneInput}
                 onChange={handlePhoneChange}
                 disabled={showOtpField || (!shouldShowRegister && isRegister)}
-                className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+                className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
                 font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
                 transition-all duration-200 outline-none"
                 placeholder="1234567890"
@@ -178,7 +178,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     value={otpInput}
                     onChange={handleOtpChange}
                     disabled={!shouldShowRegister && isRegister}
-                    className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+                    className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
                     font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
                     transition-all duration-200 outline-none"
                     placeholder="Enter 6-digit code"
@@ -206,7 +206,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     onClick={handleEditNumber}
                     disabled={!shouldShowRegister && isRegister}
                     className="px-6 py-2.5 rounded-lg bg-gray-100 border border-gray-300 
-                    text-gray-700 font-medium hover:bg-gray-200 focus:outline-none 
+                    text-white font-medium hover:bg-gray-200 focus:outline-none 
                     focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                   >
                     Edit Number
