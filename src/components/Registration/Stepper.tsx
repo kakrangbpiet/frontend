@@ -250,19 +250,11 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
 
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
-                className={`w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base ${activeStep === 0 ? 'w-full ml-auto' : ''}`}
+                className={`w-full py-3 bg-gradient-to-r  text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base ${activeStep === 0 ? 'w-full ml-auto' : ''}`}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Continue'}
               </button>
               
-              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
-                <button
-                  onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
-                  className="w-full py-3 bg-gradient-to-r   hover:to-blue-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
-                >
-                  Pay Now
-                </button>
-              }
             </div>
           </>
         )}

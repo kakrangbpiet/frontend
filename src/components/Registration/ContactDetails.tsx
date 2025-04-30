@@ -109,9 +109,6 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
           placeholder="your.email@example.com"
           required
         />
-        {inquiryData.email && (
-          <p className="text-xs text-gray-400">Booking confirmation email</p>
-        )}
       </div>
       
       {/* Phone Verification Flow */}

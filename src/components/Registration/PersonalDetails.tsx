@@ -77,7 +77,7 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
             onChange={(e) => handleChange('specialRequests', e.target.value)}
             disabled={!shouldShowRegister && isRegister}
             rows={3}
-            className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+            className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
                font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
                transition-all duration-200 outline-none resize-y"
             placeholder="E.g., dietary restrictions, accessibility needs, etc."

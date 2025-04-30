@@ -73,10 +73,9 @@ const RazorpayPaymentButton = ({
     <button
       onClick={handlePayment}
       disabled={loading || !inquiryId}
-      className={`px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors ${
-        loading ? 'opacity-70 cursor-not-allowed' : ''
-      }`}
+      className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
     >
+      
       {loading ? 'Processing...' : buttonText}
     </button>
   );
