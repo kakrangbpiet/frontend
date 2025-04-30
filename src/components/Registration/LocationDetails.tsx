@@ -43,13 +43,14 @@ function LocationDetails({
     handleChange('address', address);
   };
 
-  // Custom MUI styles
+  // Custom MUI styles - more compact
   const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
       backgroundColor: 'rgba(245, 243, 255, 0.4)', 
       backdropFilter: 'blur(10px)', 
       WebkitBackdropFilter: 'blur(10px)', 
-      borderRadius: '0.5rem',
+      borderRadius: '0.375rem',
+      height: '2.75rem',
       '& fieldset': {
         borderColor: 'rgba(209, 213, 219, 1)',
       },
@@ -63,15 +64,18 @@ function LocationDetails({
     '& input': {
       fontWeight: '400',
       color: '#000000',
+      padding: '0.5rem 0.75rem',
+      fontSize: '0.875rem',
     },
+    marginTop: '0.375rem',
+    marginBottom: '0.375rem',
   };
 
   return (
-    <Box sx={{}} className="space-y-6">
+    <Box sx={{}} className="space-y-3">
       {/* Current Location */}
-      <div className='m-0'>
-  
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+      <div>
+        <label htmlFor="address" className="block text-xs font-medium text-gray-200 mb-1">
           Your Current Location
         </label>
         <TextField
@@ -82,18 +86,18 @@ function LocationDetails({
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <PlaceIcon className="text-gray-500" />
+                <PlaceIcon className="text-gray-500" sx={{ fontSize: '1rem' }} />
               </InputAdornment>
             ),
             readOnly: true,
           }}
-          margin="normal"
+          size="small"
           required
           disabled={!shouldShowRegister && isRegister}
           sx={textFieldStyle}
         />
         {inquiryData.address && (
-          <p className="mt-0 text-xs text-gray-100">We'll use this for pickup arrangements</p>
+          <p className="mt-0 text-xs text-gray-100">Pickup location</p>
         )}
       </div>
 
@@ -102,6 +106,9 @@ function LocationDetails({
           {/* Destination */}
           {('destination' in inquiryData) && (
             <div>
+              <label htmlFor="destination" className="block text-xs font-medium text-gray-200 mb-1">
+                Destination
+              </label>
               {inquiryData.destination && !isCustomForm ? (
                 <TextField
                   fullWidth
@@ -110,12 +117,12 @@ function LocationDetails({
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <PlaceIcon className="text-gray-500" />
+                        <PlaceIcon className="text-gray-500" sx={{ fontSize: '1rem' }} />
                       </InputAdornment>
                     ),
                     readOnly: true,
                   }}
-                  margin="normal"
+                  size="small"
                   sx={textFieldStyle}
                   disabled={true}
                 />
@@ -140,17 +147,17 @@ function LocationDetails({
                             ...params.InputProps,
                             startAdornment: (
                               <InputAdornment position="start">
-                                <PlaceIcon className="text-gray-500" />
+                                <PlaceIcon className="text-gray-500" sx={{ fontSize: '1rem' }} />
                               </InputAdornment>
                             ),
                           }}
-                          margin="normal"
+                          size="small"
                           required
                           sx={textFieldStyle}
                         />
                       )}
                     />
-                    <p className="mt-1 text-xs text-gray-100">Select from our available destinations</p>
+                    <p className="text-xs text-gray-100">Select destination</p>
                   </div>
                 )
               )}
@@ -159,7 +166,10 @@ function LocationDetails({
 
           {/* Date Selection */}
           {'startDate' in inquiryData && 'endDate' in inquiryData && (
-            <div>
+            <div className="mt-2">
+              <label htmlFor="dates" className="block text-xs font-medium text-gray-200 mb-1">
+                Travel Dates
+              </label>
               <DateSelectionTabs
                 tripType={('tripType' in inquiryData ? inquiryData.tripType : 'pre-planned') as 'pre-planned' | 'custom'}
                 setTripType={(type) => handleChange('tripType', type)}
@@ -172,10 +182,10 @@ function LocationDetails({
                 isCustomForm={isCustomForm}
               />
               {inquiryData.startDate && inquiryData.endDate && (
-                <p className="mt-1 text-xs text-gray-100">
+                <p className="text-xs text-gray-100">
                   {inquiryData.tripType === 'custom' ? 
-                    "Your custom dates have been selected" : 
-                    "Pre-planned itinerary dates selected"}
+                    "Custom dates" : 
+                    "Pre-planned itinerary"}
                 </p>
               )}
             </div>

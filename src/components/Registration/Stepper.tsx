@@ -13,16 +13,16 @@ import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlic
 import { accountStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
 import { formatDate } from '../../page/SinglePackage/DateAvailability';
 
-// Import sprted to view
+// Import components
 import LocationDetails from './LocationDetails';
 import PersonalDetails from './PersonalDetails';
 import ContactDetails from './ContactDetails';
 import RazorpayPaymentButton from '../Payment/RazorpayPaymentButton';
 
 const inquirySteps = [
-  'Travel Destination',
-  'Personal Information',
-  'Contact Details'
+  'Destination',
+  'Personal Info',
+  'Contact'
 ];
 
 // Update the getStepContent function
@@ -42,7 +42,7 @@ function getStepContent(
           inquiryData={inquiryData}
           setInquiryData={setInquiryData}
           dateAvailabilities={dateAvailabilities}
-          titles={titles} // Pass titles to LocationDetails
+          titles={titles}
         />
       );
     case 1:
@@ -54,18 +54,15 @@ function getStepContent(
   }
 }
 
-// In the TravelInquiryForm component, update the render section:
-
-
 function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageId?: string, packageTitle?: string, isCustomForm?: boolean }) {
   const dispatch = useDispatch<AppDispatch>();
-
   const [activeStep, setActiveStep] = useState(0);
   const auth = useSelector(isAuthenticated);
   const token = useSelector(selectToken);
   const selectedPackage = useSelector(useSelectedTravelPackage(packageId));
   const navigate = useNavigate();
   const titles = useSelector(selectTitles);
+  
   const getUserDetailsFromToken = (token: string | null): { name?: string, email?: string, phoneNumber?: string } => {
     if (!token) return {};
     try {
@@ -182,20 +179,16 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
   };
 
   return (
-    <div className="">
-      <div className="bg-transparent-900/90 backdrop-blur-md rounded-xl  overflow-y-auto overflow-hidden border border-white/20 shadow-2xl">
-        <div className="bg-transparent-800/80 p-4 border-b border-gray-700">
-          <h2 className="text-xl font-semibold text-white text-center mb-4">Travel Inquiry Form</h2>
+    <div>
+      <div className="bg-transparent-900/90 backdrop-blur-md rounded-lg overflow-hidden border border-white/20 shadow-lg">
+        <div className="bg-transparent-800/80 p-3 border-b border-gray-700">
+          <h2 className="text-lg font-semibold text-white text-center mb-2">Travel Inquiry</h2>
           <div className="flex items-center justify-between mb-1">
-            <div className={`text-xs font-medium ${activeStep === 0 ? 'text-blue-400' : 'text-gray-400'}`}>
-              {inquirySteps[0]}
-            </div>
-            <div className={`text-xs font-medium ${activeStep === 1 ? 'text-blue-400' : 'text-gray-400'}`}>
-              {inquirySteps[1]}
-            </div>
-            <div className={`text-xs font-medium ${activeStep === 2 ? 'text-blue-400' : 'text-gray-400'}`}>
-              {inquirySteps[2]}
-            </div>
+            {inquirySteps.map((step, index) => (
+              <div key={index} className={`text-xs font-medium ${activeStep === index ? 'text-blue-400' : 'text-gray-400'}`}>
+                {step}
+              </div>
+            ))}
           </div>
           <div className="h-1 w-full bg-gray-700 rounded-full">
             <div
@@ -206,18 +199,18 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
         </div>
 
         {activeStep === inquirySteps.length ? (
-          <div className="text-center py-2 bg-gray-800/80 backdrop-blur-md p-6">
-            <h3 className="text-lg font-semibold mb-6 text-white">Thank you for your inquiry!</h3>
+          <div className="text-center py-2 bg-gray-800/80 backdrop-blur-md p-4">
+            <h3 className="text-base font-semibold mb-4 text-white">Thank you for your inquiry!</h3>
             <button
               onClick={navigateToProfile}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition transform hover:-translate-y-0.5"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow transition transform hover:-translate-y-0.5"
             >
               View Updates
             </button>
           </div>
         ) : (
           <>
-            <div className="p-5 bg-transaprent-100/10 backdrop-blur-md min-h-[300px]">
+            <div className="p-3 bg-transparent-100/10 backdrop-blur-md min-h-[250px]">
               {getStepContent(
                 activeStep,
                 inquiryData,
@@ -228,11 +221,12 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
               )}
             </div>
 
-            <div className="px-2 py-4 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
+            <div className="px-2 gap-2 py-3 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
               {activeStep > 0 && (
                 <button
                   onClick={handleBack}
-                  className="px-5 py-3 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors"
+                  
+                  className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
                 >
                   Back
                 </button>
@@ -256,11 +250,19 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
 
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}
-                className={`px-5 py-3 bg-blue-500/50 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors ${activeStep === 0 ? 'w-full ml-auto' : ''
-                  }`}
+                className={`w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base ${activeStep === 0 ? 'w-full ml-auto' : ''}`}
               >
                 {activeStep === inquirySteps.length - 1 ? 'Submit Inquiry' : 'Continue'}
               </button>
+              
+              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
+                <button
+                  onClick={() => setInquiryData({ ...inquiryData, tripType: 'custom' })}
+                  className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
+                >
+                  Pay Now
+                </button>
+              }
             </div>
           </>
         )}

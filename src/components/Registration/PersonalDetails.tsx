@@ -8,9 +8,6 @@ interface PersonalDetailsProps {
   shouldShowRegister?: boolean;
 }
 
-/**
- * Component for collecting personal details and passenger count
- */
 function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRegister }: PersonalDetailsProps) {
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
@@ -20,84 +17,75 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
   };
 
   return (
-    <Box sx={{ px: 2, mt: 2 }}>
+    <Box sx={{ mt: 1 }} className="space-y-3">
       {/* Name input */}
-      <div className="mb-1">
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+      <div>
+        <label htmlFor="name" className="block text-xs font-medium text-gray-200 mb-1">
           Your Name
         </label>
+        <input
+          type="text"
+          id="name"
+          value={inquiryData.name}
+          onChange={(e) => handleChange('name', e.target.value)}
+          disabled={!shouldShowRegister && isRegister}
+          className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+             font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+             transition-all duration-200 outline-none"
+          placeholder="Enter your full name"
+          required
+        />
         {inquiryData.name && (
-          <p className="text-xs text-gray-500 dark:text-gray-400">We'll use this name for your booking</p>
+          <p className="text-xs text-gray-400">Booking name</p>
         )}
       </div>
-      <input
-        type="text"
-        id="name"
-        value={inquiryData.name}
-        onChange={(e) => handleChange('name', e.target.value)}
-        disabled={!shouldShowRegister && isRegister}
-        className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
-             text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-             focus:ring-blue-200 transition-all duration-200 outline-none "
-        placeholder="Enter your full name"
-        required
-      />
 
       {/* Passenger count input */}
       {!isRegister && (
-        <>
-          <div className="mb-1 mt-4">
-            <label htmlFor="passengers" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-              Number of Passengers
-            </label>
-            {inquiryData.passengerCount && (
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {inquiryData.passengerCount} {inquiryData.passengerCount === 1 ? 'person' : 'people'} will be traveling
-              </p>
-            )}
-          </div>
+        <div>
+          <label htmlFor="passengers" className="block text-xs font-medium text-gray-200 mb-1">
+            Number of Passengers
+          </label>
           <input
             type="number"
             id="passengerCount"
             value={inquiryData.passengerCount}
-            onChange={(e) => handleChange('passengerCount', e.target.value)}
+            onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 1)}
             disabled={!shouldShowRegister && isRegister}
-            className="w-full px-4 py-3 rounded-lg text-white border border-gray-300 
-             text-gray-800 font-medium focus:border-blue-500 focus:ring-2 
-             focus:ring-blue-200 transition-all duration-200 outline-none "
+            className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+               font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+               transition-all duration-200 outline-none"
             placeholder="Enter number of passengers"
+            min="1"
             required
           />
-        </>
+          {inquiryData.passengerCount && (
+            <p className="text-xs text-gray-400">
+              {inquiryData.passengerCount} {inquiryData.passengerCount === 1 ? 'person' : 'people'} traveling
+            </p>
+          )}
+        </div>
       )}
 
       {/* Special requests input */}
       {!isRegister && (
-        <>
-          <div className="mb-1 mt-4">
-            <label htmlFor="requests" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-              Special Requests
-            </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Let us know if you have any special requirements
-            </p>
-          </div>
-
-
+        <div>
+          <label htmlFor="requests" className="block text-xs font-medium text-gray-200 mb-1">
+            Special Requests
+          </label>
           <textarea
             id="specialRequests"
-            value={inquiryData.specialRequests}  // Changed from email to specialRequests
+            value={inquiryData.specialRequests}
             onChange={(e) => handleChange('specialRequests', e.target.value)}
             disabled={!shouldShowRegister && isRegister}
-            rows={4}  // Number of visible rows
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 
-           text-white font-medium focus:border-blue-500 focus:ring-2 
-           focus:ring-blue-200 transition-all duration-200 outline-none
-           resize-y"  // Allows vertical resizing
+            rows={3}
+            className="w-full px-3 py-2 text-sm rounded-md text-gray-800 border border-gray-300 
+               font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+               transition-all duration-200 outline-none resize-y"
             placeholder="E.g., dietary restrictions, accessibility needs, etc."
-            required
           />
-        </>
+          <p className="text-xs text-gray-400">Optional: Let us know if you have any special requirements</p>
+        </div>
       )}
     </Box>
   );
