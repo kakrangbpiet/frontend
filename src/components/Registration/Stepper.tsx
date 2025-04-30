@@ -184,7 +184,7 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
         <div className="bg-transparent-800/80 p-3 border-b border-gray-700">
           <h2 className="text-lg font-semibold text-white text-center mb-2">Travel Inquiry</h2>
           <div className="flex items-center justify-between mb-1">
-            {inquirySteps.map((step, index) => (
+            {inquirySteps?.map((step, index) => (
               <div key={index} className={`text-xs font-medium ${activeStep === index ? 'text-blue-400' : 'text-gray-400'}`}>
                 {step}
               </div>

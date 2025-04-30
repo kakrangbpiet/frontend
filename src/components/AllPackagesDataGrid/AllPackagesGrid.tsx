@@ -45,9 +45,18 @@ export default function PackagesVerification({
       location: currentLocation,
       page: paginationModel.page + 1,
       pageSize: paginationModel.pageSize,
-      select:"id,title,location,category,image",
+      select:"id,title,location,category",
     };
     dispatch(fetchTravelPackagesApi(params));
+    const paramsWithImage = {
+      status: toggleCategoryType === "active" ? "active" : undefined,
+      category: currentCategory,
+      location: currentLocation,
+      page: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
+      select:"id,title,image",
+    };
+    dispatch(fetchTravelPackagesApi(paramsWithImage));
   }, [dispatch, toggleCategoryType, paginationModel, currentCategory, currentLocation]);
 
   // const handlePaginationModelChange = (newModel) => {

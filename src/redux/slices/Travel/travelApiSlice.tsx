@@ -148,7 +148,7 @@ export const fetchSingleTravelPackageApi = createAsyncThunk(
 
 export const addTravelPackageApi = createAsyncThunk(
   'travelCollection/addItem',
-  async ({ newTravelPackageData, formEvent, clearForm, setIsSaving }: { newTravelPackageData: ITravelPackage, formEvent: any, clearForm: any, setIsSaving: any }, { rejectWithValue, dispatch }) => {
+  async ({ newTravelPackageData, formEvent,  setIsSaving }: { newTravelPackageData: ITravelPackage, formEvent: any,  setIsSaving: any }, { rejectWithValue, dispatch }) => {
     try {
       let response;
 
@@ -166,7 +166,6 @@ export const addTravelPackageApi = createAsyncThunk(
           endpointId: "ADD_TRAVEL_ITEM",
           data: newTravelPackageData,
         });
-        clearForm();
         dispatch(addItem(response));
       }
 
@@ -459,7 +458,7 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
 
       const videosData: IVideosResponse = {
         videoCount: response.data.videoCount,
-        allVideos: response.data.allVideos.map((video: any) => ({
+        allVideos: response.data.allVideos?.map((video: any) => ({
           id: video.id,
           base64Data: video.base64Data
         }))

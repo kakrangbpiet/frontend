@@ -51,7 +51,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
         <div className="hover-sw-nav hover-sw-2">
       
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {travelPackages.map((pkg: ITravelPackage) => (
+              {travelPackages?.map((pkg: ITravelPackage) => (
                 <div key={pkg.id} className="w-full">
                   <div
                     className="cursor-pointer relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg transition-all duration-300 h-full hover:transform hover:-translate-y-2 hover:shadow-xl"
@@ -149,7 +149,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
             </div>
               {loading &&
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {[...Array(4)].map((_, index) => (
+                  {[...Array(4)]?.map((_, index) => (
                     <div key={index} className="w-full">
                       <Skeleton variant="rectangular" height={200} />
                       <Skeleton variant="text" width="80%" />

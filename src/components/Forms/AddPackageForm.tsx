@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, TextField } from '@mui/material';
 // import 'react-quill/dist/quill.snow.css';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
 import { AppDispatch } from '../../redux/store';
-import { DateAvailability, ITravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { DateAvailability, ITravelPackage,  useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
 import CustomTextField from '../CustomTextField';
-import { addTravelPackageApi, } from '../../redux/slices/Travel/travelApiSlice';
+import { addTravelPackageApi, fetchSingleTravelPackageApi, fetchTravelPackageDatesApi, } from '../../redux/slices/Travel/travelApiSlice';
 import locationsData from './Location.json';
 import AddIcon from '@mui/icons-material/Add';  // Fixed import
 import UnixDateInput from './DatePicker';
 import WYSIWYGEditor from '../WYSWYGEditor';
 
 interface AddTravelPackageProps {
-  itemInfo?: ITravelPackage;
+  packageId?: string;
   formEvent: string;
   userType: string;
 }
@@ -35,12 +35,12 @@ const newErrors: ErrorMessages = {
 const statusOptions = ['active', 'inactive', 'sold-out', 'coming-soon'];
 const travelTypeOptions = ['group', 'private', 'self-guided'];
 
-const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formEvent }) => {
+const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, formEvent }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const packageData = useSelector(useSelectedTravelPackage(packageId));
+  
   const [formData, setFormData] = useState<ITravelPackage>(
-    itemInfo
-      ? itemInfo
-      : {
+       {
         id: '',
         title: '',
         image: '',
@@ -57,50 +57,33 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ itemInfo, formE
       }
   );
 
-  useEffect(() => {
-    if (itemInfo) {
-      setFormData(itemInfo);
-      setDescription(itemInfo.description || "");
-      setDateAvailabilities(itemInfo.dateAvailabilities || []);
-      setActivities(itemInfo.activities || []);
-    }
-  }, [itemInfo]);
-
-
-  const [description, setDescription] = useState(itemInfo ? itemInfo.description : "");
+  const [description, setDescription] = useState(packageData ? packageData.description : "");
 
   const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
-    itemInfo?.dateAvailabilities || []
+    packageData?.dateAvailabilities || []
   );
 
-  const [activities, setActivities] = useState<string[]>(itemInfo?.activities || []);
+  const [activities, setActivities] = useState<string[]>(packageData?.activities || []);
   const [newActivity, setNewActivity] = useState('');
 
 
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>(newErrors);
 
-  const clearForm = () => {
-    setFormData({
-      id: '',
-      title: '',
-      image: '',
-      images: [],
-      videos: [],
-      location: '',
-      category: '',
-      status: 'active',
-      maxTravelers: undefined,
-      availableSpots: undefined,
-      travelType: undefined,
-      dateAvailabilities: [],
-      activities: []
-    });
-    setActivities([]);
-    setDescription('');
-    setErrors(newErrors);
-  };
-console.log(itemInfo?.videos);
+  useEffect(() => {
+    if (packageId) {
+      dispatch(fetchSingleTravelPackageApi({ itemId: packageId }));
+      dispatch(fetchTravelPackageDatesApi({ packageId }));
+    }
+  }, [packageId, dispatch]);
+  // Update form data when packageData changes
+  useEffect(() => {
+    if (packageData) {
+      setFormData(packageData);
+      setDescription(packageData.description || "");
+      setActivities(packageData.activities || []);
+    }
+  }, [packageData]);
 
   const handleDescriptionChange = (value: string) => {
     setDescription(value);
@@ -175,10 +158,9 @@ console.log(itemInfo?.videos);
             description,
             activities: activities,
             dateAvailabilities: dateAvailabilities.length > 0 ? dateAvailabilities : undefined,
-            id: itemInfo?.id || '',
+            id: packageId || '',
           },
           formEvent,
-          clearForm,
           setIsSaving,
         })
       );
@@ -214,11 +196,11 @@ console.log(itemInfo?.videos);
 
   const areAllFieldsFilled = () => {
     return (
-      formData.title.trim() &&
-      formData.description.trim() &&
-      formData.location.trim() &&
-      formData.category.trim() &&
-      formData.image.trim()
+      formData?.title?.trim() &&
+      formData?.description?.trim() &&
+      formData?.location?.trim() &&
+      formData?.category?.trim() &&
+      formData?.image?.trim()
     );
   };
 
@@ -242,18 +224,18 @@ console.log(itemInfo?.videos);
         <Grid container spacing={2}>
           {/* Title - full width */}
           <Grid size={{ xs: 12, md: 12 }}>
-            <Typography variant="h6">Title</Typography>
-            <CustomTextField
-              id="title"
-              type="text"
-              label="Title"
-              value={formData.title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'title')}
-              placeholder="Enter title"
-              error={errors.title}
-              isError={!!errors.title}
-              fullWidth
-            />
+          <Typography variant="h6">Title</Typography>
+              <CustomTextField
+                id="title"
+                type="text"
+                label="Title"
+                value={formData.title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'title')}
+                placeholder="Enter title"
+                error={errors.title}
+                isError={!!errors.title}
+                fullWidth
+              />
           </Grid>
 
 
@@ -305,7 +287,7 @@ console.log(itemInfo?.videos);
                 <MenuItem value="" disabled>
                   Select Location
                 </MenuItem>
-                {locationsData.locations.map((location) => (
+                {locationsData.locations?.map((location) => (
                   <MenuItem key={location.value} value={location.value}>
                     {location.label}
                   </MenuItem>
@@ -342,7 +324,7 @@ console.log(itemInfo?.videos);
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
                 displayEmpty
               >
-                {statusOptions.map((option) => (
+                {statusOptions?.map((option) => (
                   <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
@@ -361,7 +343,7 @@ console.log(itemInfo?.videos);
                 <MenuItem value="" disabled>
                   Select Travel Type
                 </MenuItem>
-                {travelTypeOptions.map((option) => (
+                {travelTypeOptions?.map((option) => (
                   <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
@@ -474,7 +456,7 @@ console.log(itemInfo?.videos);
               uploadFormat="BASE64"
             />
             <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-              {formData?.videos?.map((video, index) => (
+              {formData?.videos?.length >0 && formData?.videos?.map((video, index) => (
                 <Box key={index} position="relative">
                   <img
                     src={`data:video/mp4;base64,${video}`}
@@ -522,7 +504,7 @@ console.log(itemInfo?.videos);
               </Button>
             </Box>
 
-            {activities.map((activity, index) => (
+            {activities?.map((activity, index) => (
               <Box key={index} sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -554,7 +536,7 @@ console.log(itemInfo?.videos);
               fullWidth
               size="large"
             >
-              {isSaving ? 'Saving...' : itemInfo ? 'Update Package' : 'Create Package'}
+              {isSaving ? 'Saving...' : packageId ? 'Update Package' : 'Create Package'}
             </Button>
           </Grid>
         </Grid>

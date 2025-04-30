@@ -54,7 +54,7 @@ const TextTab = ({ messages }: { messages: any[] }) => {
     <Box sx={{
       padding: "20px 2px"
     }}>
-      {messages.map((message: ChatMessage, index: number) => (
+      {messages?.map((message: ChatMessage, index: number) => (
         <Box
           key={index}
           sx={{

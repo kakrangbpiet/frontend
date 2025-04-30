@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
 import { selectUserType } from '../../redux/slices/login/authSlice';
-import { fetchSingleTravelPackageApi, fetchTravelItemRandomVideoApi, fetchTravelItemVideosApi, fetchTravelPackageDatesApi, updateTravelPackageStatus } from '../../redux/slices/Travel/travelApiSlice';
+import { fetchSingleTravelPackageApi, fetchTravelItemRandomVideoApi, fetchTravelItemVideosApi, fetchTravelPackageDatesApi } from '../../redux/slices/Travel/travelApiSlice';
 import { ITravelPackage, selectFieldLoading, selectPackageDates, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
-import { TravelPackageStatus, UserCategory } from '../../Datatypes/Enums/UserEnums';
+import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import AiPromptGenerator from '../../components/AiPrompt/AiPrompt';
 import { MediaBackground } from './bgRenderer';
-import AddTravelPackageForm from '../../components/Forms/AddPackageForm';
 import { DateAvailabilityDisplay } from './DateAvailability';
 import FullScreenGallery from './FullScreenGallery';
 import { setActiveHistory } from '../../redux/slices/AI/AiSlice';
@@ -37,7 +36,6 @@ const SingleTravelPackageDetails = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [isUpdating, setIsUpdating] = useState(false);
   const userType = useSelector(selectUserType);
 
   const isDescriptionLoading = useSelector(selectFieldLoading('description'));
@@ -51,7 +49,11 @@ const SingleTravelPackageDetails = () => {
     dispatch(fetchTravelItemRandomVideoApi({ itemId: travelPackageId }));
     dispatch(setActiveHistory(travelPackageId))
   }, [dispatch]);
-
+    useEffect(() => {
+      if(userType === UserCategory.KAKRAN_SUPER_ADMIN) {
+        navigate(`/addTravelPackage/${travelPackageId}`); 
+      }
+    }, [dispatch, userType, travelPackageId, navigate]);
   // Staggered loading pattern
   useEffect(() => {
     if (userType  && userType === UserCategory.KAKRAN_SUPER_ADMIN) {
@@ -89,22 +91,6 @@ const SingleTravelPackageDetails = () => {
     navigate("/");
   };
 
-  const approveTravelPackage = () => {
-    (dispatch as AppDispatch)(updateTravelPackageStatus({
-      itemId: travelPackageId,
-      setIsUpdating,
-      status: TravelPackageStatus.Active
-    }));
-  };
-
-  const pauseTravelPackage = () => {
-    (dispatch as AppDispatch)(updateTravelPackageStatus({
-      setIsUpdating,
-      itemId: travelPackageId,
-      status: TravelPackageStatus.InActive
-    }));
-  };
-
   const toggleMobileForm = () => {
     setShowMobileForm(!showMobileForm);
   };
@@ -117,12 +103,7 @@ const SingleTravelPackageDetails = () => {
   const images = selectedTravelPackage?.images ?? [image];
   const videos = selectedTravelPackage?.videos ?? [];
   const title = selectedTravelPackage?.title ?? travelPackageTitle ?? '';
-  const location = selectedTravelPackage?.location ?? '';
-  const category = selectedTravelPackage?.category ?? '';
   const status = selectedTravelPackage?.status ?? 'inactive';
-  const availableSpots = selectedTravelPackage?.availableSpots ?? 0;
-  const travelType = selectedTravelPackage?.travelType ?? 'group';
-  const maxTravelers = selectedTravelPackage?.maxTravelers ?? 0;
   const activities = selectedTravelPackage?.activities ?? null;
 
 
@@ -132,36 +113,6 @@ const SingleTravelPackageDetails = () => {
       {videos &&
         <MediaBackground video={videos.randomVideo} />
       }
-      {userType === UserCategory.KAKRAN_SUPER_ADMIN ? (
-             <div className="min-h-screen w-full bg-transparent ">
-             {status && <button
-               disabled={isUpdating}
-               onClick={status === 'inactive' ? approveTravelPackage : pauseTravelPackage}
-               className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white rounded-lg shadow-lg disabled:opacity-50 transition duration-300 font-medium"
-             >
-               {status === 'inactive' ? 'Activate' : 'Deactivate'}
-             </button>
-             }
-   
-             <div className="bg-black/10 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-white/20">
-               <AddTravelPackageForm formEvent={"EDIT"} itemInfo={{
-                 id: travelPackageId,
-                 title,
-                 description,
-                 image,
-                 images,
-                 location,
-                 category,
-                 status,
-                 availableSpots,
-                 travelType,
-                 maxTravelers,
-                 dateAvailabilities,
-                 activities
-               }} userType={userType} />
-             </div>
-         </div>
-      ):(
       <div className="">
       <div className="backdrop-blur-[4px]  min-h-screen pt-6 md:pt-2">
         <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
@@ -423,8 +374,6 @@ const SingleTravelPackageDetails = () => {
         onClose={() => setGalleryOpen(false)}
       />
       </div>
-      )}
-
     </div>
   );
 };

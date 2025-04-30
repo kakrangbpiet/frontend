@@ -214,10 +214,10 @@ const AutocompleteList: React.FC<AutocompleteListProps> = ({ setAddress, handleC
         {value.trim() && (
           <List className="max-h-64 overflow-y-auto">
             {indianCities
-              .filter((city) =>
+              ?.filter((city) =>
                 city.label.toLowerCase().includes(value.toLowerCase())
               )
-              .map((city) => (
+              ?.map((city) => (
                 <ListItem
                   key={city.label}
                   onClick={() => handleCitySelect(city.label)}

@@ -39,7 +39,7 @@ const AiPromptGenerator = (data) => {
     <Box sx={{ margin: 'auto', paddingTop:"20px" }}>
      
           <Box>
-            {messages.length>0 && messages.map((message: { image?: string, role: string; content: any; }, index: Key | null | undefined) => (
+            {messages.length>0 && messages?.map((message: { image?: string, role: string; content: any; }, index: Key | null | undefined) => (
               <Box key={index} sx={{ display: 'flex', alignItems: 'flex-start', margin: '1px 0', textAlign: message.role === 'user' ? 'right' : 'left' }}>
                 {message.role === 'user' ? (
                   <AccountCircleIcon sx={{ marginLeft: 'auto', marginRight: '12px',width:"26px",height:"30px"}}/>
