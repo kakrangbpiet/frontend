@@ -7,3 +7,12 @@ body {
     margin: 0 0;
     padding: 0;
   }
+
+  /* Prevent body scrolling when keyboard is open on mobile */
+@media (max-width: 768px) {
+  body {
+    overscroll-behavior-y: contain;
+    height: 100vh;
+    height: 100dvh;
+  }
+}

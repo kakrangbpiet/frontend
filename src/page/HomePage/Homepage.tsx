@@ -73,11 +73,18 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const SearchContainer = styled.div`
+const SearchContainer = styled.div<{ $isMobileFocused: boolean }>`
   width: 100%;
   max-width: 600px;
   margin: 0 auto 1.5rem;
   position: relative;
+  
+  @media (max-width: 768px) {
+    ${({ $isMobileFocused }) => $isMobileFocused && `
+      position: sticky;
+      z-index: 1000;
+    `}
+  }
 `;
 
 const SearchInput = styled.input`
@@ -90,6 +97,16 @@ const SearchInput = styled.input`
   color: white;
   font-size: 1rem;
   
+  // Mobile-specific styles
+  @media (max-width: 768px) {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    
+    // Use safe-area-inset for notch devices
+    padding-left: calc(1.5rem + env(safe-area-inset-left));
+    padding-right: calc(1.5rem + env(safe-area-inset-right));
+  }
+
   &::placeholder {
     color: rgba(255, 255, 255, 0.7);
   }
@@ -176,7 +193,9 @@ const HomePage: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const categories = useSelector(selectCategories);
   const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
-
+  const [isMobileFocused, setIsMobileFocused] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  
   const titles = useSelector(selectTitles);
   const travelPackages = useSelector(selectedTravelPackages);
   const travelPackagesLoading = useSelector(selectedTravelPackagesLoading);
@@ -241,7 +260,39 @@ const HomePage: React.FC = () => {
   //   }
   // };
 
-
+  const handleFocus = () => {
+    handleSearchFocus();
+    if (window.innerWidth <= 768) {
+      setIsMobileFocused(true);
+      // Scroll input into view
+      setTimeout(() => {
+        searchInputRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'center'
+        });
+      }, 100);
+    }
+  };
+  
+  const handleBlur = () => {
+    setTimeout(() => {
+      setIsMobileFocused(false);
+    }, 200);
+  };
+  // Add visual viewport handler for mobile keyboards
+useEffect(() => {
+  if (typeof window !== 'undefined' && window.visualViewport) {
+    const handler = () => {
+      if (isMobileFocused && searchInputRef.current) {
+        searchInputRef.current.scrollIntoView({ block: 'center' });
+      }
+    };
+    
+    window.visualViewport.addEventListener('resize', handler);
+    return () => window.visualViewport.removeEventListener('resize', handler);
+  }
+}, [isMobileFocused]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -374,13 +425,15 @@ const HomePage: React.FC = () => {
         </HeroText>
 
         <ButtonContainer>
-        <SearchContainer ref={searchRef}>
+        <SearchContainer ref={searchRef} $isMobileFocused={isMobileFocused}>
             <SearchInput
+            ref={searchInputRef}
               type="text"
               placeholder="Search for Destinations, Cities or Tours..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              onFocus={handleSearchFocus}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
             {showResults && (
               <SearchResults>
