@@ -5,7 +5,7 @@ import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Bo
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
 import { AppDispatch } from '../../redux/store';
-import { DateAvailability, ITravelPackage,  useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { DateAvailability, ITravelPackage,  selectPackageDates,  useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
 import CustomTextField from '../CustomTextField';
 import { addTravelPackageApi, fetchSingleTravelPackageApi, fetchTravelPackageDatesApi, } from '../../redux/slices/Travel/travelApiSlice';
@@ -59,8 +59,10 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
 
   const [description, setDescription] = useState(packageData ? packageData.description : "");
 
+  const dateAvailabilitiesPrev = useSelector(selectPackageDates(packageId)) ?? [];
+
   const [dateAvailabilities, setDateAvailabilities] = useState<DateAvailability[]>(
-    packageData?.dateAvailabilities || []
+    dateAvailabilitiesPrev
   );
 
   const [activities, setActivities] = useState<string[]>(packageData?.activities || []);

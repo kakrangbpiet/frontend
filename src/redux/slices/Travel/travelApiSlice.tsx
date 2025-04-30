@@ -148,11 +148,11 @@ export const fetchSingleTravelPackageApi = createAsyncThunk(
 
 export const addTravelPackageApi = createAsyncThunk(
   'travelCollection/addItem',
-  async ({ newTravelPackageData, formEvent,  setIsSaving }: { newTravelPackageData: ITravelPackage, formEvent: any,  setIsSaving: any }, { rejectWithValue, dispatch }) => {
+  async ({ newTravelPackageData, setIsSaving }: { newTravelPackageData: ITravelPackage, formEvent: any,  setIsSaving: any }, { rejectWithValue, dispatch }) => {
     try {
       let response;
 
-      if (formEvent === "EDIT") {
+      if (newTravelPackageData.id) {
         // Update item logic
         response = await Request({
           endpointId: "EDIT_TRAVEL_ITEM",

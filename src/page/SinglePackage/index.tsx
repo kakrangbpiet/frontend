@@ -67,7 +67,7 @@ const SingleTravelPackageDetails = () => {
       }));
       dispatch(fetchSingleTravelPackageApi({
         itemId: travelPackageId,
-        select: "image,status,dateAvailabilities"
+        select: "image,status,dateAvailabilities,activities"
       }));
     }
     dispatch(fetchTravelPackageDatesApi({ packageId: travelPackageId }));

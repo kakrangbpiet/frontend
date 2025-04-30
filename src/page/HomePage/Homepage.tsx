@@ -28,8 +28,7 @@ const PackagesSection = styled.div`
 const ContentOverlay = styled.div`
   position: relative;
   width: 100%;
-  height: 90vh; 
-  min-height: 90vh; 
+  height: 100vh; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -75,7 +74,7 @@ const ButtonContainer = styled.div`
 
 const SearchContainer = styled.div<{ $isMobileFocused: boolean }>`
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto 1.5rem;
   position: relative;
   
@@ -89,26 +88,29 @@ const SearchContainer = styled.div<{ $isMobileFocused: boolean }>`
 
 const SearchInput = styled.input`
   width: 100%;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
   color: white;
   font-size: 1rem;
+  text-align: center;
   
   // Mobile-specific styles
   @media (max-width: 768px) {
-    padding: 1rem 1.5rem;
     font-size: 1rem;
-    
-    // Use safe-area-inset for notch devices
-    padding-left: calc(1.5rem + env(safe-area-inset-left));
-    padding-right: calc(1.5rem + env(safe-area-inset-right));
+    text-align: center;
   }
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.7);
+    text-align: center; /* Specifically center the placeholder */
+  }
+
+  /* For browsers that support ::placeholder with text-align */
+  &:placeholder-shown {
+    text-align: center;
   }
 `;
 
@@ -128,7 +130,7 @@ const SearchResults = styled.div`
 `;
 
 const SearchResultItem = styled.div`
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   color: white;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -150,9 +152,9 @@ const ButtonGroup = styled.div`
   justify-content: center;
   gap: 1rem;
   width: 100%;
+  flex-direction: row;
   
   @media (max-width: 640px) {
-    flex-direction: column;
     gap: 0.75rem;
   }
 `;
@@ -445,21 +447,21 @@ useEffect(() => {
                     </SearchResultItem>
                   ))
                 ) : (
-                  <SearchResultItem>
+                  <div>
                     Nothing found. Try our best packages:
                     {categories.slice(0, 3).map((category, index) => (
-                      <div key={`cat-${index}`} onClick={() => navigate(`/packages?category=${encodeURIComponent(category)}`)}>
+                      <SearchResultItem key={`cat-${index}`} onClick={() => navigate(`/packages?category=${encodeURIComponent(category)}`)}>
                         <ResultType>category</ResultType>
                         {category}
-                      </div>
+                      </SearchResultItem>
                     ))}
                     {titles.slice(0, 3).map((title, index) => (
-                      <div key={`title-${index}`} onClick={() => navigate(`/package/${title.id}/${title.title}`)}>
+                      <SearchResultItem key={`title-${index}`} onClick={() => navigate(`/package/${title.id}/${title.title}`)}>
                         <ResultType>tour</ResultType>
                         {title.title}
-                      </div>
+                      </SearchResultItem>
                     ))}
-                  </SearchResultItem>
+                  </div>
                 )}
               </SearchResults>
             )}
@@ -468,7 +470,7 @@ useEffect(() => {
 
           <ButtonGroup>
             <Button onClick={handleCustomizedTripClick}>
-              Plan Your Own Trip
+              Plan Own Trip
             </Button>
             <Button onClick={handlePrePlannedTripsClick}>
               Pre-planned Trips
