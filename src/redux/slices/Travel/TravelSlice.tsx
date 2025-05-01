@@ -20,7 +20,7 @@ export interface ITravelPackage {
 
   export interface IVideoItem {
     id: string;
-    base64Data: string;
+    awsUrl: string;
     // title?: string;
     // duration?: number;
     // thumbnail?: string;

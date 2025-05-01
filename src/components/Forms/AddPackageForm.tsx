@@ -139,7 +139,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
     event.preventDefault();
 
     // Validate required fields
-    const requiredFields: Array<keyof ITravelPackage> = ['title', 'description', 'location', 'category', 'status', 'image'];
+    const requiredFields: Array<keyof ITravelPackage> = ['title', 'location', 'category', 'status', 'image'];
     let hasErrors = false;
 
     requiredFields.forEach((field) => {
@@ -167,7 +167,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
         })
       );
     } else {
-      setIsSaving(false);
+      // setIsSaving(false);
     }
   };
 
@@ -199,10 +199,9 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
   const areAllFieldsFilled = () => {
     return (
       formData?.title?.trim() &&
-      formData?.description?.trim() &&
+      description?.trim() &&
       formData?.location?.trim() &&
-      formData?.category?.trim() &&
-      formData?.image?.trim()
+      formData?.category?.trim() 
     );
   };
 
@@ -461,7 +460,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
               {formData?.videos?.length >0 && formData?.videos?.map((video, index) => (
                 <Box key={index} position="relative">
                   <img
-                    src={`data:video/mp4;base64,${video}`}
+                    src={`data:video/mp4;base64,${video.base64Data}`}
                     alt={`Gallery ${index + 1}`}
                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                   />

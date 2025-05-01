@@ -64,7 +64,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                     <div className="h-40 md:h-56 overflow-hidden">
                       {pkg.image ? (
                         <CustomSwiper
-                          images={[`data:image/jpeg;base64,${pkg.image}`]}
+                          images={[`${pkg.image}`]}
                         />
                       ) : (
                         // Show skeleton when no image
