@@ -66,7 +66,9 @@ export default function PackagesVerification({
   const filteredPackages = travelPackages.travelPackages.filter(
     (pkg) =>
       pkg.id &&
-      pkg.title.toLowerCase().includes(searchQuery.toLowerCase())
+      pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (!currentCategory || pkg.category === currentCategory) &&
+      (!currentLocation || pkg.location === currentLocation)
   );
 
   const updateUserStatus = (itemId, status) => {

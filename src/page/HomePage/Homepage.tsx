@@ -216,7 +216,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({
       status: "active",
-      select: "title,price,category"
+      select: "title,category"
     }));
   }, [dispatch]);
   useEffect(() => {
@@ -413,7 +413,7 @@ useEffect(() => {
 
 
   const handlePrePlannedTripsClick = () => {
-    navigate(`/packages?category=${encodeURIComponent("pre-planned-trips")}`);
+    navigate(`/packages?category=${encodeURIComponent("top-destination")}`);
 
   };
 
@@ -449,12 +449,6 @@ useEffect(() => {
                 ) : (
                   <div>
                     Nothing found. Try our best packages:
-                    {categories.slice(0, 3).map((category, index) => (
-                      <SearchResultItem key={`cat-${index}`} onClick={() => navigate(`/packages?category=${encodeURIComponent(category)}`)}>
-                        <ResultType>category</ResultType>
-                        {category}
-                      </SearchResultItem>
-                    ))}
                     {titles.slice(0, 3).map((title, index) => (
                       <SearchResultItem key={`title-${index}`} onClick={() => navigate(`/package/${title.id}/${title.title}`)}>
                         <ResultType>tour</ResultType>
@@ -473,7 +467,7 @@ useEffect(() => {
               Plan Own Trip
             </Button>
             <Button onClick={handlePrePlannedTripsClick}>
-              Pre-planned Trips
+              Top Destinations
             </Button>
           </ButtonGroup>
         </ButtonContainer>

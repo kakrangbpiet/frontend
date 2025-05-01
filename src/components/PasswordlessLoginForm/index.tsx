@@ -9,7 +9,7 @@
     Stack,
     Typography,
     Box,
-    Divider,
+    // Divider,
     Container,
   } from '@mui/material';
 
@@ -22,8 +22,8 @@
     selectTrxId 
   } from '../../redux/slices/login/authSlice';
 
-  import GoogleIcon from '@mui/icons-material/Google';
-  import EmailIcon from '@mui/icons-material/Email';
+  // import GoogleIcon from '@mui/icons-material/Google';
+  // import EmailIcon from '@mui/icons-material/Email';
   import PhoneIcon from '@mui/icons-material/Phone';
 
   interface LoginProps {
@@ -122,14 +122,14 @@
       }
     };
 
-    const handleGoogleSignIn = () => {
-      console.log("Google sign-in clicked");
-    };
+    // const handleGoogleSignIn = () => {
+    //   console.log("Google sign-in clicked");
+    // };
 
 
-    const handleEmailSignIn = () => {
-      console.log("Email sign-in clicked");
-    };
+    // const handleEmailSignIn = () => {
+    //   console.log("Email sign-in clicked");
+    // };
 
     return (
       <Container maxWidth="sm">
@@ -144,7 +144,7 @@
             width: '100%',
           }}
         >
-          <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+          <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
           Login to Your Account
           </Typography>
           
@@ -158,7 +158,9 @@
                         <InputLabel htmlFor="phone-number" sx={{ fontWeight: 'medium' }}>
                           Phone Number
                         </InputLabel>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2,
+                             flexDirection: { xs: 'column', md: 'row' },
+                         }}>
                           <OutlinedInput
                             id="phone-number"
                             type="tel"
@@ -299,7 +301,7 @@
                 </Grid>
               )}
 
-              {!otpSent && (
+              {/* {!otpSent && (
                 <>
                   <Grid size={{xs:12}}>
                     <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
@@ -356,7 +358,7 @@
                     </Stack>
                   </Grid>
                 </>
-              )}
+              )} */}
             </Grid>
           </form>
 

@@ -27,6 +27,7 @@ export default defineConfig({
     tailwind(),
     VitePWA({
       registerType: 'autoUpdate',
+       injectRegister: 'auto',
       devOptions: {
         enabled: false
       },
@@ -42,15 +43,27 @@ export default defineConfig({
         skipWaiting: true,
         clientsClaim: true
       },
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'maskable-icon.svg'],
       manifest: {
         name: "Samsara Adventures",
         short_name: "Samsara",
+        description: 'My Awesome App description',
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",
         theme_color: "#4285f4",
-    
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ],
       }
     }),
        dts(),

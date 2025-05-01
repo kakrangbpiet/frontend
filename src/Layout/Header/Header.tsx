@@ -23,14 +23,14 @@ const Header: React.FC<HeaderProps> = ({
   const navigate = useNavigate();
   return (
     <header className="fixed z-100 pt-0 px-3 sm:px-6 md:px-6 lg:px-12 flex justify-between items-center w-full">
-      <div className="flex items-center justify-center h-16 w-32 sm:h-20 sm:w-40 md:h-28 md:w-48" onClick={() => navigate('/')}>
-        <img src={"/Smasara-Logo.png"} alt="Logo" className="object-contain" />
+      <div className="flex items-center justify-center h-16 w-32  md:h-24 md:w-40" onClick={() => navigate('/')}>
+        <img src={"/Samsara-Logo.svg"} alt="Logo" className="object-contain" />
       </div>
 
       <div className="hidden md:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
-        <nav className="flex space-x-8 lg:space-x-12 text-white tracking-wide">
+        <nav className="flex space-x-8 lg:space-x-12 text-white tracking-wide text-lg">
           {links.map((link, index) => (
-              <div className={`hover:text-gray-400 text-white text-lg font-extralight text-[15px] px-3 py-2 rounded 
+            <div className={`hover:text-gray-400 text-white text-xl font-extralight  px-3 py-2 rounded 
                 ${window.location.pathname === link.to ? 'bg-transparent' : 'bg-transparent'}`}
               key={index}
               onClick={() => navigate(link.to)}
@@ -54,14 +54,14 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {isMobile && (
-          <button 
-            className="text-white p-2 relative z-20" 
+          <button
+            className="text-white p-2 relative z-20"
             onClick={toggleMobileMenu}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
-            {mobileMenuOpen ? 
-              <X size={24} /> : 
-              <Menu size={24} style={{ color: 'black' }} />
+            {mobileMenuOpen ?
+              <X size={24} /> :
+              <Menu size={24} style={{ color: 'white' }} />
             }
           </button>
         )}
