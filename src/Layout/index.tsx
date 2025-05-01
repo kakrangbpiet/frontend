@@ -10,27 +10,28 @@ import { isAuthenticated, selectUserType } from '../redux/slices/login/authSlice
 import { useMediaQuery } from '@mui/material';
 import { UserCategory } from '../Datatypes/Enums/UserEnums';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
-import { Twitter, Instagram, Facebook } from 'lucide-react';
+import { Twitter, Instagram } from 'lucide-react';
 import VideoHero from '../page/HomePage/VideoHero';
 import ScrollToTop from './ScrollToTop';
+import { WhatsApp } from '@mui/icons-material';
 
 const heroContent = [
   {
-    video: '/HomeVideos/v1.mp4',
+    video: '/HomeVideos/t1.mp4',
     title: "Discover the world's hidden gems with Samsara Adventures—where every journey tells a unique story and every destination leaves you breathless."
   },
   {
-    video: '/HomeVideos/v2.mp4',
+    video: '/HomeVideos/t2.mp4',
     title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
   },
-  {
-    video: '/HomeVideos/v3.mp4',
-    title: "Embark on extraordinary adventures with Samsara—crafting experiences that go beyond the ordinary and into the extraordinary."
-  },
-  {
-    video: '/HomeVideos/v4.mp4',
-    title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
-  }
+  // {
+  //   video: '/HomeVideos/v3.mp4',
+  //   title: "Embark on extraordinary adventures with Samsara—crafting experiences that go beyond the ordinary and into the extraordinary."
+  // },
+  // {
+  //   video: '/HomeVideos/v4.mp4',
+  //   title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
+  // }
 ];
 
 export const VideoHeroContainer = styled.div`
@@ -110,29 +111,34 @@ const Layout = () => {
             title={randomHero.title}
           />
         <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
+
+        <a href="http://instagram.com/" className="text-white hover:text-gray-300">
+            <WhatsApp sx={{ fontSize: 24 }} />
+          </a>
+
           <a href="http://instagram.com/" className="text-white hover:text-gray-300">
             <Twitter size={24} />
           </a>
-          <a href="http://instagram.com/" className="text-white hover:text-gray-300">
+          <a href="https://www.instagram.com/samsara_adventures01/" className="text-white hover:text-gray-300">
             <Instagram size={24} />
           </a>
-          <a href="http://instagram.com/" className="text-white hover:text-gray-300">
-            <Facebook size={24} />
-          </a>
+
         </div>
         
         {/* Mobile social icons - now conditional on showMobileIcons state */}
         {!mobileMenuOpen && showMobileIcons && (
           <div className="z-50 md:hidden flex justify-center space-x-8 mt-6">
             <a href="http://instagram.com/" className="text-white hover:text-gray-300">
+              <WhatsApp sx={{ fontSize: 20 }} />
+            </a>
+
+            <a href="http://instagram.com/" className="text-white hover:text-gray-300">
               <Twitter size={20} />
             </a>
-            <a href="http://instagram.com/" className="text-white hover:text-gray-300">
+            <a href="http://instagram.com/samsara_adventures01" className="text-white hover:text-gray-300">
               <Instagram size={20} />
             </a>
-            <a href="http://instagram.com/" className="text-white hover:text-gray-300">
-              <Facebook size={20} />
-            </a>
+
           </div>
         )}
         </VideoHeroContainer>

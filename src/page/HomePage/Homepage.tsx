@@ -91,10 +91,10 @@ const SearchInput = styled.input`
   padding: 0.75rem 1rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   color: white;
-  font-size: 1rem;
+  font-size: 1.1rem;
   text-align: center;
   
   // Mobile-specific styles
@@ -104,7 +104,10 @@ const SearchInput = styled.input`
   }
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 1.2rem;
+    font-weight: 1000;
+
     text-align: center; /* Specifically center the placeholder */
   }
 
@@ -163,11 +166,11 @@ const Button = styled.button`
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   color: white;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 1000;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -431,7 +434,7 @@ useEffect(() => {
             <SearchInput
             ref={searchInputRef}
               type="text"
-              placeholder="Search for Destinations, Cities or Tours..."
+              placeholder="Destinations..."
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               onFocus={handleFocus}
