@@ -183,6 +183,7 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
         <div className="bg-transparent-800/80 p-3 border-b border-gray-700">
           <h2 className="text-lg font-semibold text-white text-center mb-2">Travel Inquiry</h2>
           <div className="flex items-center justify-between mb-1">
+            
             {inquirySteps?.map((step, index) => (
               <div key={index} className={`text-xs font-medium ${activeStep === index ? 'text-blue-400' : 'text-gray-400'}`}>
                 {step}
@@ -195,6 +196,7 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
               style={{ width: `${((activeStep + 1) / 3) * 100}%` }}
             ></div>
           </div>
+          
         </div>
 
         {activeStep === inquirySteps.length ? (
@@ -220,18 +222,8 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
               )}
             </div>
 
-            <div className="px-2 gap-2 py-3 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
-              {activeStep > 0 && (
-                <button
-                  onClick={handleBack}
-                  
-                  className="w-full py-3 bg-gradient-to-r  hover:from-emerald-700  text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
-                >
-                  Back
-                </button>
-              )}
-
-              {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
+            {/*Moved Here */}
+            {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
                 <RazorpayPaymentButton
                   inquiryId={inquiryData.packageId || ''}
                   amount={inquiryData.price ? parseFloat(inquiryData.price) * 100 : 0}
@@ -246,6 +238,33 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
                   }}
                 />
               }
+
+            <div className="px-2 gap-2 py-3 flex justify-between items-center bg-gray-800/80 backdrop-blur-md border-t border-gray-700">
+              {activeStep > 0 && (
+                <button
+                  onClick={handleBack}
+                  
+                  className="w-full py-3 bg-gradient-to-r  hover:from-emerald-700  text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
+                >
+                  Back
+                </button>
+              )}
+
+              {/* {inquiryData.tripType === "pre-planned" && activeStep === inquirySteps.length - 1 &&
+                <RazorpayPaymentButton
+                  inquiryId={inquiryData.packageId || ''}
+                  amount={inquiryData.price ? parseFloat(inquiryData.price) * 100 : 0}
+                  onSuccess={(paymentId) => {
+                    // Handle successful payment
+                    console.log('Payment successful:', paymentId);
+                    submitTravelInquiry(); // Submit the inquiry after payment
+                  }}
+                  onError={(error) => {
+                    console.error('Payment failed:', error);
+                    alert('Payment failed. Please try again.');
+                  }}
+                />
+              } */}
 
               <button
                 onClick={activeStep === inquirySteps.length - 1 ? submitTravelInquiry : handleNext}

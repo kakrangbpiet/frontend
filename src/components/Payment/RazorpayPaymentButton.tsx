@@ -81,17 +81,21 @@ const RazorpayPaymentButton = ({
 
   return (
     <>
-      <button
-        onClick={handlePayment}
-        disabled={loading || !inquiryId}
-        className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
-      >
-        {loading ? 'Processing...' : buttonText}
-      </button>
+<div className="w-full px-4">
+  <button
+    onClick={handlePayment}
+    disabled={loading || !inquiryId}
+    className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-lg text-center shadow-lg transition-all flex justify-center items-center transform hover:translate-y-0.5 duration-300 border border-emerald-500 text-base"
+  >
+    {loading ? 'Processing...' : buttonText}
+  </button>
+</div>
+
+
 
       {showPopup && (
-        <div className="fixed inset-0 bg-black/90 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl transform transition-all">
+        <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white/80 rounded-lg p-6 max-w-md mx-4 shadow-xl transform transition-all">
             <div className="text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,7 +103,7 @@ const RazorpayPaymentButton = ({
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Payment Not Available</h3>
-              <p className="text-gray-500 mb-4">
+              <p className="text-gray-700 mb-4">
                 This feature is coming soon! Thank you for your patience.
               </p>
               <button
