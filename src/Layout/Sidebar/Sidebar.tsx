@@ -124,16 +124,16 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
           </ProfileButton>
           
           <SocialLinks>
-            <SocialIcon href="tw">
-              <Twitter size={20} />
-            </SocialIcon>
-            <SocialIcon href="https://www.instagram.com/samsara_adventures01/">
-              <Instagram size={20} />
-            </SocialIcon>
-            <SocialIcon href="https://www.facebook.com/profile.php?id=61575410837166">
-              <Facebook size={20} />
-            </SocialIcon>
-          </SocialLinks>
+  <SocialIcon href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+    <Twitter size={20} />
+  </SocialIcon>
+  <SocialIcon href="https://www.instagram.com/samsara_adventures01/" target="_blank" rel="noopener noreferrer">
+    <Instagram size={20} />
+  </SocialIcon>
+  <SocialIcon href="https://www.facebook.com/profile.php?id=61575410837166" target="_blank" rel="noopener noreferrer">
+    <Facebook size={20} />
+  </SocialIcon>
+</SocialLinks>
         </BottomSection>
       </MenuContainer>
     </SidebarContainer>

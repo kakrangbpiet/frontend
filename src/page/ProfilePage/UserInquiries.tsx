@@ -317,7 +317,7 @@ export default function UserInquiries({ }) {
                                   }}
                                   onError={(error) => {
                                     console.error('Payment failed:', error);
-                                    alert('Payment failed. Please try again.');
+                                    // alert('Payment failed. Please try again.');
                                   }}
                                 />
                           }
