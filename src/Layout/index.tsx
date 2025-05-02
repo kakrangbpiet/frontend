@@ -10,9 +10,10 @@ import { isAuthenticated, selectUserType } from '../redux/slices/login/authSlice
 import { useMediaQuery } from '@mui/material';
 import { UserCategory } from '../Datatypes/Enums/UserEnums';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
-import { Twitter, Instagram, Facebook } from 'lucide-react';
+import { Twitter, Instagram } from 'lucide-react';
 import VideoHero from '../page/HomePage/VideoHero';
 import ScrollToTop from './ScrollToTop';
+import { WhatsApp } from '@mui/icons-material';
 
 const heroContent = [
   {
@@ -129,7 +130,6 @@ const Layout = () => {
             onNextVideo={handleNextVideo}
             onPreviousVideo={handlePreviousVideo}
           />
-
           <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
             <a href="http://instagram.com/" className="text-white hover:text-gray-300">
               <Twitter size={24} />
@@ -139,7 +139,9 @@ const Layout = () => {
             </a>
             <a href="https://www.facebook.com/profile.php?id=61575410837166" className="text-white hover:text-gray-300">
               <Facebook size={24} />
+
             </a>
+
           </div>
 
           {!mobileMenuOpen && showMobileIcons && (

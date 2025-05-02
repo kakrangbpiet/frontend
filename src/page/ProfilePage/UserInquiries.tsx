@@ -154,7 +154,6 @@ export default function UserInquiries({ }) {
           alert("User Not Logged In!");
         }
       } catch (error) {
-        console.error('Error submitting inquiry:', error);
       }
     };
 

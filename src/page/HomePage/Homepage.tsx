@@ -109,6 +109,7 @@ const SearchInput = styled.input`
     color: rgba(255, 255, 255, 0.7);
     font-size: 1.2rem;
     font-weight: 2000;
+
     text-align: center; /* Specifically center the placeholder */
   }
 
@@ -170,6 +171,7 @@ const Button = styled.button`
   backdrop-filter: blur(4px);
   color: white;
   font-size: 1.1rem;
+
   font-weight: 1000;
   cursor: pointer;
   transition: all 0.3s ease;

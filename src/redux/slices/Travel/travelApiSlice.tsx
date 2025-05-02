@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { setLoadedItems, addItem, updateItem, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories, updatePackageDates } from './TravelSlice';
+import { setLoadedItems, addItem, updateItem, ITravelPackage, setTravelItemVideos, IVideosResponse, setTitles, setLocations, setCategories, updatePackageDates, removeItem } from './TravelSlice';
 import Request from '../../../Backend/apiCall.tsx';
 import { addItemToCart, CartItem, loadCart, removeItemFromCart } from './AddToCartSlice.tsx';
 import { ApiError, ApiSuccess } from '../../../Datatypes/interface.ts';
@@ -642,6 +642,111 @@ export const fetchAllTitles = createAsyncThunk(
       return rejectWithValue(
         typeof castedError?.error === 'string' ? castedError?.error : 'Failed to fetch titles'
       );
+    }
+  }
+);
+
+// Add these to your existing async thunks
+export const updateTravelPackageImageApi = createAsyncThunk(
+  'travelCollection/updateItem',
+  async ({ packageId, image }: { packageId: string; image: string }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await Request({
+        endpointId: "UPDATE_TRAVEL_PACKAGE_IMAGE",
+        slug: `/${packageId}`,
+        data: { image },
+      });
+
+      dispatch(updateItem(response.data));
+      
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Package image updated successfully',
+        data: response.data,
+      };
+
+      return apiSuccess;
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Error updating package image');
+    }
+  }
+);
+
+export const updateTravelPackageImagesApi = createAsyncThunk(
+  'travelCollection/updateItem',
+  async ({ packageId, images }: { packageId: string; images: string[] }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await Request({
+        endpointId: "UPDATE_TRAVEL_PACKAGE_IMAGES",
+        slug: `/${packageId}`,
+        data: { images },
+      });
+
+      dispatch(updateItem(response.data));
+      
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Package images updated successfully',
+        data: response.data,
+      };
+
+      return apiSuccess;
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Error updating package images');
+    }
+  }
+);
+
+export const updateTravelPackageVideosApi = createAsyncThunk(
+  'travelCollection/updateItem',
+  async ({ packageId, videos }: { packageId: string; videos: string[] }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await Request({
+        endpointId: "UPDATE_TRAVEL_PACKAGE_VIDEOS",
+        slug: `/${packageId}`,
+        data: { videos },
+      });
+
+      dispatch(updateItem(response.data));
+      
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Package videos updated successfully',
+        data: response.data,
+      };
+
+      return apiSuccess;
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Error updating package videos');
+    }
+  }
+);
+
+export const deleteTravelPackageApi = createAsyncThunk(
+  'travelCollection/deleteItem',
+  async (packageId: string, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await Request({
+        endpointId: "DELETE_TRAVEL_PACKAGE",
+        slug: `/${packageId}`,
+      });
+
+      // You might want to add a removeItem action to your slice
+      dispatch(removeItem(packageId));
+      
+      const apiSuccess: ApiSuccess = {
+        statusCode: response.status,
+        message: 'Package deleted successfully',
+        data: response.data,
+      };
+
+      return apiSuccess;
+    } catch (error) {
+      const castedError = error as ApiError;
+      return rejectWithValue(castedError?.error || 'Error deleting package');
     }
   }
 );
