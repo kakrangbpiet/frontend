@@ -202,7 +202,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                     type="button"
                     onClick={handleEditNumber}
                     disabled={!shouldShowRegister && isRegister}
-                    className="px-6 py-2.5 rounded-lg bg-gray-100 border border-gray-300 
+                    className="px-6 py-2.5 rounded-lg  border border-gray-300 
                     text-white font-medium hover:bg-gray-200 focus:outline-none 
                     focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                   >
