@@ -22,13 +22,11 @@ function MyLocation({ setAddress, open, handleClose }: MyLocationProps) {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=${import.meta.env.VITE_GOOGLE_LOCATION_API_KEY}`
       );
       const data = await res.json();
-      console.log(data);
-      
 
       if (data.status === 'OK' && data.results.length > 0) {
         setAddress(data.plus_code.compound_code);
         handleClose();
-    setLoadingLocation(false);
+        setLoadingLocation(false);
 
       } else {
     setLoadingLocation(false);
