@@ -10,10 +10,9 @@ import { isAuthenticated, selectUserType } from '../redux/slices/login/authSlice
 import { useMediaQuery } from '@mui/material';
 import { UserCategory } from '../Datatypes/Enums/UserEnums';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
-import { Twitter, Instagram, Facebook } from 'lucide-react';
 import VideoHero from '../page/HomePage/VideoHero';
 import ScrollToTop from './ScrollToTop';
-// import { WhatsApp } from '@mui/icons-material';
+//import {WhatsApp} from '@mui/icons-material';
 
 const heroContent = [
   {
@@ -100,9 +99,6 @@ const Layout = () => {
     setVideoIndex((prev) => (prev - 1 + heroContent.length) % heroContent.length);
   };
 
-  // mobile icons visibility (reserved)
-  const [showMobileIcons] = useState(false);
-
   return (
     <div className="relative w-full overflow-hidden">
       <ScrollToTop />
@@ -130,33 +126,8 @@ const Layout = () => {
             onNextVideo={handleNextVideo}
             onPreviousVideo={handlePreviousVideo}
           />
-          <div className="z-50 hidden md:flex absolute right-6 top-1/2 transform -translate-y-1/2 flex-col space-y-6">
-            <a href="http://instagram.com/" className="text-white hover:text-gray-300">
-              <Twitter size={24} />
-            </a>
-            <a href="https://www.instagram.com/samsara_adventures01/" className="text-white hover:text-gray-300">
-              <Instagram size={24} />
-            </a>
-            <a href="https://www.facebook.com/profile.php?id=61575410837166" className="text-white hover:text-gray-300">
-              <Facebook size={24} />
-
-            </a>
-
-          </div>
-
-          {!mobileMenuOpen && showMobileIcons && (
-            <div className="z-50 md:hidden flex justify-center space-x-8 mt-6">
-              <a href="http://instagram.com/" className="text-white hover:text-gray-300">
-                <Twitter size={20} />
-              </a>
-              <a href="https://www.instagram.com/samsara_adventures01/" className="text-white hover:text-gray-300">
-                <Instagram size={20} />
-              </a>
-              <a href="https://www.facebook.com/profile.php?id=61575410837166" className="text-white hover:text-gray-300">
-                <Facebook size={20} />
-              </a>
-            </div>
-          )}
+          
+          {/* Social media icons moved to HomePage component */}
         </VideoHeroContainer>
       )}
 

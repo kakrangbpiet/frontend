@@ -10,7 +10,7 @@ import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import locationsData from '../../components/Forms/Location.json';
 import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
 import FormDialog from '../../components/Registration/FormDailog.tsx';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Twitter, Instagram, Facebook } from 'lucide-react';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -170,7 +170,7 @@ const Button = styled.button`
   backdrop-filter: blur(4px);
   color: white;
   font-size: 1.1rem;
-
+  
   font-weight: 1000;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -194,7 +194,7 @@ const MediaControlsContainer = styled.div`
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   border-radius: 50px;
   padding: 8px 16px;
@@ -230,57 +230,60 @@ const MediaControlButton = styled.button`
     stroke-width: 2.5px;
   }
 `;
-// const NextVideoButton = styled.button`
-//   position: absolute;
-//   right: 20px;
-//   top: 80%;
-//   transform: translateY(-50%);
-//   background-color: rgba(0, 0, 0, 0.4);
-//   backdrop-filter: blur(4px);
-//   border: none;
-//   border-radius: 9999px;
-//   padding: 1rem;
-//   color: white;
-//   cursor: pointer;
-//   z-index: 50;
-//   transition: all 0.3s ease;
-//   display:flex;
-//   &:hover {
-//     background-color: rgba(0, 0, 0, 0.6);
-//     transform: translateY(-50%) scale(1.05);
-//   }
-  
-//   @media (max-width: 768px) {
-//     right: 10px;
-//     padding: 0.75rem;
-//   }
-// `;
 
-// const PreviousVideoButton = styled.button`
-//   position: absolute;
-//   left: 20px;
-//   top: 80%;
-//   transform: translateY(-50%);
-//   background-color: rgba(0, 0, 0, 0.4);
-//   backdrop-filter: blur(4px);
-//   border: none;
-//   border-radius: 9999px;
-//   padding: 1rem;
-//   color: white;
-//   cursor: pointer;
-//   z-index: 50;
-//   transition: all 0.3s ease;
+const SocialMediaContainer = styled.div`
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 200; /* High z-index to ensure it's above other elements */
   
-//   &:hover {
-//     background-color: rgba(0, 0, 0, 0.6);
-//     transform: translateY(-50%) scale(1.05);
-//   }
+  @media (max-width: 768px) {
+    display: none; /* Hide on mobile */
+  }
+`;
+
+const MobileSocialMediaContainer = styled.div`
+  display: none; /* Hide completely on all devices */
   
-//   @media (max-width: 768px) {
-//     left: 10px;
-//     padding: 0.75rem;
-//   }
-// `;
+  /* Original mobile styles (now disabled)
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  z-index: 200;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 15px 0;
+  */
+`;
+
+const SocialIconButton = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  
+  color: white;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+  
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+`;
 
 interface OutletContextType {
   title: string;
@@ -506,23 +509,76 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="relative w-full">
+      {/* Fixed position social media icons for desktop */}
+      <SocialMediaContainer>
+        <SocialIconButton 
+          href="http://twitter.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Twitter"
+        >
+          <Twitter size={24} />
+        </SocialIconButton>
+        <SocialIconButton 
+          href="https://www.instagram.com/samsara_adventures01/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+        >
+          <Instagram size={24} />
+        </SocialIconButton>
+        <SocialIconButton 
+          href="https://www.facebook.com/profile.php?id=61575410837166" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+        >
+          <Facebook size={24} />
+        </SocialIconButton>
+      </SocialMediaContainer>
+
+      {/* Fixed position social media icons for mobile */}
+      <MobileSocialMediaContainer>
+        <SocialIconButton 
+          href="http://twitter.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Twitter"
+        >
+          <Twitter size={20} />
+        </SocialIconButton>
+        <SocialIconButton 
+          href="https://www.instagram.com/samsara_adventures01/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+        >
+          <Instagram size={20} />
+        </SocialIconButton>
+        <SocialIconButton 
+          href="https://www.facebook.com/profile.php?id=61575410837166" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+        >
+          <Facebook size={20} />
+        </SocialIconButton>
+      </MobileSocialMediaContainer>
+
       <ContentOverlay>
         <HeroText>
           <HeroTitle>{title || "Discover Amazing Destinations"}</HeroTitle>
         </HeroText>
 
         <MediaControlsContainer>
-  <MediaControlButton onClick={handlePreviousVideoClick} aria-label="Previous video">
-    <ChevronLeft />
-  </MediaControlButton>
-  <MediaControlButton onClick={handleNextVideoClick} aria-label="Next video">
-    <ChevronRight />
-  </MediaControlButton>
-</MediaControlsContainer>
-
-        {/* <PreviousVideoButton > */}
-        {/* </PreviousVideoButton> */}
+          <MediaControlButton onClick={handlePreviousVideoClick} aria-label="Previous video">
+            <ChevronLeft />
+          </MediaControlButton>
+          <MediaControlButton onClick={handleNextVideoClick} aria-label="Next video">
+            <ChevronRight />
+          </MediaControlButton>
+        </MediaControlsContainer>
 
         <ButtonContainer>
           <SearchContainer ref={searchRef} $isMobileFocused={isMobileFocused}>
