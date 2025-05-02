@@ -7,7 +7,6 @@ import { fetchAllCategories, fetchAllTitles, fetchTravelPackagesApi } from '../.
 import { AppDispatch } from '../../redux/store';
 import { selectCategories, selectedTravelPackages, selectedTravelPackagesLoading, selectTitles } from '../../redux/slices/Travel/TravelSlice';
 import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
-import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import locationsData from '../../components/Forms/Location.json';
 import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
 import FormDialog from '../../components/Registration/FormDailog.tsx';
@@ -313,9 +312,6 @@ const HomePage: React.FC = () => {
     dispatch(fetchAllCategories());
     dispatch(fetchAllTitles({ status: "active" }));
 
-    if (auth && selectedUserType === UserCategory.KAKRAN_SUPER_ADMIN) {
-      navigate("/dashboard");
-    }
   }, [auth, navigate, selectedUserType, dispatch]);
 
   useEffect(() => {
