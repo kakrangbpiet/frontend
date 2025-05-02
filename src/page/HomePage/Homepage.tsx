@@ -10,7 +10,7 @@ import TravelPackages from '../../components/Card/TravelPackageItems.tsx';
 import locationsData from '../../components/Forms/Location.json';
 import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
 import FormDialog from '../../components/Registration/FormDailog.tsx';
-import { ChevronRight, ChevronLeft, Twitter, Instagram, Facebook } from 'lucide-react';
+import { Twitter, Instagram, Facebook } from 'lucide-react';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -28,7 +28,7 @@ const PackagesSection = styled.div`
 const ContentOverlay = styled.div`
   position: relative;
   width: 100%;
-  height: 100vh; 
+  height: 80vh; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -187,49 +187,49 @@ const Button = styled.button`
   }
 `;
 
-const MediaControlsContainer = styled.div`
-  position: absolute;
-  right: 2px;
-  top: 80%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  border-radius: 50px;
-  padding: 8px 16px;
-  z-index: 50;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-`;
+// const MediaControlsContainer = styled.div`
+//   position: absolute;
+//   right: 2px;
+//   top: 80%;
+//   transform: translateX(-50%);
+//   display: flex;
+//   align-items: center;
+//   background-color: rgba(0, 0, 0, 0.4);
+//   backdrop-filter: blur(8px);
+//   border-radius: 50px;
+//   padding: 8px 16px;
+//   z-index: 50;
+//   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+//   border: 1px solid rgba(255, 255, 255, 0.1);
+// `;
 
-const MediaControlButton = styled.button`
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
+// const MediaControlButton = styled.button`
+//   background: transparent;
+//   border: none;
+//   color: white;
+//   cursor: pointer;
+//   padding: 8px;
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   transition: all 0.3s ease;
   
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-  }
+//   &:hover {
+//     background-color: rgba(255, 255, 255, 0.2);
+//     transform: scale(1.1);
+//   }
   
-  &:active {
-    transform: scale(0.95);
-  }
+//   &:active {
+//     transform: scale(0.95);
+//   }
   
-  svg {
-    width: 24px;
-    height: 24px;
-    stroke-width: 2.5px;
-  }
-`;
+//   svg {
+//     width: 24px;
+//     height: 24px;
+//     stroke-width: 2.5px;
+//   }
+// `;
 
 const SocialMediaContainer = styled.div`
   position: fixed;
@@ -298,7 +298,7 @@ const HomePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const { title, onNextVideo, onPreviousVideo } = useOutletContext<OutletContextType>();
+  const { title, /*onNextVideo, onPreviousVideo*/ } = useOutletContext<OutletContextType>();
   const [showResults, setShowResults] = useState(false);
   const categories = useSelector(selectCategories);
   const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
@@ -496,17 +496,17 @@ const HomePage: React.FC = () => {
     navigate(`/packages?category=${encodeURIComponent("top-destination")}`);
   };
 
-  const handleNextVideoClick = () => {
-    if (onNextVideo) {
-      onNextVideo();
-    }
-  };
+  // const handleNextVideoClick = () => {
+  //   if (onNextVideo) {
+  //     onNextVideo();
+  //   }
+  // };
 
-  const handlePreviousVideoClick = () => {
-    if (onPreviousVideo) {
-      onPreviousVideo();
-    }
-  };
+  // const handlePreviousVideoClick = () => {
+  //   if (onPreviousVideo) {
+  //     onPreviousVideo();
+  //   }
+  // };
 
   return (
     <div className="relative w-full">
@@ -571,14 +571,14 @@ const HomePage: React.FC = () => {
           <HeroTitle>{title || "Discover Amazing Destinations"}</HeroTitle>
         </HeroText>
 
-        <MediaControlsContainer>
+        {/* <MediaControlsContainer>
           <MediaControlButton onClick={handlePreviousVideoClick} aria-label="Previous video">
             <ChevronLeft />
           </MediaControlButton>
           <MediaControlButton onClick={handleNextVideoClick} aria-label="Next video">
             <ChevronRight />
           </MediaControlButton>
-        </MediaControlsContainer>
+        </MediaControlsContainer> */}
 
         <ButtonContainer>
           <SearchContainer ref={searchRef} $isMobileFocused={isMobileFocused}>

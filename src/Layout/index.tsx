@@ -16,7 +16,7 @@ import ScrollToTop from './ScrollToTop';
 
 const heroContent = [
   {
-    video: '/HomeVideos/m1.mp4',
+    video: '/HomeVideos/v2.mp4',
     title: "Discover the world's hidden gems with Samsara Adventures—where every journey tells a unique story and every destination leaves you breathless."
   },
   {
