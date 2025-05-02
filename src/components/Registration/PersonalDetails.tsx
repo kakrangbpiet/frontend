@@ -10,12 +10,32 @@ interface PersonalDetailsProps {
 }
 
 function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRegister }: PersonalDetailsProps) {
-  const [passengerInput, setPassengerInput] = useState<string>(inquiryData.passengerCount.toString());
+  // Check if passengerCount,default 0
+  const [passengerInput, setPassengerInput] = useState<string>(
+    inquiryData && inquiryData.passengerCount !== undefined ? 
+    inquiryData.passengerCount.toString() : '0'
+  );
 
   useEffect(() => {
-    // Sync with external changes
-    setPassengerInput(inquiryData.passengerCount.toString());
-  }, [inquiryData.passengerCount]);
+    if (inquiryData && inquiryData.passengerCount !== undefined) {
+      setPassengerInput(inquiryData.passengerCount.toString());
+    }
+  }, [inquiryData?.passengerCount]);
+
+  useEffect(() => {
+    if (!inquiryData || Object.keys(inquiryData).length === 0) {
+      setInquiryData({
+        name: '',
+        passengerCount: 0,
+        specialRequests: ''
+      });
+    } else if (inquiryData.passengerCount === undefined) {
+      setInquiryData(prev => ({
+        ...prev,
+        passengerCount: 0
+      }));
+    }
+  }, [inquiryData, setInquiryData]);
 
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
@@ -44,13 +64,17 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
     handleChange('passengerCount', numericValue);
   };
 
+  const name = inquiryData?.name || '';
+  const specialRequests = inquiryData?.specialRequests || '';
+  const passengerCount = inquiryData?.passengerCount || 0;
+
   return (
     <Box sx={{ mt: 1, color: 'white' }} className="space-y-3">
       {/* Name input */}
       <TextField
         label="Your Name"
         id="name"
-        value={inquiryData.name}
+        value={name}
         onChange={(e) => handleChange('name', e.target.value)}
         disabled={!shouldShowRegister && isRegister}
         fullWidth
@@ -116,9 +140,9 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
             placeholder="Enter number of passengers"
             required
           />
-          {inquiryData.passengerCount > 0 && (
+          {passengerCount > 0 && (
             <Box sx={{ mt: 0.5, fontSize: '0.75rem', color: 'white' }}>
-              {inquiryData.passengerCount} {inquiryData.passengerCount === 1 ? 'person' : 'people'} traveling
+              {passengerCount} {passengerCount === 1 ? 'person' : 'people'} traveling
             </Box>
           )}
         </Box>
@@ -129,7 +153,7 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
         <TextField
           label="Special Requests"
           id="specialRequests"
-          value={inquiryData.specialRequests}
+          value={specialRequests}
           onChange={(e) => handleChange('specialRequests', e.target.value)}
           disabled={!shouldShowRegister && isRegister}
           fullWidth
