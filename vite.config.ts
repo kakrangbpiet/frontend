@@ -5,6 +5,11 @@ import dts from "vite-plugin-dts";
 import tailwind from '@tailwindcss/vite' // ESM import
 
 export default defineConfig({
+  preview: {
+    allowedHosts: ['samsaraadventures.com'], // Allow only this domain
+    // OR allow all hosts (less secure):
+    // allowedHosts: 'all',
+  },
   server: {
     host: '0.0.0.0',
     port: 5173,
