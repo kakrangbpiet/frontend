@@ -24,14 +24,22 @@ const heroContent = [
     video: '/HomeVideos/t2.mp4',
     title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
   },
-  // {
-  //   video: '/HomeVideos/v3.mp4',
-  //   title: "Embark on extraordinary adventures with Samsara—crafting experiences that go beyond the ordinary and into the extraordinary."
-  // },
-  // {
-  //   video: '/HomeVideos/v4.mp4',
-  //   title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
-  // }
+  {
+    video: '/HomeVideos/v3.mp4',
+    title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
+  },
+  {
+    video: '/HomeVideos/v4.mp4',
+    title: "Embark on extraordinary adventures with Samsara—crafting experiences that go beyond the ordinary and into the extraordinary."
+  },
+  {
+    video: '/HomeVideos/v5.mp4',
+    title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
+  },
+  {
+    video: '/HomeVideos/v6.mp4',
+    title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
+  }
 ];
 
 export const VideoHeroContainer = styled.div`

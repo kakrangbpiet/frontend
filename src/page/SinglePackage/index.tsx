@@ -121,7 +121,7 @@ const SingleTravelPackageDetails = () => {
               <Skeleton variant="rectangular" height={400} />
             ) : (
               <img
-                src={`data:image/jpeg;base64,${image}`}
+                src={`${image}`}
                 alt={title}
                 className="w-full h-64 md:h-96 object-cover"
               />
@@ -176,7 +176,7 @@ const SingleTravelPackageDetails = () => {
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200 relative">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <img
-                          src={`data:image/jpeg;base64,${images[0] || image}`}
+                          src={`${images[0] || image}`}
                           alt={`${title} video thumbnail`}
                           className="w-full h-full object-cover opacity-90"
                         />
@@ -224,7 +224,7 @@ const SingleTravelPackageDetails = () => {
                         }}
                       >
                         <img
-                          src={`data:image/jpeg;base64,${img}`}
+                          src={`${img}`}
                           alt={`${title} - image ${index + 1}`}
                           className="w-full h-48 md:h-64 object-cover"
                         />
@@ -261,7 +261,7 @@ const SingleTravelPackageDetails = () => {
                       >
                         <div className='w-full h-48 md:h-64 object-cover'>
                           <StyledVideo
-                            src={`data:video/mp4;base64,${vid?.base64Data}`}
+                            src={`${vid?.awsUrl}`}
                             autoPlay
                             loop
                             muted

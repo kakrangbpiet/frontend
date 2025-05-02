@@ -4,7 +4,7 @@ import VideoHero from "../HomePage/VideoHero";
 export const MediaBackground = ({ video }: { video: any }) => {
   if (!video) return null;
 
-  const videoSrc = `data:video/mp4;base64,${video?.base64Data}`;
+  const videoSrc = `${video}`;
 
   return (
     <VideoHero

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 interface MediaItem {
-  base64Data: string;
+  awsUrl: string;
   type: 'image' | 'video';
 }
 
@@ -22,7 +22,7 @@ const FullScreenGallery = ({
 }: FullScreenGalleryProps) => {
   const [currentMedia, setCurrentMedia] = useState(initialMedia);
   const allMedia = [
-    ...images.map(img => ({ base64Data: img, type: 'image' as const })),
+    ...images.map(img => ({ awsUrl: img, type: 'image' as const })),
     ...videos
   ];
 
@@ -104,14 +104,14 @@ const FullScreenGallery = ({
       <div className="relative w-full h-full flex items-center justify-center p-4 md:p-12">
         {allMedia[currentMedia.index].type === 'image' ? (
           <img
-            src={`data:image/jpeg;base64,${allMedia[currentMedia.index].base64Data}`}
+            src={`${allMedia[currentMedia.index]}`}
             alt={`Gallery image ${currentMedia.index + 1}`}
             className="max-h-[90vh] max-w-full object-contain select-none rounded-lg shadow-2xl"
             draggable="false"
           />
         ) : (
           <video
-            src={`data:video/mp4;base64,${allMedia[currentMedia.index].base64Data}`}
+            src={`${allMedia[currentMedia.index].awsUrl}`}
             className="max-h-[90vh] max-w-full object-contain rounded-lg shadow-2xl"
             autoPlay
             loop
@@ -160,7 +160,7 @@ const FullScreenGallery = ({
           >
             {media.type === 'image' ? (
               <img
-                src={`data:image/jpeg;base64,${media.base64Data}`}
+                src={`${media.awsUrl}`}
                 alt={`Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover"
               />
@@ -171,7 +171,7 @@ const FullScreenGallery = ({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <video
-                  src={`data:video/mp4;base64,${media?.base64Data}`}
+                  src={`${media?.awsUrl}`}
                   autoPlay
                   loop
                   muted

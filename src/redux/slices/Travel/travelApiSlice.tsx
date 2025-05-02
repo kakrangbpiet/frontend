@@ -460,7 +460,7 @@ export const fetchTravelItemVideosApi = createAsyncThunk(
         videoCount: response.data.videoCount,
         allVideos: response.data.allVideos?.map((video: any) => ({
           id: video.id,
-          base64Data: video.base64Data
+          awsUrl: video.awsUrl
         }))
       };
 
@@ -510,8 +510,8 @@ export const fetchTravelItemRandomVideoApi = createAsyncThunk(
       const videosData: IVideosResponse = {
         videoCount: responseData.videoCount,
         randomVideo: {
-          id: responseData.randomVideo.id,
-          base64Data: responseData.randomVideo.base64Data
+          id: responseData?.randomVideo?.id,
+          awsUrl: responseData?.randomVideo?.awsUrl
         }
       };
 
