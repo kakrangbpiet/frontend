@@ -48,7 +48,7 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
             type="number"
             id="passengerCount"
             value={inquiryData.passengerCount}
-            onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 1)}
+            onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 0)}
             disabled={!shouldShowRegister && isRegister}
             className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
                font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
