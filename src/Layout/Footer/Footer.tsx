@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isAuthenticated, logout } from '../../redux/slices/login/authSlice';
 import { Container } from '@mui/material';
 import PasswordlessLoginForm from '../../components/PasswordlessLoginForm';
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Twitter, Instagram, Linkedin } from 'lucide-react';
+import { WhatsApp } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -229,23 +230,21 @@ const Footer: React.FC<FooterProps> = ({
             </nav>
           </div>
 
-          {/*Icons instead of FB and oterh ,,,, size can be changed */}
           {showSocials && (
             <div className="flex justify-center items-center space-x-20">
-              <a href="https://facebook.com" target='_blank' aria-label="Facebook" className="text-white/70 hover:text-white transition">
-                <Facebook size={24} />
+              <a href="#" target='_blank' aria-label="WhatsApp" className="text-white/70 hover:text-white transition">
+                <WhatsApp sx={{ fontSize: 24 }} />
               </a>
               <a href="https://twitter.com" target='_blank' aria-label="Twitter" className="text-white/70 hover:text-white transition">
                 <Twitter size={24} />
               </a>
-              <a href="https://instagram.com" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
+              <a href="https://www.instagram.com/samsara_adventures01/" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
                 <Instagram size={24} />
               </a>
               <a href="https://linkedin.com" target='_blank' aria-label="LinkedIn" className="text-white/70 hover:text-white transition">
                 <Linkedin size={24} />
               </a>
             </div>
-
           )}
 
           <div style={copyrightStyle}>
