@@ -73,7 +73,6 @@ function TravelInquiryForm({ packageId, packageTitle, isCustomForm }: { packageI
         phoneNumber: decoded.phoneNumber
       };
     } catch (error) {
-      console.error('Error decoding token:', error);
       return {};
     }
   };

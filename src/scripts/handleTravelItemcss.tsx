@@ -163,14 +163,13 @@ export const handleShare = (link: string) => {
       text: 'Here’s an interesting blog you might enjoy.',
       url: fullLink
     })
-      .catch((error) => console.error('Error sharing', error));
+      .catch(() => console.error('Error sharing'));
   } else {
     navigator.clipboard.writeText(fullLink)
       .then(() => {
         alert('Link copied to clipboard');
       })
-      .catch((error) => {
-        console.error('Error copying link', error);
+      .catch(() => {
         alert('Failed to copy the link');
       });
   }

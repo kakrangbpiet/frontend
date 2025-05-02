@@ -80,7 +80,6 @@
         setResendDisabled(true);
         setResendTimer(30);
       } catch (error) {
-        console.log(error);
         setError('Failed to send OTP');
       }
     };
@@ -94,7 +93,6 @@
         setResendDisabled(true);
         setResendTimer(30);
       } catch (error) {
-        console.log(error);
         setError('Failed to resend OTP');
       }
     };

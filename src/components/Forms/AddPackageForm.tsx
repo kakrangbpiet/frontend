@@ -98,8 +98,6 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
     }
   }, [packageId, dispatch]);
   // Update form data when packageData changes
-  console.log(packageData?.videos);
-  console.log(formData.videos);
 
   useEffect(() => {
     if (packageData) {
