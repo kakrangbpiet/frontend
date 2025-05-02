@@ -232,8 +232,9 @@ const Footer: React.FC<FooterProps> = ({
 
           {showSocials && (
             <div className="flex justify-center items-center space-x-20">
-              <a href="#" target='_blank' aria-label="WhatsApp" className="text-white/70 hover:text-white transition">
-                <WhatsApp sx={{ fontSize: 24 }} />
+              <a href="https://www.facebook.com/profile.php?id=61575410837166" target='_blank' aria-label="Facebook" className="text-white/70 hover:text-white transition">
+                <Facebook size={24} />
+
               </a>
               <a href="https://twitter.com" target='_blank' aria-label="Twitter" className="text-white/70 hover:text-white transition">
                 <Twitter size={24} />

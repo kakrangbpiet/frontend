@@ -11,6 +11,7 @@ import { UserCategory } from '../../Datatypes/Enums/UserEnums';
 import locationsData from '../../components/Forms/Location.json';
 import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
 import FormDialog from '../../components/Registration/FormDailog.tsx';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -91,10 +92,11 @@ const SearchInput = styled.input`
   padding: 0.75rem 1rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(7, 3, 3, 0.5);
   backdrop-filter: blur(4px);
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 1000;
   text-align: center;
   
   // Mobile-specific styles
@@ -104,9 +106,9 @@ const SearchInput = styled.input`
   }
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.86);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 1.2rem;
-    font-weight: 1000;
+    font-weight: 2000;
 
     text-align: center; /* Specifically center the placeholder */
   }
@@ -149,7 +151,6 @@ const ResultType = styled.span`
   margin-right: 0.5rem;
 `;
 
-
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
@@ -166,10 +167,11 @@ const Button = styled.button`
   padding: 0.75rem 1.5rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(7, 3, 3, 0.5);
   backdrop-filter: blur(4px);
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+
   font-weight: 1000;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -186,6 +188,63 @@ const Button = styled.button`
   }
 `;
 
+const NextVideoButton = styled.button`
+  position: absolute;
+  right: 20px;
+  top: 80%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 9999px;
+  padding: 1rem;
+  color: white;
+  cursor: pointer;
+  z-index: 50;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+    transform: translateY(-50%) scale(1.05);
+  }
+  
+  @media (max-width: 768px) {
+    right: 10px;
+    padding: 0.75rem;
+  }
+`;
+
+const PreviousVideoButton = styled.button`
+  position: absolute;
+  left: 20px;
+  top: 80%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 9999px;
+  padding: 1rem;
+  color: white;
+  cursor: pointer;
+  z-index: 50;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+    transform: translateY(-50%) scale(1.05);
+  }
+  
+  @media (max-width: 768px) {
+    left: 10px;
+    padding: 0.75rem;
+  }
+`;
+
+interface OutletContextType {
+  title: string;
+  onNextVideo?: () => void;
+  onPreviousVideo?: () => void;
+}
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -194,7 +253,7 @@ const HomePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const { title } = useOutletContext<{ title: string }>();
+  const { title, onNextVideo, onPreviousVideo } = useOutletContext<OutletContextType>();
   const [showResults, setShowResults] = useState(false);
   const categories = useSelector(selectCategories);
   const [openInquiryDialog, setOpenInquiryDialog] = useState(false); // State for dialog
@@ -222,6 +281,7 @@ const HomePage: React.FC = () => {
       select: "title,category"
     }));
   }, [dispatch]);
+  
   useEffect(() => {
     dispatch(fetchTravelPackagesApi({
       status: "active",
@@ -242,28 +302,6 @@ const HomePage: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  // const handleLoadCategories = async () => {
-  //   try {
-  //     dispatch(
-  //       fetchTravelPackagesApi({
-  //         pageSize: 10,
-  //         page: 1,
-  //         category: "hotdeals",
-  //         status: "active"
-  //       })
-  //     );
-  //     dispatch(
-  //       fetchTravelPackagesApi({
-  //         pageSize: 10,
-  //         page: 1,
-  //         category: "pre-planned-trips",
-  //         status: "active"
-  //       })
-  //     );
-  //   } catch (error) {
-  //     console.error("Failed to fetch travel packages:", error);
-  //   }
-  // };
 
   const handleFocus = () => {
     handleSearchFocus();
@@ -285,19 +323,20 @@ const HomePage: React.FC = () => {
       setIsMobileFocused(false);
     }, 200);
   };
+  
   // Add visual viewport handler for mobile keyboards
-useEffect(() => {
-  if (typeof window !== 'undefined' && window.visualViewport) {
-    const handler = () => {
-      if (isMobileFocused && searchInputRef.current) {
-        searchInputRef.current.scrollIntoView({ block: 'center' });
-      }
-    };
-    
-    window.visualViewport.addEventListener('resize', handler);
-    return () => window.visualViewport.removeEventListener('resize', handler);
-  }
-}, [isMobileFocused]);
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.visualViewport) {
+      const handler = () => {
+        if (isMobileFocused && searchInputRef.current) {
+          searchInputRef.current.scrollIntoView({ block: 'center' });
+        }
+      };
+      
+      window.visualViewport.addEventListener('resize', handler);
+      return () => window.visualViewport.removeEventListener('resize', handler);
+    }
+  }, [isMobileFocused]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -364,8 +403,6 @@ useEffect(() => {
     }
   };
 
-
-
   const handleSearchFocus = () => {
     setShowResults(true);
     if (searchQuery.length === 0) {
@@ -405,7 +442,6 @@ useEffect(() => {
     }
   };
 
-
   const handleCustomizedTripClick = () => {
     setOpenInquiryDialog(true);
   };
@@ -414,13 +450,21 @@ useEffect(() => {
     setOpenInquiryDialog(false);
   };
 
-
   const handlePrePlannedTripsClick = () => {
     navigate(`/packages?category=${encodeURIComponent("top-destination")}`);
-
   };
 
+  const handleNextVideoClick = () => {
+    if (onNextVideo) {
+      onNextVideo();
+    }
+  };
 
+  const handlePreviousVideoClick = () => {
+    if (onPreviousVideo) {
+      onPreviousVideo();
+    }
+  };
 
   return (
     <div>
@@ -429,10 +473,18 @@ useEffect(() => {
           <HeroTitle>{title || "Discover Amazing Destinations"}</HeroTitle>
         </HeroText>
 
+        <NextVideoButton onClick={handleNextVideoClick}>
+          <ChevronRight size={28} />
+        </NextVideoButton>
+
+        <PreviousVideoButton onClick={handlePreviousVideoClick}>
+          <ChevronLeft size={28} />
+        </PreviousVideoButton>
+
         <ButtonContainer>
-        <SearchContainer ref={searchRef} $isMobileFocused={isMobileFocused}>
+          <SearchContainer ref={searchRef} $isMobileFocused={isMobileFocused}>
             <SearchInput
-            ref={searchInputRef}
+              ref={searchInputRef}
               type="text"
               placeholder="Destinations..."
               value={searchQuery}
@@ -464,7 +516,6 @@ useEffect(() => {
             )}
           </SearchContainer>
 
-
           <ButtonGroup>
             <Button onClick={handleCustomizedTripClick}>
               Plan Own Trip
@@ -481,17 +532,17 @@ useEffect(() => {
           <TravelInquiryForm isCustomForm={true} />
         </FormDialog>
       </ContentOverlay>
-      {/*test */}
+      
       <div className="relative w-full min-h-[50vh] bg-transparent bg-opacity-50 flex flex-col items-center justify-center text-center p-4 pt-20 pb-40">
         <h1 className="text-4xl font-bold text-white mt-6">
           Start with a Feeling, End with a Journey
         </h1>
         <p className="text-white mt-8 max-w-4xl">
           See the Himalayan peaks rising above lush valleys—where misty summits tower over green meadows,
-          quiet paths call your name, and every sunrise reveals nature’s magic
+          quiet paths call your name, and every sunrise reveals nature's magic
         </p>
       </div>
-      {/*Content */}
+      
       <div className="text-center mt-4">
         <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
           Explore With Us
@@ -501,30 +552,13 @@ useEffect(() => {
         <span className="block w-24 h-[3px] bg-white/30 rounded-full transition-all duration-500 group-hover:w-32 group-hover:bg-white/60"></span>
       </div>
 
-
-
       <TravelPackages
         travelPackages={travelPackages.travelPackages}
         categoryType="new"
         loading={travelPackagesLoading}
       />
-
-
-      {/* <div className=" bg-transparent flex items-center justify-center p-5">
-        <div className="w-[450px] h-[80px] bg-transparent border border-white/30 rounded-2xl backdrop-blur-md flex items-center justify-center shadow-xl">
-
-        </div>
-      </div> */}
-      {/*todo //UI*/}
-
-
-
-
-
-
       <DashboardGrid>
         <PackagesSection>
-
           <div className="text-center mt-12">
             <div className="inline-block px-8 py-3 text-white text-3xl font-extrabold tracking-wide bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
               Pre-Planned Trips

@@ -127,10 +127,10 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
             <SocialIcon href="tw">
               <Twitter size={20} />
             </SocialIcon>
-            <SocialIcon href="i">
+            <SocialIcon href="https://www.instagram.com/samsara_adventures01/">
               <Instagram size={20} />
             </SocialIcon>
-            <SocialIcon href="f">
+            <SocialIcon href="https://www.facebook.com/profile.php?id=61575410837166">
               <Facebook size={20} />
             </SocialIcon>
           </SocialLinks>
