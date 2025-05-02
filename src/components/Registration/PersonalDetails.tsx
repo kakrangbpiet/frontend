@@ -1,5 +1,6 @@
-import { Box } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
+import { useState, useEffect } from 'react';
 
 interface PersonalDetailsProps {
   inquiryData: any;
@@ -9,6 +10,13 @@ interface PersonalDetailsProps {
 }
 
 function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRegister }: PersonalDetailsProps) {
+  const [passengerInput, setPassengerInput] = useState<string>(inquiryData.passengerCount.toString());
+
+  useEffect(() => {
+    // Sync with external changes
+    setPassengerInput(inquiryData.passengerCount.toString());
+  }, [inquiryData.passengerCount]);
+
   const handleChange = (field: keyof TravelInquiry, value: string | number) => {
     setInquiryData(prev => ({
       ...prev,
@@ -16,74 +24,134 @@ function PersonalDetails({ inquiryData, setInquiryData, isRegister, shouldShowRe
     }));
   };
 
+  const handlePassengerCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setPassengerInput(inputValue); // Update local state immediately for responsive UI
+
+    // Parse the numeric value, handling empty string case
+    const numericValue = inputValue === '' ? 0 : parseInt(inputValue, 10);
+
+    // Only update the form data if we have a valid number or empty string
+    if (!isNaN(numericValue)) {
+      handleChange('passengerCount', numericValue);
+    }
+  };
+
+  const handlePassengerBlur = () => {
+    // When field loses focus, clean up the display value
+    const numericValue = parseInt(passengerInput, 10) || 0;
+    setPassengerInput(numericValue.toString());
+    handleChange('passengerCount', numericValue);
+  };
+
   return (
-    <Box sx={{ mt: 1 }} className="space-y-3">
+    <Box sx={{ mt: 1, color: 'white' }} className="space-y-3">
       {/* Name input */}
-      <div>
-        <label htmlFor="name" className="block text-xs font-medium text-gray-200 mb-1">
-          Your Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          value={inquiryData.name}
-          onChange={(e) => handleChange('name', e.target.value)}
-          disabled={!shouldShowRegister && isRegister}
-          className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
-             font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
-             transition-all duration-200 outline-none"
-          placeholder="Enter your full name"
-          required
-        />
-       
-      </div>
+      <TextField
+        label="Your Name"
+        id="name"
+        value={inquiryData.name}
+        onChange={(e) => handleChange('name', e.target.value)}
+        disabled={!shouldShowRegister && isRegister}
+        fullWidth
+        size="small"
+        className="w-full  px-3 mt-2 py-2 text-sm rounded-md text-white border border-gray-300 
+        font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+        transition-all duration-200 outline-none"
+        sx={{
+          '& .MuiInputBase-input': {
+            color: 'white',
+          },
+          '& .MuiInputLabel-root': {
+            color: 'white',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.23)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.5)',
+            },
+          },
+          '& .MuiFormHelperText-root': {
+            color: 'white',
+          },
+        }}
+        placeholder="Enter your full name"
+        required
+      />
 
       {/* Passenger count input */}
       {!isRegister && (
-        <div>
-          <label htmlFor="passengers" className="block text-xs font-medium text-gray-200 mb-1">
-            Number of Passengers
-          </label>
-          <input
-            type="number"
+        <Box sx={{mt:4, color: 'white'}}>
+          <TextField
+            label="Number of Passengers"
             id="passengerCount"
-            value={inquiryData.passengerCount}
-            onChange={(e) => handleChange('passengerCount', parseInt(e.target.value) || 0)}
+            type="number"
+            value={passengerInput}
+            onChange={handlePassengerCountChange}
+            onBlur={handlePassengerBlur}
             disabled={!shouldShowRegister && isRegister}
-            className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
-               font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
-               transition-all duration-200 outline-none"
+            fullWidth
+            size="small"
+            className="w-full mt-8 px-3 mt-2 py-2 text-sm rounded-md text-white border border-gray-300 
+            font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+            transition-all duration-200 outline-none"
+            sx={{
+              '& .MuiInputBase-input': {
+                color: 'white',
+              },
+              '& .MuiInputLabel-root': {
+                color: 'white',
+              },
+              '& .MuiFormHelperText-root': {
+                color: 'white',
+              },
+            }}
+            InputProps={{
+              inputProps: { 
+                min: 0,
+              }
+            }}
             placeholder="Enter number of passengers"
-            min="1"
             required
           />
-          {inquiryData.passengerCount && (
-            <p className="text-xs text-gray-400">
+          {inquiryData.passengerCount > 0 && (
+            <Box sx={{ mt: 0.5, fontSize: '0.75rem', color: 'white' }}>
               {inquiryData.passengerCount} {inquiryData.passengerCount === 1 ? 'person' : 'people'} traveling
-            </p>
+            </Box>
           )}
-        </div>
+        </Box>
       )}
 
       {/* Special requests input */}
       {!isRegister && (
-        <div>
-          <label htmlFor="requests" className="block text-xs font-medium text-gray-200 mb-1">
-            Special Requests
-          </label>
-          <textarea
-            id="specialRequests"
-            value={inquiryData.specialRequests}
-            onChange={(e) => handleChange('specialRequests', e.target.value)}
-            disabled={!shouldShowRegister && isRegister}
-            rows={3}
-            className="w-full px-3 py-2 text-sm rounded-md text-white border border-gray-300 
-               font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
-               transition-all duration-200 outline-none resize-y"
-            placeholder="E.g., dietary restrictions, accessibility needs, etc."
-          />
-          <p className="text-xs text-gray-400">Optional: Let us know if you have any special requirements</p>
-        </div>
+        <TextField
+          label="Special Requests"
+          id="specialRequests"
+          value={inquiryData.specialRequests}
+          onChange={(e) => handleChange('specialRequests', e.target.value)}
+          disabled={!shouldShowRegister && isRegister}
+          fullWidth
+          multiline
+          rows={3}
+          size="small"
+          className="w-full px-3 py-2 mt-2 text-sm rounded-md text-white border border-gray-300 
+          font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-200 
+          transition-all duration-200 outline-none"
+          sx={{
+            '& .MuiInputBase-input': {
+              color: 'white',
+            },
+            '& .MuiInputLabel-root': {
+              color: 'white',
+            },
+            '& .MuiFormHelperText-root': {
+              color: 'white',
+            },
+          }}
+          placeholder="E.g., dietary restrictions, accessibility needs, etc."
+        />
       )}
     </Box>
   );
