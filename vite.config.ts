@@ -3,13 +3,21 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import dts from "vite-plugin-dts";
 import tailwind from '@tailwindcss/vite' // ESM import
+import fs from 'fs';
+import path from 'path';
+
 
 export default defineConfig({
+  base: 'https://samsaraadventures.com/',
   preview: {
-    allowedHosts: ['samsaraadventures.com'], // Allow only this domain
-    // OR allow all hosts (less secure):
-    // allowedHosts: 'all',
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'key.pem')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'cert.pem')),
+    },
+    host: 'samsaraadventures.com',
+    allowedHosts: ['samsaraadventures.com'],
   },
+
   server: {
     host: '0.0.0.0',
     port: 5173,
