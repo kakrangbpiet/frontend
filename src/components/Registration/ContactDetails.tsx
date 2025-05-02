@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TravelInquiry } from '../../redux/slices/Travel/Booking/BoookTravelSlice';
-import { SelectConactVerified, SelectContact, selectTrxId, setContactVerified } from '../../redux/slices/login/authSlice';
+import { authLoading, SelectConactVerified, SelectContact, selectTrxId, setContactVerified } from '../../redux/slices/login/authSlice';
 import { registerNumberDispatcher, registerNumberOtpDispatcher } from '../../redux/slices/login/authApiSlice';
 import { AppDispatch } from '../../redux/store';
 import AdditionalServices from './AdditionalServices';
@@ -21,7 +21,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
   const isContactVerified = useSelector(SelectConactVerified);
   const verifiedPhoneNumber = useSelector(SelectContact);
   const trxId = useSelector(selectTrxId);
-
+  const loadingAuth=useSelector(authLoading)
   useEffect(() => {
     document.body.classList.add('overflow-auto');
     
@@ -159,7 +159,7 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                 text-white text-sm font-medium shadow hover:shadow-md disabled:opacity-50 
                 disabled:cursor-not-allowed transition-all duration-200 w-full"
               >
-                Send Verification Code
+               {loadingAuth ?" Sending OTP..." : "Send Verification Code"}
               </button>
             </div>
           ) : (
@@ -194,9 +194,9 @@ function ContactDetails({ inquiryData, setInquiryData, isRegister, shouldShowReg
                   text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 
                   disabled:cursor-not-allowed transition-all duration-200"
                 >
-                  Verify Phone Number
+               {loadingAuth ?" Verifying OTP..." : " Verify Phone Number"}
+                 
                 </button>
-                
                 {!isRegister && (
                   <button 
                     type="button"
