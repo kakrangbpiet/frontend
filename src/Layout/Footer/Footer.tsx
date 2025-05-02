@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isAuthenticated, logout } from '../../redux/slices/login/authSlice';
 import { Container } from '@mui/material';
 import PasswordlessLoginForm from '../../components/PasswordlessLoginForm';
-import { Twitter, Instagram, Linkedin } from 'lucide-react';
-import { WhatsApp } from '@mui/icons-material';
+import { Twitter, Instagram, Linkedin, Facebook } from 'lucide-react';
+// import { WhatsApp } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 

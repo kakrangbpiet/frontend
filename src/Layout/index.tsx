@@ -10,10 +10,10 @@ import { isAuthenticated, selectUserType } from '../redux/slices/login/authSlice
 import { useMediaQuery } from '@mui/material';
 import { UserCategory } from '../Datatypes/Enums/UserEnums';
 export type { TooltipProps, TooltipPosition, TooltipVariant } from './Tooltip';
-import { Twitter, Instagram } from 'lucide-react';
+import { Twitter, Instagram, Facebook } from 'lucide-react';
 import VideoHero from '../page/HomePage/VideoHero';
 import ScrollToTop from './ScrollToTop';
-import { WhatsApp } from '@mui/icons-material';
+// import { WhatsApp } from '@mui/icons-material';
 
 const heroContent = [
   {

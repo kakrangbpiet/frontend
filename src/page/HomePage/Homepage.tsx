@@ -188,57 +188,100 @@ const Button = styled.button`
   }
 `;
 
-const NextVideoButton = styled.button`
+const MediaControlsContainer = styled.div`
   position: absolute;
-  right: 20px;
+  right: 2px;
   top: 80%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  border: none;
-  border-radius: 9999px;
-  padding: 1rem;
-  color: white;
-  cursor: pointer;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 50px;
+  padding: 8px 16px;
   z-index: 50;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.6);
-    transform: translateY(-50%) scale(1.05);
-  }
-  
-  @media (max-width: 768px) {
-    right: 10px;
-    padding: 0.75rem;
-  }
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
-const PreviousVideoButton = styled.button`
-  position: absolute;
-  left: 20px;
-  top: 80%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+const MediaControlButton = styled.button`
+  background: transparent;
   border: none;
-  border-radius: 9999px;
-  padding: 1rem;
   color: white;
   cursor: pointer;
-  z-index: 50;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
   
   &:hover {
-    background-color: rgba(0, 0, 0, 0.6);
-    transform: translateY(-50%) scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
   }
   
-  @media (max-width: 768px) {
-    left: 10px;
-    padding: 0.75rem;
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.5px;
   }
 `;
+// const NextVideoButton = styled.button`
+//   position: absolute;
+//   right: 20px;
+//   top: 80%;
+//   transform: translateY(-50%);
+//   background-color: rgba(0, 0, 0, 0.4);
+//   backdrop-filter: blur(4px);
+//   border: none;
+//   border-radius: 9999px;
+//   padding: 1rem;
+//   color: white;
+//   cursor: pointer;
+//   z-index: 50;
+//   transition: all 0.3s ease;
+//   display:flex;
+//   &:hover {
+//     background-color: rgba(0, 0, 0, 0.6);
+//     transform: translateY(-50%) scale(1.05);
+//   }
+  
+//   @media (max-width: 768px) {
+//     right: 10px;
+//     padding: 0.75rem;
+//   }
+// `;
+
+// const PreviousVideoButton = styled.button`
+//   position: absolute;
+//   left: 20px;
+//   top: 80%;
+//   transform: translateY(-50%);
+//   background-color: rgba(0, 0, 0, 0.4);
+//   backdrop-filter: blur(4px);
+//   border: none;
+//   border-radius: 9999px;
+//   padding: 1rem;
+//   color: white;
+//   cursor: pointer;
+//   z-index: 50;
+//   transition: all 0.3s ease;
+  
+//   &:hover {
+//     background-color: rgba(0, 0, 0, 0.6);
+//     transform: translateY(-50%) scale(1.05);
+//   }
+  
+//   @media (max-width: 768px) {
+//     left: 10px;
+//     padding: 0.75rem;
+//   }
+// `;
 
 interface OutletContextType {
   title: string;
@@ -473,13 +516,17 @@ const HomePage: React.FC = () => {
           <HeroTitle>{title || "Discover Amazing Destinations"}</HeroTitle>
         </HeroText>
 
-        <NextVideoButton onClick={handleNextVideoClick}>
-          <ChevronRight size={28} />
-        </NextVideoButton>
+        <MediaControlsContainer>
+  <MediaControlButton onClick={handlePreviousVideoClick} aria-label="Previous video">
+    <ChevronLeft />
+  </MediaControlButton>
+  <MediaControlButton onClick={handleNextVideoClick} aria-label="Next video">
+    <ChevronRight />
+  </MediaControlButton>
+</MediaControlsContainer>
 
-        <PreviousVideoButton onClick={handlePreviousVideoClick}>
-          <ChevronLeft size={28} />
-        </PreviousVideoButton>
+        {/* <PreviousVideoButton > */}
+        {/* </PreviousVideoButton> */}
 
         <ButtonContainer>
           <SearchContainer ref={searchRef} $isMobileFocused={isMobileFocused}>

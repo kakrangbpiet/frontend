@@ -43,10 +43,10 @@ interface VideoHeroProps {
 
 const VideoHero: React.FC<VideoHeroProps> = ({
   videoSrc,
-  title,
-  subtitle,
-  onNextVideo,
-  onPreviousVideo
+  // title,
+  // subtitle,
+  // onNextVideo,
+  // onPreviousVideo
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
