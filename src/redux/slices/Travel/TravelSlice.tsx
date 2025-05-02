@@ -255,6 +255,16 @@ const travelSlice = createSlice({
     setTitles: (state, action) => {
       state.titles = action.payload;
     },
+    removeItem: (state, action: PayloadAction<string>) => {
+      const packageId = action.payload;
+      state.travelPackages = state.travelPackages.filter(item => item.id !== packageId);
+      
+      // Also remove from categorized packages
+      for (const category in state.travelPackagesByCategory) {
+        state.travelPackagesByCategory[category] = 
+          state.travelPackagesByCategory[category].filter(item => item.id !== packageId);
+      }
+    },
   },
 });
 
@@ -268,7 +278,8 @@ export const {
   setCategories,
   setLocations,
   setTitles,
-  updatePackageDates
+  updatePackageDates,
+  removeItem
 } = travelSlice.actions;
 
 export default travelSlice.reducer;

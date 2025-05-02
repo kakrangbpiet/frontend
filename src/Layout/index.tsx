@@ -17,11 +17,11 @@ import { WhatsApp } from '@mui/icons-material';
 
 const heroContent = [
   {
-    video: '/HomeVideos/t1.mp4',
+    video: '/HomeVideos/v1.mp4',
     title: "Discover the world's hidden gems with Samsara Adventures—where every journey tells a unique story and every destination leaves you breathless."
   },
   {
-    video: '/HomeVideos/t2.mp4',
+    video: '/HomeVideos/v2.mp4',
     title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
   },
   {

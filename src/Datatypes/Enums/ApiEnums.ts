@@ -216,6 +216,46 @@ export const ApiEndpoint: Record<string, any> = {
     errorMessage: "Error updating status"
   },
 
+  UPDATE_TRAVEL_PACKAGE_IMAGE: { 
+    apiId: 34, 
+    withAuth: true, 
+    url: `${backendUrl}/Travel/image`, 
+    method: 'PATCH', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Updating package image",
+    successMessage: "Package image updated successfully",
+    errorMessage: "Error updating package image"
+  },
+  UPDATE_TRAVEL_PACKAGE_IMAGES: { 
+    apiId: 35, 
+    withAuth: true, 
+    url: `${backendUrl}/Travel/images`, 
+    method: 'PATCH', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Updating package images",
+    successMessage: "Package images updated successfully",
+    errorMessage: "Error updating package images"
+  },
+  UPDATE_TRAVEL_PACKAGE_VIDEOS: { 
+    apiId: 36, 
+    withAuth: true, 
+    url: `${backendUrl}/Travel/videos`, 
+    method: 'PATCH', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Updating package videos",
+    successMessage: "Package videos updated successfully",
+    errorMessage: "Error updating package videos"
+  },
+  DELETE_TRAVEL_PACKAGE: { 
+    apiId: 37, 
+    withAuth: true, 
+    url: `${backendUrl}/Travel`, 
+    method: 'DELETE', 
+    headers: { 'Content-Type': 'application/json' },
+    loadingMessage: "Deleting travel package",
+    successMessage: "Travel package deleted successfully",
+    errorMessage: "Error deleting travel package"
+  },
   // BOOKING ENDPOINTS
   COMPLETE_BOOKING: {
     apiId: 40,

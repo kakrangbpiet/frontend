@@ -5,10 +5,10 @@ import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Bo
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUploader from '../ImageUploader';
 import { AppDispatch } from '../../redux/store';
-import { DateAvailability, ITravelPackage,  selectPackageDates,  useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
+import { DateAvailability, ITravelPackage, selectPackageDates, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
 import CustomTextField from '../CustomTextField';
-import { addTravelPackageApi, fetchSingleTravelPackageApi, fetchTravelPackageDatesApi, } from '../../redux/slices/Travel/travelApiSlice';
+import { addTravelPackageApi, fetchSingleTravelPackageApi, fetchTravelItemVideosApi, fetchTravelPackageDatesApi, } from '../../redux/slices/Travel/travelApiSlice';
 import locationsData from './Location.json';
 import AddIcon from '@mui/icons-material/Add';  // Fixed import
 import UnixDateInput from './DatePicker';
@@ -38,26 +38,26 @@ const travelTypeOptions = ['group', 'private', 'self-guided'];
 const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, formEvent }) => {
   const dispatch = useDispatch<AppDispatch>();
   const packageData = useSelector(useSelectedTravelPackage(packageId));
-  
+
   const [formData, setFormData] = useState<ITravelPackage>(
-       {
-        id: '',
-        title: '',
-        image: '',
-        images: [],
-        videos: [],
-        location: '',
-        category: '',
-        status: 'active',
-        maxTravelers: undefined,
-        availableSpots: undefined,
-        travelType: undefined,
-        dateAvailabilities: [],
-        activities: []
-      }
+    {
+      id: '',
+      title: '',
+      image: '',
+      images: [],
+      videos: [],
+      location: '',
+      category: '',
+      status: 'active',
+      maxTravelers: undefined,
+      availableSpots: undefined,
+      travelType: undefined,
+      dateAvailabilities: [],
+      activities: []
+    }
   );
 
-  const [description, setDescription] = useState(packageData ? packageData.description : "");
+  const [description, setDescription] = useState(packageData ? packageData?.description : "");
 
   const dateAvailabilitiesPrev = useSelector(selectPackageDates(packageId)) ?? [];
 
@@ -72,18 +72,25 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorMessages>(newErrors);
 
+
   useEffect(() => {
     if (packageId) {
       dispatch(fetchSingleTravelPackageApi({ itemId: packageId }));
       dispatch(fetchTravelPackageDatesApi({ packageId }));
+      dispatch(fetchTravelItemVideosApi({
+        itemId: packageId,
+      }));
     }
   }, [packageId, dispatch]);
   // Update form data when packageData changes
+  console.log(packageData?.videos);
+  console.log(formData.videos);
+
   useEffect(() => {
     if (packageData) {
       setFormData(packageData);
-      setDescription(packageData.description || "");
-      setActivities(packageData.activities || []);
+      setDescription(packageData?.description || "");
+      setActivities(packageData?.activities || []);
     }
   }, [packageData]);
 
@@ -201,7 +208,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
       formData?.title?.trim() &&
       description?.trim() &&
       formData?.location?.trim() &&
-      formData?.category?.trim() 
+      formData?.category?.trim()
     );
   };
 
@@ -225,18 +232,18 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
         <Grid container spacing={2}>
           {/* Title - full width */}
           <Grid size={{ xs: 12, md: 12 }}>
-          <Typography variant="h6">Title</Typography>
-              <CustomTextField
-                id="title"
-                type="text"
-                label="Title"
-                value={formData.title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'title')}
-                placeholder="Enter title"
-                error={errors.title}
-                isError={!!errors.title}
-                fullWidth
-              />
+            <Typography variant="h6">Title</Typography>
+            <CustomTextField
+              id="title"
+              type="text"
+              label="Title"
+              value={formData.title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, 'title')}
+              placeholder="Enter title"
+              error={errors.title}
+              isError={!!errors.title}
+              fullWidth
+            />
           </Grid>
 
 
@@ -394,12 +401,15 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
           </Grid>
 
           {/* Images - full width */}
+
+          <Typography variant="h6">Main Image</Typography>
           <Grid size={{ xs: 12, md: 12 }}>
-            <Typography variant="h6">Main Image</Typography>
-            <ImageUploader
-              register={handleMainImageUpload}
-              uploadFormat="BASE64"
-            />
+            {!packageId &&
+              <ImageUploader
+                register={handleMainImageUpload}
+                uploadFormat="BASE64"
+              />
+            }
             {errors.image && (
               <Typography color="error" variant="body2">
                 {errors.image}
@@ -408,7 +418,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
             {formData.image && (
               <Box mt={2}>
                 <img
-                  src={`data:video/mp4;base64,${formData.image}`}
+                  src={`${formData.image}`}
                   alt="Main preview"
                   style={{ maxWidth: '200px', maxHeight: '200px' }}
                 />
@@ -418,19 +428,22 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
 
           <Grid size={{ xs: 12, md: 12 }}>
             <Typography variant="h6">Gallery Images</Typography>
-            <ImageUploader
-              register={(url) => handleGalleryImagesUpload([...(formData.images || []), url])}
-              uploadFormat="BASE64"
-            />
+
+            {!packageId &&
+              <ImageUploader
+                register={(url) => handleGalleryImagesUpload([...(formData.images || []), url])}
+                uploadFormat="BASE64"
+              />
+            }
             <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
               {formData.images?.map((img, index) => (
                 <Box key={index} position="relative">
                   <img
-                    src={`data:image/jpeg;base64,${img}`}
+                    src={`${img}`}
                     alt={`Gallery ${index + 1}`}
                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                   />
-                  <IconButton
+                  {/* <IconButton
                     size="small"
                     style={{
                       position: 'absolute',
@@ -445,26 +458,31 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
                     }}
                   >
                     <RemoveIcon fontSize="small" />
-                  </IconButton>
+                  </IconButton> */}
                 </Box>
               ))}
             </Box>
           </Grid>
           <Grid size={{ xs: 12, md: 12 }}>
             <Typography variant="h6">Gallery Videos</Typography>
-            <ImageUploader
-              register={(url) => handleGalleryVideoUpload([...(formData.videos || []), url])}
-              uploadFormat="BASE64"
-            />
+            {!packageId &&
+              <ImageUploader
+                register={(url) => handleGalleryVideoUpload([...(formData.videos || []), url])}
+                uploadFormat="BASE64"
+              />
+            }
             <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-              {formData?.videos?.length >0 && formData?.videos?.map((video, index) => (
+              {packageData?.videos?.allVideos?.length > 0 && packageData?.videos?.allVideos?.map((video, index) => (
                 <Box key={index} position="relative">
-                  <img
-                    src={`data:video/mp4;base64,${video.base64Data}`}
-                    alt={`Gallery ${index + 1}`}
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  <video
+                    style={{ width: '200px', height: '100%' }}
+                    src={video.awsUrl}
+                    controls
+                    preload="metadata"
+                    onClick={(e) => e.currentTarget.play()}
                   />
-                  <IconButton
+
+                  {/* <IconButton
                     size="small"
                     style={{
                       position: 'absolute',
@@ -479,7 +497,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
                     }}
                   >
                     <RemoveIcon fontSize="small" />
-                  </IconButton>
+                  </IconButton> */}
                 </Box>
               ))}
             </Box>
