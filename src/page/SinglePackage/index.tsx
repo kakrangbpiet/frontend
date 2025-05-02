@@ -114,7 +114,7 @@ const SingleTravelPackageDetails = () => {
         <MediaBackground video={videos.randomVideo} />
       }
       <div className="">
-      <div className="backdrop-blur-[4px]  min-h-screen pt-6 md:pt-2">
+      <div className="backdrop-blur-[1px]  min-h-screen pt-6 md:pt-2">
         <div className="max-w-[95%] md:max-w-[90%] mx-auto px-2 md:px-4 py-8 md:py-12">
           <div className="relative rounded-xl overflow-hidden mb-8 md:mb-12 shadow-2xl h-64 md:h-96 object-cover">
             {isImageLoading && !image ? (

@@ -232,13 +232,13 @@ const Footer: React.FC<FooterProps> = ({
           {/*Icons instead of FB and oterh ,,,, size can be changed */}
           {showSocials && (
             <div className="flex justify-center items-center space-x-20">
-              <a href="https://facebook.com" target='_blank' aria-label="Facebook" className="text-white/70 hover:text-white transition">
+              <a href="https://www.facebook.com/profile.php?id=61575410837166" target='_blank' aria-label="Facebook" className="text-white/70 hover:text-white transition">
                 <Facebook size={24} />
               </a>
               <a href="https://twitter.com" target='_blank' aria-label="Twitter" className="text-white/70 hover:text-white transition">
                 <Twitter size={24} />
               </a>
-              <a href="https://instagram.com" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
+              <a href="https://www.instagram.com/samsara_adventures01/" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
                 <Instagram size={24} />
               </a>
               <a href="https://linkedin.com" target='_blank' aria-label="LinkedIn" className="text-white/70 hover:text-white transition">
