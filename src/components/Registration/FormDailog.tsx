@@ -71,20 +71,27 @@ const FormDialog: React.FC<FormDialogProps> = ({
   useEffect(() => {
     if (!open) return;
 
+    // Store the current history state to restore later
+    const currentState = window.history.state;
+    
     // Add a dummy history entry when dialog opens
     window.history.pushState({ isFormDialogOpen: true }, '');
 
-    const handleBackButton = () => {
-      onClose();
-      // Remove the dummy history entry
-      window.history.back();
+    const handlePopState = (event: PopStateEvent) => {
+      // Check if the dialog is open and we're going back
+      if (open && (!event.state || event.state.isFormDialogOpen !== true)) {
+        onClose();
+        // Restore the original history state
+        window.history.replaceState(currentState, '');
+      }
     };
 
-    window.addEventListener('popstate', handleBackButton);
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
-      window.removeEventListener('popstate', handleBackButton);
-      // Clean up the dummy history entry if dialog is closed normally
+      window.removeEventListener('popstate', handlePopState);
+      
+      // If dialog is closing and we have our dummy state, clean it up
       if (window.history.state?.isFormDialogOpen) {
         window.history.back();
       }
