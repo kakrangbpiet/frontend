@@ -16,23 +16,27 @@ import ScrollToTop from './ScrollToTop';
 
 const heroContent = [
   {
-    video: '/HomeVideos/v2.mp4',
+    video: 'https://metakulbucket.s3.us-east-1.amazonaws.com/samsara/homePageVideo/v6.mp4',
     title: "Discover the world's hidden gems with Samsara Adventures—where every journey tells a unique story and every destination leaves you breathless."
   },
   {
-    video: '/HomeVideos/g1.mp4',
+    video: 'https://metakulbucket.s3.us-east-1.amazonaws.com/samsara/homePageVideo/v2.mp4',
     title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
   },
   {
-    video: '/HomeVideos/g2.mp4',
+    video: 'https://metakulbucket.s3.us-east-1.amazonaws.com/samsara/homePageVideo/m1.mp4',
+    title: "Begin your unforgettable journey with Samsara Adventures—where every path leads to wonder, and every moment becomes a memory in time."
+  },
+  {
+    video: 'https://metakulbucket.s3.us-east-1.amazonaws.com/samsara/homePageVideo/v5.mp4',
     title: "Embark on extraordinary adventures with Samsara—crafting experiences that go beyond the ordinary and into the extraordinary."
   },
   {
-    video: '/HomeVideos/v1.mp4',
+    video: 'https://metakulbucket.s3.us-east-1.amazonaws.com/samsara/homePageVideo/g1.mp4',
     title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
   },
   {
-    video: '/HomeVideos/v2.mp4',
+    video: 'https://metakulbucket.s3.us-east-1.amazonaws.com/samsara/homePageVideo/g2.mp4',
     title: "Let Samsara Adventures be your guide to the world's most captivating destinations—where dreams meet reality and adventures begin."
   }
 ];
