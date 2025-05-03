@@ -104,7 +104,7 @@ const Layout = () => {
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="">
       <ScrollToTop />
       <Header
         title={"SAMSARA"}
