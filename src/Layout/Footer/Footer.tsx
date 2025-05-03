@@ -205,7 +205,7 @@ const Footer: React.FC<FooterProps> = ({
                 Contact
               </div>
               <div
-                onClick={() => navigate('/privacy')}
+                onClick={() => navigate('/privacy-policy')}
                 style={{ ...linkStyle, cursor: 'pointer' }}
               >
                 Privacy Policy

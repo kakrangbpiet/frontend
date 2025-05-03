@@ -1,7 +1,7 @@
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
-import SettingsIcon from '@mui/icons-material/Settings';
+// import SettingsIcon from '@mui/icons-material/Settings';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
@@ -9,7 +9,7 @@ import InfoIcon from '@mui/icons-material/Info';
 export const HEADER_LINKS = [
   { to: '/', label: 'DASHBOARD',icon:<HomeIcon sx={{color:"white"}}/> },
   { to: '/about-us', label: 'ABOUT',icon:<InfoIcon sx={{color:"white"}}/> },
-  { to: '/settings', label: 'SETTINGS',icon:<SettingsIcon sx={{color:"white"}}/> },
+  // { to: '/settings', label: 'SETTINGS',icon:<SettingsIcon sx={{color:"white"}}/> },
 ];
 
 // Sidebar Items

@@ -104,7 +104,7 @@ const FullScreenGallery = ({
       <div className="relative w-full h-full flex items-center justify-center p-4 md:p-12">
         {allMedia[currentMedia.index].type === 'image' ? (
           <img
-            src={`${allMedia[currentMedia.index]}`}
+            src={`${allMedia[currentMedia.index].awsUrl}`}
             alt={`Gallery image ${currentMedia.index + 1}`}
             className="max-h-[90vh] max-w-full object-contain select-none rounded-lg shadow-2xl"
             draggable="false"

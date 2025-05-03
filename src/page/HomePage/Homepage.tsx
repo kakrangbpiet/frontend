@@ -391,9 +391,9 @@ const HomePage: React.FC = () => {
       categories.forEach(category => {
         if (category.toLowerCase().includes(query.toLowerCase())) {
           results.push({
-            type: 'category',
+            type: 'Category',
             value: category,
-            label: `Category: ${category}`
+            label: `${category}`
           });
         }
       });
@@ -413,9 +413,9 @@ const HomePage: React.FC = () => {
       titles.forEach(item => {
         if (item.title.toLowerCase().includes(query.toLowerCase())) {
           results.push({
-            type: 'title',
+            type: 'Tour',
             value: item,
-            label: `Tour: ${item.title}`
+            label: `${item.title}`
           });
         }
       });
@@ -427,17 +427,17 @@ const HomePage: React.FC = () => {
       
       categories.forEach(category => {
         allResults.push({
-          type: 'category',
+          type: 'Category',
           value: category,
-          label: `Category: ${category}`
+          label: `${category}`
         });
       });
 
       titles.forEach(item => {
         allResults.push({
-          type: 'title',
+          type: 'Tour',
           value: item,
-          label: `Tour: ${item.title}`
+          label: `${item.title}`
         });
       });
 
@@ -453,17 +453,17 @@ const HomePage: React.FC = () => {
       
       categories.forEach(category => {
         allResults.push({
-          type: 'category',
+          type: 'Category',
           value: category,
-          label: `Category: ${category}`
+          label: `${category}`
         });
       });
 
       titles.forEach(item => {
         allResults.push({
-          type: 'title',
+          type: 'Tour',
           value: item,
-          label: `Tour: ${item.title}`
+          label: `${item.title}`
         });
       });
 
@@ -475,11 +475,11 @@ const HomePage: React.FC = () => {
     setSearchQuery('');
     setShowResults(false);
 
-    if (result.type === 'category') {
+    if (result.type === 'Category') {
       navigate(`/packages?category=${encodeURIComponent(result.value)}`);
     } else if (result.type === 'location') {
       navigate(`/packages?location=${encodeURIComponent(result.value.value)}`);
-    } else if (result.type === 'title') {
+    } else if (result.type === 'Tour') {
       navigate(`/package/${result.value.id}/${result.value.title}`);
     }
   };

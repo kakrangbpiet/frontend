@@ -5,7 +5,6 @@ const AboutContainer = styled(Container)({
   padding: "24px",
   textAlign: "center",
   maxWidth: "800px",
-  margin: "100px auto",
   background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%)",
   backdropFilter: "blur(10px)",
   WebkitBackdropFilter: "blur(10px)",

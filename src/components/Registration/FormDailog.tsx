@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Dialog,
   Slide,
@@ -67,6 +67,29 @@ const FormDialog: React.FC<FormDialogProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    if (!open) return;
+
+    // Add a dummy history entry when dialog opens
+    window.history.pushState({ isFormDialogOpen: true }, '');
+
+    const handleBackButton = () => {
+      onClose();
+      // Remove the dummy history entry
+      window.history.back();
+    };
+
+    window.addEventListener('popstate', handleBackButton);
+
+    return () => {
+      window.removeEventListener('popstate', handleBackButton);
+      // Clean up the dummy history entry if dialog is closed normally
+      if (window.history.state?.isFormDialogOpen) {
+        window.history.back();
+      }
+    };
+  }, [open, onClose]);
 
   return (
     <Dialog

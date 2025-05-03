@@ -11,6 +11,7 @@ import AllUsers from "./page/Dashboard/AllUsers";
 import ProfilePage from "./page/ProfilePage";
 import UserInquiries from "./page/ProfilePage/UserInquiries";
 import AllTravelPackagesPage from "./page/AllPackagesPage";
+import PrivacyPolicy from "./page/PrivacyPolicy";
 
 const Router: React.FC = () => {
 
@@ -27,6 +28,10 @@ const Router: React.FC = () => {
         {
           path: "/about-us",
           element: <AboutPage/>,
+        },
+        {
+          path: "/privacy-policy",
+          element: <PrivacyPolicy/>,
         },
         {
           path: "/package/:travelPackageId/:travelPackageTitle",
