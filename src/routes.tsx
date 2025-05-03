@@ -12,6 +12,7 @@ import ProfilePage from "./page/ProfilePage";
 import UserInquiries from "./page/ProfilePage/UserInquiries";
 import AllTravelPackagesPage from "./page/AllPackagesPage";
 import PrivacyPolicy from "./page/PrivacyPolicy";
+import ContactPage from "./page/ContactUsPage";
 
 const Router: React.FC = () => {
 
@@ -32,6 +33,10 @@ const Router: React.FC = () => {
         {
           path: "/privacy-policy",
           element: <PrivacyPolicy/>,
+        },
+        {
+          path: "/contact",
+          element: <ContactPage/>,
         },
         {
           path: "/package/:travelPackageId/:travelPackageTitle",
