@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, TextField } from '@mui/material';
+import { Typography, Button, Grid, IconButton, MenuItem, Select, FormControl, Box, TextField, Container } from '@mui/material';
 // import 'react-quill/dist/quill.snow.css';
 import RemoveIcon from '@mui/icons-material/Remove';
-import ImageUploader from '../ImageUploader';
 import { AppDispatch } from '../../redux/store';
 import { DateAvailability, ITravelPackage, selectPackageDates, useSelectedTravelPackage } from '../../redux/slices/Travel/TravelSlice';
 // import WYSIWYGEditor from '../WYSWYGEditor';
@@ -13,6 +12,9 @@ import locationsData from './Location.json';
 import AddIcon from '@mui/icons-material/Add';  // Fixed import
 import UnixDateInput from './DatePicker';
 import WYSIWYGEditor from '../WYSWYGEditor';
+import GalleryVideosDisplay from './GalleryVideosDisplay';
+import MainImageDisplay from './MainImageDisplay';
+import GalleryImagesDisplay from './GalleryImagesDisplay';
 
 interface AddTravelPackageProps {
   packageId?: string;
@@ -35,20 +37,6 @@ const newErrors: ErrorMessages = {
 const statusOptions = ['active', 'inactive', 'sold-out', 'coming-soon'];
 const travelTypeOptions = ['group', 'private', 'self-guided'];
 
-function getImageMimeType(base64String) {
-  // Check the first few characters to determine image type
-  if (base64String.startsWith('/9j/') || base64String.startsWith('/9j/')) {
-    return 'jpeg';
-  } else if (base64String.startsWith('iVBORw0KGgo')) {
-    return 'png';
-  } else if (base64String.startsWith('R0lGODdh') || base64String.startsWith('R0lGODlh')) {
-    return 'gif';
-  } else if (base64String.startsWith('UklGR')) {
-    return 'webp';
-  }
-  // Default to jpeg if unknown
-  return 'jpeg';
-}
 
 const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, formEvent }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -187,7 +175,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
         })
       );
     } else {
-      // setIsSaving(false);
+      setIsSaving(false);
     }
   };
 
@@ -236,9 +224,10 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
   }, [dateAvailabilities]);
 
   return (
-    <Box sx={{
+    <Container sx={{
       background: "white",
-      p: 4
+      p: 4,
+      borderRadius: 10,
     }}>
 
       <form onSubmit={handleFormSubmit}>
@@ -415,169 +404,43 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
 
           {/* Images - full width */}
 
-          <Typography variant="h6">Main Image</Typography>
+          {/* Main Image */}
           <Grid size={{ xs: 12, md: 12 }}>
-            {!packageId &&
-              <ImageUploader
-                register={handleMainImageUpload}
-                uploadFormat="BASE64"
-              />
-            }
-            {errors.image && (
-              <Typography color="error" variant="body2">
-                {errors.image}
-              </Typography>
-            )}
-            {packageData?.id && formData.image && (
-              <Box mt={2}>
-                <img
-                  src={`${formData.image}`}
-                  alt="Main preview"
-                  style={{ maxWidth: '200px', maxHeight: '200px' }}
-                />
-              </Box>
-            )}
-            {formData.image && !packageData?.id && (
-              <Box mt={2}>
-                <img
-                  src={`data:image/${getImageMimeType(formData.image)};base64,${formData.image}`}
-                  alt="Main preview"
-                  style={{ maxWidth: '200px', maxHeight: '200px' }}
-                />
-              </Box>
-            )}
+            <MainImageDisplay
+              image={formData.image}
+              onImageUpload={handleMainImageUpload}
+              error={errors.image}
+              packageId={packageId}
+            />
           </Grid>
 
+          {/* Gallery Images */}
           <Grid size={{ xs: 12, md: 12 }}>
-            <Typography variant="h6">Gallery Images</Typography>
-
-            {!packageData?.id &&
-              <ImageUploader
-                register={(url) => handleGalleryImagesUpload([...(formData.images || []), url])}
-                uploadFormat="BASE64"
-              />
-            }
-            <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-              {packageData?.id && formData?.images?.map((img, index) => (
-                <Box key={index} position="relative">
-                  <img
-                    src={`${img}`}
-                    alt={`Gallery ${index + 1}`}
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                  />
-                  {/* <IconButton
-                    size="small"
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      backgroundColor: 'rgba(255,255,255,0.7)'
-                    }}
-                    onClick={() => {
-                      const updatedImages = [...(formData.images || [])];
-                      updatedImages.splice(index, 1);
-                      setFormData({ ...formData, images: updatedImages });
-                    }}
-                  >
-                    <RemoveIcon fontSize="small" />
-                  </IconButton> */}
-                </Box>
-              ))}
-              {!packageData?.id && formData.images?.map((img, index) => (
-                <Box key={index} position="relative">
-                  <img
-                    src={`data:image/${getImageMimeType(img)};base64,${img}`}
-                    alt={`Gallery ${index + 1}`}
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                  />
-                  <IconButton
-                    size="small"
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      backgroundColor: 'rgba(255,255,255,0.7)'
-                    }}
-                    onClick={() => {
-                      const updatedImages = [...(formData.images || [])];
-                      updatedImages.splice(index, 1);
-                      setFormData({ ...formData, images: updatedImages });
-                    }}
-                  >
-                    <RemoveIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
+            <GalleryImagesDisplay
+              images={formData.images || []}
+              onImagesUpload={(url) => handleGalleryImagesUpload([...(formData.images || []), url])}
+              onRemoveImage={(index) => {
+                const updatedImages = [...(formData.images || [])];
+                updatedImages.splice(index, 1);
+                setFormData({ ...formData, images: updatedImages });
+              }}
+              packageId={packageId}
+            />
           </Grid>
+
+          {/* Gallery Videos */}
           <Grid size={{ xs: 12, md: 12 }}>
-            <Typography variant="h6">Gallery Videos</Typography>
-            {!packageData?.id &&
-              <ImageUploader
-                register={(url) => handleGalleryVideoUpload([...(formData.videos || []), url])}
-                uploadFormat="BASE64"
-              />
-            }
-            <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-              {packageData?.id && packageData?.videos?.allVideos?.length > 0 && packageData?.videos?.allVideos?.map((video, index) => (
-                <Box key={index} position="relative">
-                  <video
-                    style={{ width: '200px', height: '100%' }}
-                    src={video.awsUrl}
-                    controls
-                    preload="metadata"
-                    onClick={(e) => e.currentTarget.play()}
-                  />
-
-                  {/* <IconButton
-                    size="small"
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      backgroundColor: 'rgba(255,255,255,0.7)'
-                    }}
-                    onClick={() => {
-                      const updatedVideos = [...(formData.videos || [])];
-                      updatedVideos.splice(index, 1);
-                      setFormData({ ...formData, videos: updatedVideos as string[] });
-                    }}
-                  >
-                    <RemoveIcon fontSize="small" />
-                  </IconButton> */}
-                </Box>
-              ))}
-            </Box>
-            <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-              {!packageData?.id && formData?.videos?.length > 0 && formData?.videos?.map((video, index) => (
-                <Box key={index} position="relative">
-                  <video
-                    style={{ width: '200px', height: '100%' }}
-                    src={`data:video/mp4;base64,${video}`}
-                    controls
-                    preload="metadata"
-                    onClick={(e) => e.currentTarget.play()}
-                  />
-
-                  <IconButton
-                    size="small"
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      backgroundColor: 'rgba(255,255,255,0.7)'
-                    }}
-                    onClick={() => {
-                      const updatedVideos = [...(formData.videos || [])];
-                      updatedVideos.splice(index, 1);
-                      setFormData({ ...formData, videos: updatedVideos as string[] });
-                    }}
-                  >
-                    <RemoveIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
+            <GalleryVideosDisplay
+              videos={packageData?.videos || formData.videos || []}
+              onVideosUpload={(url) => handleGalleryVideoUpload([...(formData.videos || []), url])}
+              onRemoveVideo={(index) => {
+                const updatedVideos = [...(formData.videos || [])];
+                updatedVideos.splice(index, 1);
+                setFormData({ ...formData, videos: updatedVideos as string[] });
+              }}
+              isPackageSaved={!!packageData?.id}
+              packageId={packageId}
+            />
           </Grid>
 
           <Grid size={{ xs: 12 }}>
@@ -637,7 +500,7 @@ const AddTravelPackageForm: React.FC<AddTravelPackageProps> = ({ packageId, form
           </Grid>
         </Grid>
       </form>
-    </Box>
+    </Container>
   );
 };
 

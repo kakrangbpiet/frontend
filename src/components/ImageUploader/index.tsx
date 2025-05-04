@@ -1,64 +1,42 @@
 import { AddAPhoto as AddAPhotoIcon } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-import { useState } from "react";
 import { Container, Typography, Box, Paper } from "@mui/material";
 import { convertFileToBase64 } from "../../scripts/fileConverter";
 
 interface ImageUploaderProps {
   register: any;
   uploadFormat : "BASE64" | "File"
-}
-
-interface FilePreview {
-  preview: string;
-  name: string;
+  buttonText?:string
 }
 
 export default function ImageUploader(props: ImageUploaderProps) {
-  const { register } = props;
-  const [file, setFile] = useState<FilePreview | null>(null);
+  const { register, uploadFormat,  } = props;
+
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     accept: {
-      "image/*": [],
-      "video/*": [],
+      "image/*": [".jpeg", ".jpg", ".png", ".gif", ".webp"],
+      "video/*": [".mp4", ".webm", ".ogg"],
     },
-    onDrop: async (acceptedFiles: any[]) => {
+    onDrop: async (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0) return;
+
       const file = acceptedFiles[0];
-      const base64Image = await convertFileToBase64(file);
-      if(props.uploadFormat== "BASE64" ){
-        register(base64Image);
+      
+      try {
+        if (uploadFormat === "BASE64") {
+          const base64Data = await convertFileToBase64(file);
+          register(base64Data); // This will include the data:image/ or data:video/ prefix
+        } else {
+          register(file); // Send the File object directly
+        }
+   
+      } catch (error) {
+        console.error("Error processing file:", error);
       }
-      else {
-        register(convertFileToBase64(file));
-      }
-      setFile({ preview: URL.createObjectURL(file), name: file.name });
     },
   });
 
-  const preview = file ? (
-    <Box key={file.name}>
-      <div>
-        <img
-          style={{
-            display: "block",
-            objectFit: "cover",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          alt={file.name}
-          src={file.preview}
-          width={400}
-          height={400}
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-        />
-      </div>
-    </Box>
-  ) : null;
 
   return (
     <Paper
@@ -72,6 +50,7 @@ export default function ImageUploader(props: ImageUploaderProps) {
           "rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;",
       }}
     >
+      {props?.buttonText}
       <Container
         sx={{
           display: "flex",
@@ -127,7 +106,6 @@ export default function ImageUploader(props: ImageUploaderProps) {
             >
               Import an image
             </Typography>
-            {preview}
           </Box>
         </Box>
         <Typography
