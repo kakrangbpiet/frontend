@@ -701,7 +701,7 @@ export const updateTravelPackageImagesApi = createAsyncThunk(
 
 export const updateTravelPackageVideosApi = createAsyncThunk(
   'travelCollection/updateItem',
-  async ({ packageId, videos }: { packageId: string; videos: string[] }, { rejectWithValue, dispatch }) => {
+  async ({ packageId, videos }: { packageId: string; videos: string[] }, { rejectWithValue,  }) => {
     try {
       const response = await Request({
         endpointId: "UPDATE_TRAVEL_PACKAGE_VIDEOS",
@@ -709,7 +709,7 @@ export const updateTravelPackageVideosApi = createAsyncThunk(
         data: { videos },
       });
 
-      dispatch(updateItem(response.data));
+      // dispatch(updateItem(response.data));
       
       const apiSuccess: ApiSuccess = {
         statusCode: response.status,

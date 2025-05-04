@@ -11,6 +11,7 @@ import locationsData from '../../components/Forms/Location.json';
 import TravelInquiryForm from '../../components/Registration/Stepper.tsx';
 import FormDialog from '../../components/Registration/FormDailog.tsx';
 import { Twitter, Instagram, Facebook } from 'lucide-react';
+import { Typography } from '@mui/material';
 
 const DashboardGrid = styled.div`
   width: 100%;
@@ -387,6 +388,16 @@ const HomePage: React.FC = () => {
     if (query.length > 0) {
       const results: any[] = [];
 
+            // Match titles
+            titles.forEach(item => {
+              if (item.title.toLowerCase().includes(query.toLowerCase())) {
+                results.push({
+                  type: 'Tour',
+                  value: item,
+                  label: `${item.title}`
+                });
+              }
+            });
       // Match categories
       categories.forEach(category => {
         if (category.toLowerCase().includes(query.toLowerCase())) {
@@ -409,22 +420,21 @@ const HomePage: React.FC = () => {
         }
       });
 
-      // Match titles
-      titles.forEach(item => {
-        if (item.title.toLowerCase().includes(query.toLowerCase())) {
-          results.push({
-            type: 'Tour',
-            value: item,
-            label: `${item.title}`
-          });
-        }
-      });
+
 
       setSearchResults(results);
     } else {
       // When search is empty, show all available options
       const allResults: any[] = [];
       
+      titles.forEach(item => {
+        allResults.push({
+          type: 'Tour',
+          value: item,
+          label: `${item.title}`
+        });
+      });
+
       categories.forEach(category => {
         allResults.push({
           type: 'Category',
@@ -433,13 +443,7 @@ const HomePage: React.FC = () => {
         });
       });
 
-      titles.forEach(item => {
-        allResults.push({
-          type: 'Tour',
-          value: item,
-          label: `${item.title}`
-        });
-      });
+
 
       setSearchResults(allResults.slice(0, 10)); // Limit to 10 results
     }
@@ -451,6 +455,13 @@ const HomePage: React.FC = () => {
       // Show all available options when input is focused and empty
       const allResults: any[] = [];
       
+      titles.forEach(item => {
+        allResults.push({
+          type: 'Tour',
+          value: item,
+          label: `${item.title}`
+        });
+      });
       categories.forEach(category => {
         allResults.push({
           type: 'Category',
@@ -459,13 +470,7 @@ const HomePage: React.FC = () => {
         });
       });
 
-      titles.forEach(item => {
-        allResults.push({
-          type: 'Tour',
-          value: item,
-          label: `${item.title}`
-        });
-      });
+
 
       setSearchResults(allResults.slice(0, 10)); // Limit to 10 results
     }
@@ -597,7 +602,9 @@ const HomePage: React.FC = () => {
                   searchResults.map((result, index) => (
                     <SearchResultItem key={index} onClick={() => handleResultClick(result)}>
                       <ResultType>{result.type}</ResultType>
+                      <Typography fontSize="14px" className='uppercase'>
                       {result.label}
+                      </Typography>
                     </SearchResultItem>
                   ))
                 ) : (
@@ -605,7 +612,7 @@ const HomePage: React.FC = () => {
                     Nothing found. Try our best packages:
                     {titles.slice(0, 3).map((title, index) => (
                       <SearchResultItem key={`title-${index}`} onClick={() => navigate(`/package/${title.id}/${title.title}`)}>
-                        <ResultType>tour</ResultType>
+                        <ResultType>Tour</ResultType>
                         {title.title}
                       </SearchResultItem>
                     ))}

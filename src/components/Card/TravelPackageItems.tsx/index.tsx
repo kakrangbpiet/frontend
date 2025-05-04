@@ -45,7 +45,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
   // };
 
   return (
-    <div className="w-full  from-white/10 to-white/20 backdrop-blur-xs py-8" style={{ position: 'relative', zIndex: 5, width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
+    <div className="w-full  from-white/10 to-white/20 backdrop-blur-xs py-2" style={{ position: 'relative', zIndex: 5, width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
       {/*full width*/}
       <section className="container mx-auto px-4">
         <div className="hover-sw-nav hover-sw-2">
@@ -55,7 +55,7 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
                 <div key={pkg.id} className="w-full">
                   <div
                     className="cursor-pointer relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg transition-all duration-300 h-full hover:transform hover:-translate-y-2 hover:shadow-xl"
-                    onClick={() => handleNavigate(pkg.id, pkg.title)}
+                    onClick={() => handleNavigate(pkg?.id, pkg?.title)}
                   >
                     {/* <div className="relative z-10">
                       {renderStatusChip(pkg.status)}
@@ -82,12 +82,12 @@ const TravelPackages: React.FC<TravelPackagesProps> = ({
 
                     <div className="p-3 md:p-4 bg-black/40 backdrop-blur-md text-white border-t border-white/10">
                       {/* Skeleton for title */}
-                      {pkg.title ? (
+                      {pkg?.title ? (
                         <Link
-                          to={`/package/${pkg.id}/${pkg.title}`}
+                          to={`/package/${pkg?.id}/${pkg?.title}`}
                           className="block mb-1 md:mb-2 text-sm md:text-lg font-semibold text-white hover:text-blue-300 no-underline truncate"
                         >
-                          {pkg.title}
+                          {pkg?.title}
                         </Link>
                       ) : (
                         <Skeleton

@@ -9,7 +9,7 @@ import { updateTravelPackageVideosApi } from '../../redux/slices/Travel/travelAp
 
 interface GalleryVideosDisplayProps {
     packageId?: string;
-    videos: IVideosResponse[] | string[];
+    videos: IVideosResponse;
     onVideosUpload: (videoUrl: string) => void;
     onRemoveVideo: (index: number) => void;
     isPackageSaved?: boolean;
@@ -19,15 +19,16 @@ const GalleryVideosDisplay: React.FC<GalleryVideosDisplayProps> = ({
     packageId,
     videos,
     onVideosUpload,
-    onRemoveVideo,
+    // onRemoveVideo,
 }) => {
+    console.log(videos, 'videos');
     
     const dispatch = useDispatch<AppDispatch>();
     const [newVideos, setNewVideos] = useState<string[]>([]);
     const [removedVideoIndexes, setRemovedVideoIndexes] = useState<number[]>([]);
     const [isUploading, setIsUploading] = useState(false);
 
-    const originalVideoUrls =videos.length>0 ? videos?.map((v) => v?.awsUrl).filter(url => url) : [];
+    const originalVideoUrls =videos?.allVideos?.length>0 ? videos?.allVideos?.map((v) => v?.awsUrl).filter(url => url) : [];
 
     const handleVideoSelect = (selectedVideo: string) => {
         if (!selectedVideo) return;
@@ -65,10 +66,6 @@ const GalleryVideosDisplay: React.FC<GalleryVideosDisplayProps> = ({
                     videos: updatedVideos,
                 })
             ).unwrap();
-
-            // Update parent with all changes
-            removedVideoIndexes.forEach(() => onRemoveVideo(0)); // Parent will handle actual removal
-            newVideos.forEach(video => onVideosUpload(video));
 
             // Reset local state
             setNewVideos([]);
