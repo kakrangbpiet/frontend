@@ -526,7 +526,7 @@ const HomePage: React.FC = () => {
           <Twitter size={24} />
         </SocialIconButton>
         <SocialIconButton 
-          href="https://www.instagram.com/samsara_adventures01/" 
+          href="https://www.instagram.com/samsara_adventures_official/" 
           target="_blank" 
           rel="noopener noreferrer"
           aria-label="Instagram"
@@ -554,7 +554,7 @@ const HomePage: React.FC = () => {
           <Twitter size={20} />
         </SocialIconButton>
         <SocialIconButton 
-          href="https://www.instagram.com/samsara_adventures01/" 
+          href="https://www.instagram.com/samsara_adventures_official/" 
           target="_blank" 
           rel="noopener noreferrer"
           aria-label="Instagram"

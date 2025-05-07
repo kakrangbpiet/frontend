@@ -142,7 +142,7 @@ const ContactPage = () => {
             Follow our adventures and get the latest updates:
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3 }}>
-            <Link href="https://www.instagram.com/samsara_adventures01/" target="_blank" rel="noopener">
+            <Link href="https://www.instagram.com/samsara_adventures_official/" target="_blank" rel="noopener">
               <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" width="40" />
             </Link>
             <Link href="https://www.facebook.com/profile.php?id=61575410837166" target="_blank" rel="noopener">

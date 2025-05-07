@@ -239,7 +239,7 @@ const Footer: React.FC<FooterProps> = ({
               <a href="https://twitter.com" target='_blank' aria-label="Twitter" className="text-white/70 hover:text-white transition">
                 <Twitter size={24} />
               </a>
-              <a href="https://www.instagram.com/samsara_adventures01/" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
+              <a href="https://www.instagram.com/samsara_adventures_official/" target='_blank' aria-label="Instagram" className="text-white/70 hover:text-white transition">
                 <Instagram size={24} />
               </a>
               <a href="https://linkedin.com" target='_blank' aria-label="LinkedIn" className="text-white/70 hover:text-white transition">

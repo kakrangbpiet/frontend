@@ -127,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items, isOpen, onToggle }) => {
   <SocialIcon href="https://twitter.com" target="_blank" rel="noopener noreferrer">
     <Twitter size={20} />
   </SocialIcon>
-  <SocialIcon href="https://www.instagram.com/samsara_adventures01/" target="_blank" rel="noopener noreferrer">
+  <SocialIcon href="https://www.instagram.com/samsara_adventures_official/" target="_blank" rel="noopener noreferrer">
     <Instagram size={20} />
   </SocialIcon>
   <SocialIcon href="https://www.facebook.com/profile.php?id=61575410837166" target="_blank" rel="noopener noreferrer">
